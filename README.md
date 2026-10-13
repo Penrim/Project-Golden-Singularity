@@ -166,7 +166,20 @@ ROMs while building. Details for developers: [docs/DEVELOPMENT.md](docs/DEVELOPM
 - Third-party code and models: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (including Karanum's
   *gs2-randomiser2*, whose Golden Sun decompression this project ports).
 - The middle part of the start-screen panorama was generated locally with the Z-Image Turbo image model
-  (Tongyi-MAI, Apache 2.0) through ComfyUI.
-- This project was built with the help of an AI coding assistant (Claude, by Anthropic).
+  (Tongyi-MAI, Apache 2.0) through ComfyUI (details below).
 - *Golden Sun* is a trademark of Nintendo. This is an unofficial fan project, not affiliated with or endorsed by
   Nintendo or Camelot Software Planning.
+
+## AI disclosure
+
+This project was made with AI assistance, directed and play-tested by its author:
+
+- **Code, reverse engineering, tests and documentation** were written with **Claude Code** (Anthropic's agentic
+  coding tool) using the **Claude Opus 5.5** model.
+- **Start screen:** Claude Code also built the start screen — the code that takes the logo, the intro scenes and
+  the music from your ROMs, the scripts and prompts for the image generation, and the choice of the generated
+  variant. The only AI-generated image content is the **middle part of the panorama** (the transition between the
+  Golden Sun and The Lost Age scenes), generated locally with **Z-Image Turbo** (Tongyi-MAI) in ComfyUI; the
+  model, settings and prompt are documented in [art/README.md](art/README.md).
+- Everything else you see and hear on the cartridge — both games, the logo, the intro, the title scenes, the
+  music — comes unchanged from the original games, read from your ROMs.
