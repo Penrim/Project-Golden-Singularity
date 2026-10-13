@@ -6,18 +6,29 @@ story. A fan-made ROM hack for your own legally dumped cartridges.
 > **No game files are included or distributed here.** You build the cartridge yourself from your own dumps of
 > both games with `build.py`. Please read [LEGAL.md](LEGAL.md).
 
-## What you get
+## Features
 
-- **Both complete games** on one 32 MiB cartridge, 100 % of their original content, unchanged.
-- **A new start screen:** Golden Sun's original intro with its music, then a slow panorama from the Golden Sun intro
-  scene over to The Lost Age's valley with the Jupiter Lighthouse, The Lost Age logo and a menu in the games' own
-  style: *Continue*, *Chapter 1 · Golden Sun*, *Chapter 2 · The Lost Age*.
-- **Separate saves** for both games on the same cartridge (128 KiB Flash, one half per game).
-- **Seamless chapter change:** when Golden Sun's credits end, the game saves automatically, shows
-  "Chapter 2 – The Lost Age" and starts The Lost Age with **your party imported automatically** — levels, stats,
-  Djinn, items, equipment, coins, names and story choices, exactly like the original link-cable transfer, but
-  without cables, passwords or questions.
-- **Languages:** English (from the USA/Europe games) and German (from the German games). One cartridge per language.
+- 🎮 **Two games, one cartridge** — play Golden Sun and The Lost Age without switching ROMs.
+- 📖 **One continuous story** — when Golden Sun's credits end, The Lost Age starts right away as *Chapter 2*.
+- 🧙 **Your party carries over** — Isaac's team joins Felix with their levels, stats, Djinn, items, equipment,
+  coins and names, just like the original "Clear Data" transfer.
+- 🔌 **No link cable, no second Game Boy, no password** — the transfer happens automatically, nothing to type in.
+- 💾 **Separate saves for both games** — each game keeps its own save slots on the same cartridge.
+- ↩️ **Jump in anywhere** — the start menu offers *Continue*, *Chapter 1 · Golden Sun* and
+  *Chapter 2 · The Lost Age*, so you can replay Golden Sun or start The Lost Age fresh at any time.
+- 🌄 **New start screen** — Golden Sun's original intro with its music, flowing into a panorama from Mt. Aleph to
+  the Jupiter Lighthouse.
+- ✅ **The original games, untouched** — 100 % of both games' content, music and translations.
+- 🌍 **English and German** — built from the USA/Europe or the German games.
+
+<details>
+<summary>More details</summary>
+
+- Saves: 128 KiB Flash, one half per game; the chapter change saves Golden Sun's clear data automatically.
+- The transfer imports the same data as the original link-cable transfer between the two games.
+- One cartridge per language: both ROMs must be the same language.
+
+</details>
 
 ## Quick start
 
@@ -37,30 +48,96 @@ Step-by-step instructions for Windows, macOS and Linux, and troubleshooting: **[
 
 ## Which ROMs
 
-You need both games **in the same language**, dumped from your own cartridges. The builder checks them against the
-verified No-Intro dumps:
+A **ROM** is a copy of a game cartridge as a file (`.gba`). You make it yourself from your own cartridge with a
+cartridge reader ("dumper"); see [BUILDING.md](BUILDING.md#1-get-your-roms).
 
-| Game | File (No-Intro name) | SHA-1 |
-|---|---|---|
-| Golden Sun | Golden Sun (USA, Europe).gba | `5c4695205413df7db52b9a184815a07783999971` |
-| Golden Sun: The Lost Age | Golden Sun - The Lost Age (USA, Europe).gba | `b500663220cb9bf56b9f8e8c0c544f1d6fa3a824` |
-| Golden Sun (German) | Golden Sun (Germany).gba | `c23ab91a39434623cf1a999f387d743ade1a22a6` |
-| Golden Sun: Die vergessene Epoche | Golden Sun - Die Vergessene Epoche (Germany).gba | `7820b4c7ba9002b0e9be23a6f45a9ab204986438` |
+You need **two ROMs in the same language** — pick one of the two pairs:
 
-The finished cartridge always has the same checksum, so you can tell your build is correct:
-English `3fde5ab3ae785e78d4e5125a87e041955cdf1595`, German `9d87b87fa2437e19a6be82ff50fced38bbdc7321`
-(`build.py` compares this for you).
+| To build… | you need these two ROMs |
+|---|---|
+| the **English** cartridge | *Golden Sun* (USA/Europe) **and** *Golden Sun: The Lost Age* (USA/Europe) |
+| the **German** cartridge | *Golden Sun* (German) **and** *Golden Sun: Die vergessene Epoche* (German) |
+
+Mixing languages (e.g. English Golden Sun with German The Lost Age) does not work. Other languages (French,
+Italian, Spanish) are not supported yet.
+
+**You don't have to check anything yourself:** `build.py` checks automatically that each ROM is a correct,
+unmodified copy of the original cartridge, and tells you if it is not (for example a damaged copy or an already
+patched ROM). Every correct copy of the same cartridge is byte-for-byte identical, no matter who made it, so the
+builder can recognise it. Files that a dumper padded with empty space or cut short at the end are adjusted
+automatically. At the end it also confirms that your finished cartridge is identical to the reference build.
+
+<details>
+<summary>For the curious: the checksums the builder compares</summary>
+
+A checksum (SHA-1) is a fingerprint of a file: if even one byte differs, the fingerprint changes. Because every
+correct dump of the same cartridge contains exactly the same data, all of them have the same fingerprint. These are
+the fingerprints of the correct ROMs (as listed by the preservation project No-Intro):
+
+| ROM | SHA-1 |
+|---|---|
+| Golden Sun (USA, Europe) | `5c4695205413df7db52b9a184815a07783999971` |
+| Golden Sun - The Lost Age (USA, Europe) | `b500663220cb9bf56b9f8e8c0c544f1d6fa3a824` |
+| Golden Sun (Germany) | `c23ab91a39434623cf1a999f387d743ade1a22a6` |
+| Golden Sun - Die Vergessene Epoche (Germany) | `7820b4c7ba9002b0e9be23a6f45a9ab204986438` |
+
+Finished cartridge: English `3fde5ab3ae785e78d4e5125a87e041955cdf1595`,
+German `9d87b87fa2437e19a6be82ff50fced38bbdc7321`.
+
+</details>
 
 ## Playing
 
 - **Emulators:** tested in mGBA. The cartridge declares 128 KiB Flash saving, which mGBA detects automatically. In
   other emulators set the save type to *Flash 128K* (1 Mbit) if it is not detected.
 - **Flash carts / real hardware:** not tested yet. The cart must support 128 KiB Flash saves (FLASH1M).
-- **Saves:** the cartridge's save file holds both games. Save files from the separate original games cannot be used
-  directly.
-- **Start menu:** *Continue* opens The Lost Age if it has a save, otherwise Golden Sun; *Chapter 1/2* open Golden Sun or
-  The Lost Age
-  (each with its own title screen, so you can still load any of its save slots or start a new game).
+
+## Saves and the start menu
+
+The cartridge's save memory is split in two halves: one for Golden Sun, one for The Lost Age. Each game saves
+exactly as in the original (its own three files, its own save menus) and never touches the other game's half.
+Save files from the separate original games cannot be used directly.
+
+**The start menu only chooses the game.** You pick your save file in that game's own title screen, as usual:
+
+| Menu entry | Starts | Use it to… |
+|---|---|---|
+| *Continue* (shown once any save exists) | The Lost Age if it has a save, otherwise Golden Sun | jump straight into the furthest chapter |
+| *Chapter 1 · Golden Sun* | Golden Sun's title screen | load any Golden Sun file, or start Golden Sun again |
+| *Chapter 2 · The Lost Age* | The Lost Age's title screen | load any Lost Age file, or start a new Lost Age game |
+
+So with saves in both games, *Continue* goes to The Lost Age; your Golden Sun files are always reachable through
+*Chapter 1*.
+
+**The chapter change:** when Golden Sun's credits end, the game saves its end-of-game data automatically (in a
+reserved spot — your three normal Golden Sun files stay untouched), shows "Chapter 2" and starts a **new game** of
+The Lost Age. You name Felix, and Isaac's party is imported automatically.
+
+> **Important: finish Golden Sun first, then play The Lost Age.**
+> Your Golden Sun party is copied into The Lost Age **only when a new Lost Age game starts** — just like the
+> original cable/password transfer. A Lost Age game started *before* you finished Golden Sun keeps the default
+> Isaac and his team, even if you finish Golden Sun later; loading that save will not update them. To play with
+> your own Golden Sun party, start a new Lost Age game after finishing Golden Sun (the chapter change does this for
+> you). When you save that new game, make sure you do not overwrite an older Lost Age file you want to keep.
+
+Good to know:
+
+- Turned the game off right after the chapter change, before saving in The Lost Age? Nothing is lost: choose
+  *Chapter 2* → New Game and the party is imported again.
+- Once Golden Sun has been finished on the cartridge, every new Lost Age game imports that party automatically (the
+  original transfer question and password entry are skipped). Before that, The Lost Age asks about a transfer as
+  in the original, so you can still enter a password.
+- Finishing Golden Sun again replaces the end-of-game data with your latest run.
+
+## Cheat codes
+
+- **The games' own secrets** (button codes on the title screens etc.) should work as in the originals; they are
+  not changed, but not all of them were tested.
+- **Cheat devices / emulator cheats:** RAM codes (items, coins, stats, walking through walls, …) work in both games.
+  Codes that patch the game program (ROM codes, many GameShark/Action Replay "master codes") work for The Lost Age
+  but **not for Golden Sun**, because Golden Sun sits at a different place on this cartridge.
+- Both games share the same memory addresses for different things: **enable cheats only for the game you are
+  playing** and switch them off before changing games, or they can corrupt the other game.
 
 ## Known limitations
 

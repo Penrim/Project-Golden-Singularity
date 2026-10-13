@@ -9,7 +9,8 @@
 - Separate saves for both games (128 KiB Flash, one half per game).
 - Chapter change at the end of Golden Sun: automatic save, "Chapter 2" card, new game of The Lost Age with the
   Golden Sun party imported automatically (link-transfer quality, no passwords).
-- Builder `build.py`: checks the ROMs against the verified dumps, accepts .zip, detects the language, needs only
+- Builder `build.py`: checks the ROMs against the verified dumps (padded or trimmed dumps are adjusted
+  automatically), accepts .zip, detects the language, needs only
   Python with Pillow and capstone, and produces a byte-identical cartridge on every system.
 - Verified with automated tests: all 201 Golden Sun maps and all 255 enemy groups (no wrong ROM accesses, no
   crashes), saves, start menu, chapter change, final battle, ending and credits.

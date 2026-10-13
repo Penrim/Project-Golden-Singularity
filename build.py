@@ -46,22 +46,46 @@ def read_rom(path, tmp):
     return path
 
 
-def check(path, role, force):
+ROM_SIZE = {"AGSE": 8 << 20, "AGSD": 8 << 20, "AGFE": 16 << 20, "AGFD": 16 << 20}
+
+
+def normalise(data, code):
+    """Some dumpers pad the file with empty space or cut empty space off the end. The game data is the same, so
+    bring the file to the cartridge's real size first: trim a padded tail, or pad a trimmed file with 0xFF/0x00."""
+    size = ROM_SIZE[code]
+    tail = data[size:]
+    if len(data) > size and (not tail.strip(bytes([0xFF])) or not tail.strip(bytes([0x00]))):
+        return [data[:size]]
+    if len(data) < size:
+        return [data + bytes([fill]) * (size - len(data)) for fill in (0xFF, 0x00)]
+    return [data]
+
+
+def check(path, role, force, tmp):
+    """Returns (game code, path of a verified copy to build from)."""
     data = open(path, "rb").read()
     code = data[0xAC:0xB0].decode("ascii", "replace")
-    sha = hashlib.sha1(data).hexdigest()
     want = ("AGSE", "AGSD") if role == "gs1" else ("AGFE", "AGFD")
     if code not in want:
         sys.exit(f"{path}: this is not {'Golden Sun' if role == 'gs1' else 'Golden Sun: The Lost Age'} "
                  f"(game code {code!r}; expected one of {', '.join(want)})")
-    if sha in SUPPORTED:
-        print(f"  {SUPPORTED[sha][1]}: verified dump")
-    elif force:
+    for cand in normalise(data, code):
+        sha = hashlib.sha1(cand).hexdigest()
+        if sha in SUPPORTED:
+            note = "" if cand == data else f" (file size adjusted from {len(data)} to {len(cand)} bytes)"
+            print(f"  {SUPPORTED[sha][1]}: verified dump{note}")
+            if cand != data:
+                path = os.path.join(tmp, role + "_normalised.gba")
+                with open(path, "wb") as f:
+                    f.write(cand)
+            return code, path
+    sha = hashlib.sha1(data).hexdigest()
+    if force:
         print(f"  WARNING {path}: SHA-1 {sha} is not a known good dump; continuing because of --force")
-    else:
-        sys.exit(f"{path}: SHA-1 {sha} does not match the verified dump of this game "
-                 "(bad or modified dump? See README.md, 'Which ROMs'). Use --force to try anyway.")
-    return code
+        return code, path
+    sys.exit(f"{path}: SHA-1 {sha} does not match the correct copy of this game "
+             "(damaged or modified dump, or another game version? See README.md, 'Which ROMs'). "
+             "Use --force to try anyway.")
 
 
 def main():
@@ -84,7 +108,8 @@ def main():
         gs1 = read_rom(args.gs1, tmp)
         tla = read_rom(args.tla, tmp)
         print("checking ROMs")
-        pair = (check(gs1, "gs1", args.force), check(tla, "tla", args.force))
+        (c1, gs1), (c2, tla) = check(gs1, "gs1", args.force, tmp), check(tla, "tla", args.force, tmp)
+        pair = (c1, c2)
         if pair not in PAIRS:
             sys.exit(f"the two ROMs are different languages ({pair[0]} / {pair[1]}); both must be USA/Europe "
                      "or both German")

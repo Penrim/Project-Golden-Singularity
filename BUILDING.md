@@ -74,7 +74,7 @@ Open the `.gba` file in [mGBA](https://mgba.io/) (recommended) or another emulat
 |---|---|
 | `missing Python packages` | Run `python -m pip install -r requirements.txt` (in the activated virtual environment). |
 | `this is not Golden Sun` / `not ... The Lost Age` | `--gs1` and `--tla` are swapped, or the file is another game. |
-| `SHA-1 ... does not match the verified dump` | Your file differs from the verified dump: a bad dump, a patched/translated ROM, or a different revision. Re-dump the cartridge. `--force` tries anyway (untested, may not work). |
+| `SHA-1 ... does not match the correct copy` | Your file's game data differs from the original: a damaged dump (dump again, clean the contacts), a patched/translated ROM, or another game version. Padded or trimmed files are fine, the builder adjusts their size itself. `--force` tries anyway (untested, may not work). |
 | `the two ROMs are different languages` | Use both USA/Europe games or both German games. |
 | checksum differs from the reference build | Usually other package versions: install exactly `requirements.txt`. The game may still work. |
 | the emulator says it cannot save / shows a save error | Set the save type to *Flash 128K* (1 Mbit) and restart. |
