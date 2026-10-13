@@ -1,0 +1,20 @@
+# Never commit game data: ROMs, saves, savestates, archives, built cartridges
+*.gba
+*.gbc
+*.gb
+*.zip
+*.7z
+*.sav
+*.ss
+*.ss[0-9]
+*.srm
+# local build output and tools
+build/
+.venv/
+venv/
+__pycache__/
+tools/mgba/
+tools/mgba-dev/
+tools/armgcc/
+gsmerge_watch*
+reports/

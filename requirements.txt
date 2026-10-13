@@ -1,0 +1,4 @@
+# Needed to build the cartridge (python -m pip install -r requirements.txt).
+# Versions are pinned so every system produces the identical cartridge (see build.py EXPECTED_OUTPUT).
+pillow==12.3.0
+capstone==5.0.9
