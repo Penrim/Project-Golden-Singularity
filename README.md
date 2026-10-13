@@ -9,7 +9,8 @@ copies of the two games (see [LEGAL.md](LEGAL.md)).
 > ⚠️ **Early release — please keep backups of your save file.**
 > All of Golden Sun's maps and battles, saving, the start menu and the switch from the first to the second game
 > have been tested (The Lost Age itself runs unchanged), but **nobody has played the whole story from start to
-> finish on this cartridge yet**. If you run into anything odd, please [report it](#something-went-wrong).
+> finish on this cartridge yet**. Small glitches are possible, mostly in Golden Sun. If you run into anything odd,
+> please [report it](#something-went-wrong).
 
 ## Features
 
@@ -126,6 +127,9 @@ Good to know:
   groups, saving and loading in both games, the start menu, and the end of Golden Sun (final battle, ending,
   credits, switch to Chapter 2 with the party transfer). The Lost Age runs unchanged and was tested at its start
   and with saving. A complete playthrough of both games is still missing.
+- **Small glitches are possible, mostly in Golden Sun** (for example a garbled sprite), because Golden Sun had to
+  be moved inside the cartridge. The Lost Age is unchanged. Please [report](#something-went-wrong) where you saw
+  one.
 - Flash carts and real hardware are untested.
 - Only the English (USA/Europe) and German versions are supported; French, Italian and Spanish are not yet.
 
