@@ -9,6 +9,9 @@
 - Separate saves for both games (128 KiB Flash, one half per game).
 - Chapter change at the end of Golden Sun: automatic save, "Chapter 2" card, new game of The Lost Age with the
   Golden Sun party imported automatically (link-transfer quality, no passwords).
+- Easy build: copy the ROMs into `roms/` and double-click `Build (Windows).bat`, `Build (macOS).command` or
+  `build-linux.sh` (sets up its own Python environment on first start, finds and checks the ROMs itself, builds
+  every language that is complete).
 - Builder `build.py`: checks the ROMs against the verified dumps (padded or trimmed dumps are adjusted
   automatically), accepts .zip, detects the language, needs only
   Python with Pillow and capstone, and produces a byte-identical cartridge on every system.

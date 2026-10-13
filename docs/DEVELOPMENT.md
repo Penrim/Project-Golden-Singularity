@@ -118,7 +118,9 @@ Everything lives in this folder; nothing is installed system-wide.
 ```
 GoldenSunMerge/
   README.md / BUILDING.md / LEGAL.md / CHANGELOG.md   for players
-  build.py             player entry point (checks the ROMs, builds with the precompiled runtime)
+  build.py             player entry point (finds/checks the ROMs, builds with the precompiled runtime)
+  Build (Windows).bat / Build (macOS).command / build-linux.sh   double-click launchers (own .venv, then build.py)
+  roms/                players put their ROM files here (ignored by git)
   requirements*.txt    pinned Python packages (players / developers)
   docs/DEVELOPMENT.md  this file
   docs/MODLOG.md       chronological work journal (every finding, dead end and gotcha, newest at the bottom)

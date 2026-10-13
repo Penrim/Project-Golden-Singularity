@@ -1,8 +1,15 @@
 """Golden Sun Collection - build the cartridge from your own two ROMs.
 
+Easiest: put your ROM files (.gba or .zip) into the "roms" folder and double-click the launcher for your system
+("Build (Windows).bat", "Build (macOS).command", "build-linux.sh"), or run:
+
+    python build.py
+
+It finds and checks the ROMs itself and builds every language for which both games are present.
+Explicit files:
+
     python build.py --gs1 "Golden Sun (USA, Europe).gba" --tla "Golden Sun - The Lost Age (USA, Europe).gba"
 
-The ROMs may also be given as .zip files. Both must be the same language; the language is detected from the ROMs.
 The result is written next to this script as golden_sun_collection_<lang>.gba (or --out PATH).
 Nothing from the games is included in this project: everything is read from the files you supply.
 See README.md and BUILDING.md.
@@ -88,13 +95,100 @@ def check(path, role, force, tmp):
              "Use --force to try anyway.")
 
 
+NAMES = {"AGSE": "Golden Sun (USA/Europe)", "AGFE": "The Lost Age (USA/Europe)",
+         "AGSD": "Golden Sun (German)", "AGFD": "Die vergessene Epoche (German)"}
+LANG_NAME = {"en": "English", "de": "German"}
+
+
+def identify(path, tmp):
+    """(game code, path of a verified copy) for a correct ROM file, else (None, reason). Never exits."""
+    try:
+        if zipfile.is_zipfile(path):
+            with zipfile.ZipFile(path) as z:
+                names = [n for n in z.namelist() if n.lower().endswith(".gba")]
+                if len(names) != 1:
+                    return None, "zip file without exactly one .gba inside"
+                data = z.read(names[0])
+        else:
+            data = open(path, "rb").read()
+    except OSError as e:
+        return None, f"cannot read ({e})"
+    code = data[0xAC:0xB0].decode("ascii", "replace")
+    if code not in ROM_SIZE:
+        return None, "not one of the supported Golden Sun ROMs"
+    for cand in normalise(data, code):
+        if hashlib.sha1(cand).hexdigest() in SUPPORTED:
+            out = os.path.join(tmp, code + ".gba")
+            with open(out, "wb") as f:
+                f.write(cand)
+            return code, out
+    return None, f"{NAMES[code]}, but not a correct copy (damaged or modified)"
+
+
+VERBOSE = False
+
+
+def build_one(gs1, tla, lang, out):
+    import build_merge, contextlib, io
+    print(f"building the {LANG_NAME[lang]} cartridge - this takes a few seconds")
+    os.environ.setdefault("GSMERGE_PREBUILT", "1")      # players: precompiled runtime, no ARM toolchain
+    if VERBOSE:
+        build_merge.build(gs1, tla, out, lang)
+    else:
+        with contextlib.redirect_stdout(io.StringIO()):  # hide the builder's technical progress lines
+            build_merge.build(gs1, tla, out, lang)
+    sha = hashlib.sha1(open(out, "rb").read()).hexdigest()
+    if sha == EXPECTED_OUTPUT[lang]:
+        print(f"done: {out}\n  SHA-1 {sha} - identical to the reference build")
+    else:
+        print(f"done: {out}\n  SHA-1 {sha} (reference build: {EXPECTED_OUTPUT[lang]}; a different result usually "
+              "means other package versions - see BUILDING.md)")
+    return out
+
+
+def auto(tmp):
+    """Look for ROM files in roms/ and next to build.py; build every complete language pair."""
+    folders = [os.path.join(HERE, "roms"), HERE]
+    files = [os.path.join(d, f) for d in folders if os.path.isdir(d) for f in sorted(os.listdir(d))
+             if f.lower().endswith((".gba", ".zip")) and not f.startswith("golden_sun_collection")]
+    print("looking for your ROM files in the 'roms' folder" + (":" if files else " ..."))
+    found = {}
+    for f in files:
+        code, info = identify(f, tmp)
+        if code:
+            found.setdefault(code, info)
+            print(f"  OK  {os.path.basename(f)}  ->  {NAMES[code]}")
+        else:
+            print(f"  --  {os.path.basename(f)}  ({info})")
+    built = []
+    for (c1, c2), lang in PAIRS.items():
+        if c1 in found and c2 in found:
+            built.append(build_one(found[c1], found[c2], lang, os.path.join(HERE, f"golden_sun_collection_{lang}.gba")))
+    if not built:
+        need = []
+        for (c1, c2), lang in PAIRS.items():
+            if c1 in found or c2 in found:
+                need.append(f"for the {LANG_NAME[lang]} version, add: {NAMES[c2] if c1 in found else NAMES[c1]}")
+        print("\nNo cartridge built: both games of the same language are needed.")
+        print("\n".join("  " + n for n in need) if need else
+              "  Put your two ROM files (.gba or .zip) into the 'roms' folder, for example\n"
+              "  Golden Sun (USA, Europe).gba  and  Golden Sun - The Lost Age (USA, Europe).gba")
+        return 1
+    print("\nPlay the .gba file in an emulator such as mGBA. Keep the .sav file: it holds the saves of both games.")
+    return 0
+
+
 def main():
-    ap = argparse.ArgumentParser(description="Build the Golden Sun Collection cartridge from your own ROMs.")
-    ap.add_argument("--gs1", required=True, help="Golden Sun ROM (.gba or .zip)")
-    ap.add_argument("--tla", required=True, help="Golden Sun: The Lost Age ROM of the same language (.gba or .zip)")
+    ap = argparse.ArgumentParser(description="Build the Golden Sun Collection cartridge from your own ROMs. "
+                                 "Without --gs1/--tla the ROM files are searched in the 'roms' folder.")
+    ap.add_argument("--gs1", help="Golden Sun ROM (.gba or .zip)")
+    ap.add_argument("--tla", help="Golden Sun: The Lost Age ROM of the same language (.gba or .zip)")
     ap.add_argument("--out", help="output file (default: golden_sun_collection_<lang>.gba next to build.py)")
     ap.add_argument("--force", action="store_true", help="accept ROMs that are not the verified dumps (untested)")
+    ap.add_argument("--verbose", action="store_true", help="show the builder's technical progress output")
     args = ap.parse_args()
+    global VERBOSE
+    VERBOSE = args.verbose
     print(f"Golden Sun Collection {VERSION}")
     if sys.version_info < (3, 10):
         sys.exit("Python 3.10 or newer is required")
@@ -102,28 +196,19 @@ def main():
         import PIL, capstone  # noqa: F401
     except ImportError:
         sys.exit("missing Python packages - run:  python -m pip install -r requirements.txt")
-    import build_merge
-
     with tempfile.TemporaryDirectory() as tmp:
+        if not args.gs1 and not args.tla:
+            sys.exit(auto(tmp))
+        if not (args.gs1 and args.tla):
+            sys.exit("give both --gs1 and --tla, or neither (then the 'roms' folder is searched)")
         gs1 = read_rom(args.gs1, tmp)
         tla = read_rom(args.tla, tmp)
         print("checking ROMs")
         (c1, gs1), (c2, tla) = check(gs1, "gs1", args.force, tmp), check(tla, "tla", args.force, tmp)
-        pair = (c1, c2)
-        if pair not in PAIRS:
-            sys.exit(f"the two ROMs are different languages ({pair[0]} / {pair[1]}); both must be USA/Europe "
-                     "or both German")
-        lang = PAIRS[pair]
-        out = args.out or os.path.join(HERE, f"golden_sun_collection_{lang}.gba")
-        print(f"building ({'English' if lang == 'en' else 'German'}) - this takes a few seconds")
-        os.environ.setdefault("GSMERGE_PREBUILT", "1")      # players: precompiled runtime, no ARM toolchain
-        build_merge.build(gs1, tla, out, lang)
-    sha = hashlib.sha1(open(out, "rb").read()).hexdigest()
-    if sha == EXPECTED_OUTPUT[lang] and not args.force:
-        print(f"done: {out}\n  SHA-1 {sha} - identical to the reference build")
-    else:
-        print(f"done: {out}\n  SHA-1 {sha} (reference build: {EXPECTED_OUTPUT[lang]}; a different result usually "
-              "means other package versions - see BUILDING.md)")
+        if (c1, c2) not in PAIRS:
+            sys.exit(f"the two ROMs are different languages ({c1} / {c2}); both must be USA/Europe or both German")
+        lang = PAIRS[(c1, c2)]
+        build_one(gs1, tla, lang, args.out or os.path.join(HERE, f"golden_sun_collection_{lang}.gba"))
     print("Use an emulator or flash cart with 128 KiB Flash saving (see README.md).")
 
 
