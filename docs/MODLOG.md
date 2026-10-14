@@ -436,3 +436,13 @@ TODO: start menu (Continue / Chapter 1 / Chapter 2) in C; verify real GS1 credit
   reproducible / pixel-identical with equal timing). EN transition re-run PASS, DE output unchanged.
 - Builder: SUPPORTED/PAIRS/NAMES for FR/IT/ES, reference SHA-1 FR 2de01797..., IT 569f1cbb..., ES d64dedca...;
   player build from roms/ zips byte-identical to the dev builds. VERSION 1.1.0 (not released, not committed).
+
+## Hotfix 1.1.1 (2026-10-14): prebuilt runtime check
+- Found while setting up a git worktree: cart/prebuilt/*/meta.json stored sha1(runtime.c + link.ld) of the author's
+  working copy (runtime.c CRLF, link.ld LF). GitHub ZIP (LF) and git clone on Windows (CRLF) both mismatch, so
+  build.py refused to use the precompiled runtime for every player without the ARM GCC (1.0.0 and 1.1.0). The
+  earlier "clean room" test had used local files, not an export of the repository.
+- Fix: fingerprint with LF line endings (transfer_patch.build_runtime), stored values updated (the old value was
+  verified to be the same sources with CRLF runtime.c, so the runtime binaries are unchanged).
+- Verified from `git archive` exports with CRLF and with LF line endings: all five languages build, output identical
+  to the reference checksums. Release checks must use an export of the commit, never the working copy.
