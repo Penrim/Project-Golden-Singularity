@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.0 (not released yet)
+
+- New languages: French, Italian and Spanish (built from the French/Italian/Spanish games, as with English and
+  German). The builder recognises the new ROMs automatically.
+- Start screen: The Lost Age's subtitle is now removed reliably from the logo in every language; in English a
+  small piece of the logo's ornament that was cut off before is back (the English cartridge checksum changes).
+
 ## 1.0.0 — first release
 
 - Golden Sun and Golden Sun: The Lost Age on one 32 MiB cartridge (English from the USA/Europe games, German from

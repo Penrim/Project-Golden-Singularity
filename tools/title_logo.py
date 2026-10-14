@@ -124,23 +124,25 @@ def tla_logo(pic):
     keep = set(comps[0])                              # ring + "Golden Sun" + most of the ornament
     small = [c for c in comps[1:] if len(c) >= 3]
 
-    def hue(c):
-        return sum(_hsv(px[p])[0] for p in c) / len(c) * 360
-
-    # subtitle = olive/green letters right of the ring's ornament; drop everything inside their band
-    sub = [c for c in small if 55 <= hue(c) <= 180 and min(x for x, y in c) >= 64]
-    band = None
-    if sub:
-        pts = [p for c in sub for p in c]
-        band = (min(x for x, y in pts) - 1, min(y for x, y in pts) - 1, max(x for x, y in pts) + 1,
-                max(y for x, y in pts) + 1)
-    for c in small:
+    def box(c):
         xs, ys = [x for x, y in c], [y for x, y in c]
-        if min(xs) > 200:                             # TM sign
-            continue
-        if band and band[0] <= min(xs) and max(xs) <= band[2] and band[1] <= min(ys) and max(ys) <= band[3]:
-            continue
-        if c in sub:
+        return min(xs), min(ys), max(xs), max(ys)
+
+    def whitish(c):
+        return sum(_hsv(px[p])[2] for p in c) / len(c) > 0.8 and sum(_hsv(px[p])[1] for p in c) / len(c) < 0.2
+
+    small = [c for c in small if not whitish(c)]      # bright sky specks, not part of the logo
+    # Subtitle ("The Lost Age", "L'Age Perdu", two lines in German/Spanish) under "Golden Sun". Shapes right of
+    # the ring's ornament (x >= 78) are subtitle letters; further left, letters and ornament overlap in position,
+    # so a shape there counts as subtitle when nearly all its pixels have the letters' colours (letters >= 0.93,
+    # ornament <= 0.67 in all five language versions).
+    in_area = lambda b: 60 <= b[0] and b[2] <= 200 and 75 <= b[1] and b[3] <= 120
+    sub = [c for c in small if box(c)[0] >= 78 and in_area(box(c))]
+    colours = {px[p] for c in sub for p in c}
+    sub += [c for c in small if box(c)[0] < 78 and in_area(box(c)) and
+            sum(px[p] in colours for p in c) >= 0.9 * len(c)]
+    for c in small:
+        if box(c)[0] > 200 or c in sub:               # TM sign, subtitle
             continue
         keep |= set(c)
     return keep

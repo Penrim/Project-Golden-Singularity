@@ -19,7 +19,7 @@ import argparse, hashlib, os, sys, tempfile, zipfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "tools"))
 
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 
 # Verified dumps (No-Intro). Other dumps of the same version may work but are untested.
 SUPPORTED = {
@@ -27,13 +27,23 @@ SUPPORTED = {
     "b500663220cb9bf56b9f8e8c0c544f1d6fa3a824": ("AGFE", "Golden Sun - The Lost Age (USA, Europe)"),
     "c23ab91a39434623cf1a999f387d743ade1a22a6": ("AGSD", "Golden Sun (Germany)"),
     "7820b4c7ba9002b0e9be23a6f45a9ab204986438": ("AGFD", "Golden Sun - Die Vergessene Epoche (Germany)"),
+    "42f3b262c16cfc5bde1fa2b25016fb74046de1b3": ("AGSF", "Golden Sun (France)"),
+    "f14855c0f8c87a95cc52189e8e3b2bd9df186322": ("AGFF", "Golden Sun - L'Age Perdu (France)"),
+    "ca45e04b26b2f040ac63e679a459d21869f5f28d": ("AGSI", "Golden Sun (Italy)"),
+    "57f1d005666b81645e55412658427e27099c5907": ("AGFI", "Golden Sun - L'Era Perduta (Italy)"),
+    "de0bdc889594b012cad213ca83707feb81ada28b": ("AGSS", "Golden Sun (Spain)"),
+    "a2e3e80036195343c2713410ac14f4e329e3f40d": ("AGFS", "Golden Sun - La Edad Perdida (Spain)"),
 }
-PAIRS = {("AGSE", "AGFE"): "en", ("AGSD", "AGFD"): "de"}
+PAIRS = {("AGSE", "AGFE"): "en", ("AGSD", "AGFD"): "de", ("AGSF", "AGFF"): "fr", ("AGSI", "AGFI"): "it",
+         ("AGSS", "AGFS"): "es"}
 
 # SHA-1 of the finished cartridge for each language (same on every system with the pinned requirements)
 EXPECTED_OUTPUT = {
-    "en": "3fde5ab3ae785e78d4e5125a87e041955cdf1595",
+    "en": "5a8c4f2a5542a9fb745f21b8b4e804d4158043d1",
     "de": "9d87b87fa2437e19a6be82ff50fced38bbdc7321",
+    "fr": "2de01797b30807c289f79e7cd7c4afa7026c7cb3",
+    "it": "569f1cbbfc5f27cd53572bf8c5658af1a02470ae",
+    "es": "d64dedca0a0c245f0315452eb4da8656df4b4c26",
 }
 
 
@@ -53,7 +63,7 @@ def read_rom(path, tmp):
     return path
 
 
-ROM_SIZE = {"AGSE": 8 << 20, "AGSD": 8 << 20, "AGFE": 16 << 20, "AGFD": 16 << 20}
+ROM_SIZE = {**{gs1: 8 << 20 for gs1, tla in PAIRS}, **{tla: 16 << 20 for gs1, tla in PAIRS}}
 
 
 def normalise(data, code):
@@ -72,7 +82,7 @@ def check(path, role, force, tmp):
     """Returns (game code, path of a verified copy to build from)."""
     data = open(path, "rb").read()
     code = data[0xAC:0xB0].decode("ascii", "replace")
-    want = ("AGSE", "AGSD") if role == "gs1" else ("AGFE", "AGFD")
+    want = tuple(pair[0 if role == "gs1" else 1] for pair in PAIRS)
     if code not in want:
         sys.exit(f"{path}: this is not {'Golden Sun' if role == 'gs1' else 'Golden Sun: The Lost Age'} "
                  f"(game code {code!r}; expected one of {', '.join(want)})")
@@ -96,8 +106,11 @@ def check(path, role, force, tmp):
 
 
 NAMES = {"AGSE": "Golden Sun (USA/Europe)", "AGFE": "The Lost Age (USA/Europe)",
-         "AGSD": "Golden Sun (German)", "AGFD": "Die vergessene Epoche (German)"}
-LANG_NAME = {"en": "English", "de": "German"}
+         "AGSD": "Golden Sun (German)", "AGFD": "Die vergessene Epoche (German)",
+         "AGSF": "Golden Sun (French)", "AGFF": "L'Age Perdu (French)",
+         "AGSI": "Golden Sun (Italian)", "AGFI": "L'Era Perduta (Italian)",
+         "AGSS": "Golden Sun (Spanish)", "AGFS": "La Edad Perdida (Spanish)"}
+LANG_NAME = {"en": "English", "de": "German", "fr": "French", "it": "Italian", "es": "Spanish"}
 
 
 def identify(path, tmp):
@@ -206,7 +219,8 @@ def main():
         print("checking ROMs")
         (c1, gs1), (c2, tla) = check(gs1, "gs1", args.force, tmp), check(tla, "tla", args.force, tmp)
         if (c1, c2) not in PAIRS:
-            sys.exit(f"the two ROMs are different languages ({c1} / {c2}); both must be USA/Europe or both German")
+            sys.exit(f"the two ROMs are different languages ({NAMES.get(c1, c1)} / {NAMES.get(c2, c2)}); "
+                     "both must be the same language")
         lang = PAIRS[(c1, c2)]
         build_one(gs1, tla, lang, args.out or os.path.join(HERE, f"golden_sun_collection_{lang}.gba"))
     print("Use an emulator or flash cart with 128 KiB Flash saving (see README.md).")

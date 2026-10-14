@@ -34,8 +34,10 @@ def main(rom, out, demo=None):
         print("demo state:", demo)
 
     ram = bytearray(e.rr(0x02000000, 0x2000))
-    locs = [m.start() for m in re.finditer(b"Isaac", ram)]
-    print("GS1 'Isaac' at", [hex(0x02000000 + l) for l in locs])
+    hero = bytes(ram[0x500:0x50F]).split(b"\0")[0]              # Isaac's name as entered (default differs per language)
+    assert hero and len(hero) >= len(TEST_NAME), hero
+    locs = [m.start() for m in re.finditer(re.escape(hero), ram)]
+    print(f"GS1 hero {hero!r} at", [hex(0x02000000 + l) for l in locs])
     for l in locs:                                              # rename (same length, zero-padded)
         for i, c in enumerate(TEST_NAME + b"\0"):
             e.w8(0x02000000 + l + i, c)

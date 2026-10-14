@@ -9,7 +9,8 @@ with one read watchpoint over GS1 (bridge.lua `ptrprobe`) and records for every 
 Coverage: optional savestates, every map (warp + walk) and every enemy group (forced battle).
 
   python pointer_probe.py run  MERGED.gba ORIG_GS1.gba OUT.txt [state.ss ...]   (~25 min)
-  python pointer_probe.py list ORIG_GS1.gba OUT.txt         -> data/reloc_exclude_<code>.txt
+  python pointer_probe.py list ORIG_GS1.gba OUT.txt [OTHER_GS1.gba ...]   -> data/reloc_exclude_<code>.txt
+      (OTHER_GS1: versions whose lists exist already; their findings are mapped in by surrounding bytes)
 
 The exclusion file is read by build_gs1_reloc.load_exclusions. Music pointers are never excluded (the m4a engine
 reads its own pointers byte-wise by design).
@@ -40,10 +41,10 @@ def candidates(merged, orig_path):
 
 def run(merged, orig_path, out, states=()):
     import maptour, battletour
-    lst = os.path.join(os.environ.get("TEMP", "."), "gsmerge_probe_list.txt")   # bridge paths: no spaces
+    tag = os.path.splitext(os.path.basename(merged))[0]
+    lst = os.path.join(os.environ.get("TEMP", "."), f"{tag}_probe_list.txt")   # bridge paths: no spaces
     assert " " not in lst, "TEMP path must not contain spaces"
     open(lst, "w").write("\n".join("%08x" % (0x09000000 + a) for a in candidates(merged, orig_path)))
-    tag = os.path.splitext(os.path.basename(merged))[0]
     field = maptour.field_state(merged, os.path.abspath(f"build/{tag}_probe_field.ss"), True)
     world = battletour.worldmap_state(merged, field, os.path.abspath(f"build/{tag}_probe_world.ss"))
     rets = profiles.profile_gs1(orig_path)["encounter_returns"]
@@ -88,15 +89,40 @@ def exclusion_list(orig_path, probe_txt):
     return sorted(out)
 
 
+def mapped_exclusions(orig_path, other_roms, ctx=12):
+    """Exclusions found in other language versions, located in this ROM by the 12 bytes before and after the word
+    (unique 4-aligned match; the word itself may differ). Covers words the probe run did not reach."""
+    import build_gs1_reloc
+    d = open(orig_path, "rb").read()
+    music = set(m4a.all_pointers(d, profiles.profile_gs1(orig_path)["song_table"]))
+    out = set()
+    for other in other_roms:
+        s = open(other, "rb").read()
+        for a in build_gs1_reloc.load_exclusions(s[0xAC:0xB0].decode()):
+            pre, post = s[a - ctx:a], s[a + 4:a + 4 + ctx]
+            hits, i = [], d.find(pre)
+            while i >= 0:
+                if (i + ctx) % 4 == 0 and d[i + ctx + 4:i + 2 * ctx + 4] == post:
+                    hits.append(i + ctx)
+                i = d.find(pre, i + 1)
+            if len(hits) == 1 and 0x08000000 <= struct.unpack_from("<I", d, hits[0])[0] < 0x08800000 \
+                    and hits[0] not in music:
+                out.add(hits[0])
+    return out
+
+
 if __name__ == "__main__":
     if sys.argv[1] == "run":
         run(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5:])
     elif sys.argv[1] == "list":
-        orig, probe = sys.argv[2:4]
+        orig, probe, others = sys.argv[2], sys.argv[3], sys.argv[4:]   # others: GS1 ROMs with existing lists
         code = open(orig, "rb").read()[0xAC:0xB0].decode()
-        ex = exclusion_list(orig, probe)
+        probed = exclusion_list(orig, probe)
+        mapped = mapped_exclusions(orig, others) if others else set()
+        ex = sorted(set(probed) | mapped)
         p = os.path.join(HERE, "..", "data", f"reloc_exclude_{code}.txt")
+        src = f" + findings of {len(others)} other versions mapped by surrounding bytes" if others else ""
         open(p, "w").write(f"# GS1 {code}: words the relocation heuristics take for pointers but the game reads byte/halfword-wise\n"
-                           "# (tools/pointer_probe.py; see docs/TECHNICAL.md). One file offset per line.\n" +
+                           f"# (tools/pointer_probe.py probe run{src}; see docs/TECHNICAL.md). One file offset per line.\n" +
                            "\n".join("%06x" % a for a in ex) + "\n")
-        print(len(ex), "words ->", p)
+        print(f"{len(ex)} words ({len(probed)} probed, {len(mapped)} mapped, {len(mapped - set(probed))} only mapped) ->", p)

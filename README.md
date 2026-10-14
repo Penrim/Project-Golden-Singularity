@@ -25,14 +25,17 @@ copies of the two games (see [LEGAL.md](LEGAL.md)).
 - 🌄 **New start screen** — Golden Sun's original intro and music, flowing into a view from Mt. Aleph to the
   Jupiter Lighthouse.
 - ✅ **Nothing cut** — both games are complete and unchanged.
-- 🌍 **English or German**.
+- 🌍 **English, German, French, Italian or Spanish**.
 
 ## What you need
 
 1. **Your own copies of both games as ROM files** (`.gba`, or `.zip` files containing them), in the **same
    language**:
-   - for the **English** version: *Golden Sun* (USA/Europe) **and** *Golden Sun: The Lost Age* (USA/Europe)
-   - for the **German** version: *Golden Sun* (German) **and** *Golden Sun: Die vergessene Epoche* (German)
+   - **English:** *Golden Sun* (USA/Europe) **and** *Golden Sun: The Lost Age* (USA/Europe)
+   - **German:** *Golden Sun* (German) **and** *Golden Sun: Die vergessene Epoche* (German)
+   - **French:** *Golden Sun* (French) **and** *Golden Sun: L'Âge Perdu* (French)
+   - **Italian:** *Golden Sun* (Italian) **and** *Golden Sun: L'Era Perduta* (Italian)
+   - **Spanish:** *Golden Sun* (Spanish) **and** *Golden Sun: La Edad Perdida* (Spanish)
 
    A ROM file is a copy of a game cartridge. You make it from your own cartridge with a cartridge reader (for
    example GBxCart RW or GB Operator). This project does not provide ROMs.
@@ -61,7 +64,8 @@ cartridge in a few seconds. If your computer asks whether to run the file: on Wi
 anyway**; on a Mac **right-click the file → Open → Open**; on Linux choose **Run** (or start it in a terminal with
 `./build-linux.sh`).
 
-**5. Play:** open the new file `golden_sun_collection_en.gba` (German: `golden_sun_collection_de.gba`) in an emulator
+**5. Play:** open the new file `golden_sun_collection_en.gba` (German `_de`, French `_fr`, Italian `_it`, Spanish
+`_es`) in an emulator
 such as [mGBA](https://mgba.io/) — *File → Load ROM*. Keep the `.sav` file that appears next to it: it holds the
 saves of **both** games.
 
@@ -131,7 +135,7 @@ Good to know:
   be moved inside the cartridge. The Lost Age is unchanged. Please [report](#something-went-wrong) where you saw
   one.
 - Flash carts and real hardware are untested.
-- Only the English (USA/Europe) and German versions are supported; French, Italian and Spanish are not yet.
+- Supported: the English (USA/Europe), German, French, Italian and Spanish versions. The Japanese versions are not.
 
 ## Something went wrong?
 
@@ -159,9 +163,16 @@ empty space or cut short at the end are adjusted automatically.
 | Golden Sun - The Lost Age (USA, Europe) | `b500663220cb9bf56b9f8e8c0c544f1d6fa3a824` |
 | Golden Sun (Germany) | `c23ab91a39434623cf1a999f387d743ade1a22a6` |
 | Golden Sun - Die Vergessene Epoche (Germany) | `7820b4c7ba9002b0e9be23a6f45a9ab204986438` |
+| Golden Sun (France) | `42f3b262c16cfc5bde1fa2b25016fb74046de1b3` |
+| Golden Sun - L'Age Perdu (France) | `f14855c0f8c87a95cc52189e8e3b2bd9df186322` |
+| Golden Sun (Italy) | `ca45e04b26b2f040ac63e679a459d21869f5f28d` |
+| Golden Sun - L'Era Perduta (Italy) | `57f1d005666b81645e55412658427e27099c5907` |
+| Golden Sun (Spain) | `de0bdc889594b012cad213ca83707feb81ada28b` |
+| Golden Sun - La Edad Perdida (Spain) | `a2e3e80036195343c2713410ac14f4e329e3f40d` |
 
-Finished cartridge: English `3fde5ab3ae785e78d4e5125a87e041955cdf1595`,
-German `9d87b87fa2437e19a6be82ff50fced38bbdc7321`.
+Finished cartridge: English `5a8c4f2a5542a9fb745f21b8b4e804d4158043d1`,
+German `9d87b87fa2437e19a6be82ff50fced38bbdc7321`, French `2de01797b30807c289f79e7cd7c4afa7026c7cb3`,
+Italian `569f1cbbfc5f27cd53572bf8c5658af1a02470ae`, Spanish `d64dedca0a0c245f0315452eb4da8656df4b4c26`.
 
 </details>
 

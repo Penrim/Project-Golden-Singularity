@@ -10,7 +10,7 @@
 --   shot PATH                 -> ok (PNG screenshot)
 --   save PATH / load PATH     -> ok (save state file)
 --   reset                     -> ok
-local PORT = 61337
+local PORT = tonumber(os and os.getenv and os.getenv("GSMERGE_PORT") or "") or 61337   -- parallel test runs
 local server = nil
 local client = nil
 local buf = ""

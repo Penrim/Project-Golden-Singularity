@@ -71,7 +71,7 @@ Open the `.gba` file in [mGBA](https://mgba.io/) (recommended) or another emulat
 | `Could not create the setup folder` (Linux) | `sudo apt install python3-venv`, then start again. |
 | `The setup did not work` | The first start needs internet to download two small Python packages. Check the connection and start again. If it still fails, delete the `.venv` folder and retry. |
 | `No cartridge built: both games of the same language are needed` | The list above it shows which file is missing (e.g. *add: The Lost Age (USA/Europe)*). Copy it into `roms`. |
-| a file is listed as `not one of the supported Golden Sun ROMs` | It is another game or another language version (French, Italian, Spanish are not supported). |
+| a file is listed as `not one of the supported Golden Sun ROMs` | It is another game or the Japanese version (not supported). |
 | a file is listed as `not a correct copy (damaged or modified)` | The game data differs from the original: a damaged copy (copy the cartridge again, clean the contacts) or an already patched/translated ROM. Padded or trimmed files are fine — the builder adjusts their size itself. |
 | `missing Python packages` (manual way) | Run `python -m pip install -r requirements.txt` in the activated `.venv`. |
 | `externally-managed-environment` (manual way) | Use the `.venv` commands from step 5 (or the easy way, which does this for you). |

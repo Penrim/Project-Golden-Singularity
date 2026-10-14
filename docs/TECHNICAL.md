@@ -186,6 +186,25 @@ Same MFT layout. Byte-identical except: GS1 files 0–19, 22, 28, 67–68, 94, 2
 772, 777, 800–801 and all map code; TLA files 0–17, 19, 22, 24, 27–31, 34, 128–164 (scattered), 460 and all map
 code. German MFT: GS1 at 0x31FE00, TLA at 0x680000.
 
+### French, Italian, Spanish
+
+Same MFT layout and the same patterns as US/German (2026-10-14). GS1 MFT: France and Spain at 0x321800, Italy at
+0x320000; TLA at 0x680000 in all versions. All `profiles.py` patterns match unchanged; values that differ from US:
+
+| Key | France (AGSF/AGFF) | Italy (AGSI/AGFI) | Spain (AGSS/AGFS) |
+|---|---|---|---|
+| GS1 `text_table` | 0x073914 | 0x072B20 | 0x073210 |
+| GS1 `song_table` | 0x0FEE84 | 0x0FC684 | 0x0FEE84 |
+| GS1 `fn_flash_scan` / `fn_write_slot` | 0x080056DC / 0x08005930 | 0x0800570C / 0x08005960 | 0x0800572C / 0x08005980 |
+| GS1 m4a `init` / `vsync` / `main` / `song_start` | 0x080FCAA0 / 0x080FC444 / 0x080FCB18 / 0x080FCB24 | same as US | same as France |
+| TLA `recv_success` / `review_fn` / `title_fn` | 0x02008D06 / 0x0200A3E0 / 0x0200A2E8 (= German) | = German | 0x02008D02 / 0x0200A3DC / 0x0200A2E4 |
+
+The start screen sources are the same files in all five versions (GS1 files 21/23 and the used parts of file 3,
+TLA valley picture): the panorama is pixel-identical. The TLA logo differs only in the subtitle; `title_logo.py`
+removes it by position (shapes right of the ring's ornament) plus colour (shapes further left whose pixels are
+>= 90 % subtitle colours; the ornament shares at most 67 %). The Italian subtitle is dark red, so the earlier
+hue-only rule missed it.
+
 ---
 
 ## 7. Language versions and profiles (`tools/profiles.py`)
@@ -281,4 +300,6 @@ holds). A word read byte/halfword-wise and not used is data -> `data/reloc_exclu
 `build_gs1_reloc.load_exclusions`. Music pointers are never excluded (m4a reads its pointers byte-wise).
 USA probe (prologue + 201 maps + 255 battles): 3199 candidate words read; confirmed pointers 2005 (runs) / 158
 (strided) / 33 (singles); byte-read data 116 after removing music pointers. Words never read keep the heuristic
-result. Byte-pattern rules were rejected: "all low bytes small" would also drop real function pointers (0x08011D11).
+result. Other versions: German 118, French 128, Italian 127, Spanish 127 (own probe run + the findings of the
+versions done before, mapped by 12 bytes of surrounding context: `pointer_probe.py list ORIG OUT OTHER_GS1...`).
+Byte-pattern rules were rejected: "all low bytes small" would also drop real function pointers (0x08011D11).

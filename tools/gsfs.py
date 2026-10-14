@@ -13,6 +13,12 @@ MFT_OFFSETS = {
     "AGFD": 0x680000,  # Golden Sun - Die Vergessene Epoche (Germany)
     "AGSE": 0x320000,  # Golden Sun (USA, Europe)
     "AGFE": 0x680000,  # Golden Sun - The Lost Age (USA, Europe)
+    "AGSF": 0x321800,  # Golden Sun (France)
+    "AGFF": 0x680000,  # Golden Sun - L'Age Perdu (France)
+    "AGSI": 0x320000,  # Golden Sun (Italy)
+    "AGFI": 0x680000,  # Golden Sun - L'Era Perduta (Italy)
+    "AGSS": 0x321800,  # Golden Sun (Spain)
+    "AGFS": 0x680000,  # Golden Sun - La Edad Perdida (Spain)
 }
 
 

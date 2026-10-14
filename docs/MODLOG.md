@@ -416,3 +416,23 @@ TODO: start menu (Continue / Chapter 1 / Chapter 2) in C; verify real GS1 credit
   docs/. Test name changed to "Alex"; ComfyUI drafts with embedded workflow metadata moved to build/.
 - Checks on the exported file set: no personal data/paths, no 32-byte piece of any of the four ROMs in any file,
   um publish check PASS (84 files).
+
+## Session 16 (2026-10-14): French, Italian, Spanish
+- ROMs (No-Intro): AGSF 42f3b262..., AGFF f14855c0..., AGSI ca45e04b..., AGFI 57f1d005..., AGSS de0bdc88...,
+  AGFS a2e3e800.... GS1 MFT: FR/ES 0x321800, IT 0x320000 (longest pointer run starting with 0x08000000); TLA
+  0x680000 everywhere. All profiles.py patterns matched unchanged (values in TECHNICAL "French, Italian, Spanish").
+- Start screen sources identical in all five versions (panorama pixel-identical). TLA logo: the Italian subtitle is
+  dark red, the old hue rule kept "L'" and two sky specks. New rule in title_logo.tla_logo: shapes right of the
+  ornament = subtitle, shapes further left = subtitle if >= 90 % of their pixels have subtitle colours (letters
+  >= 0.93, ornament <= 0.67), whitish specks dropped. German logo identical; English now keeps a small ornament
+  curl the old rule had cut (EN output SHA-1 changes to 5a8c4f2a...).
+- Menu texts FR/IT/ES (TEXT in bootmenu.py, official subtitles L'Âge Perdu / L'Era Perduta / La Edad Perdida).
+- Parallel testing: GSMERGE_PORT (emu.py + bridge.lua), probe list file per ROM. test_transition reads the hero name
+  at 0x02000500 (FR/ES default names differ: "Vlad", "Hans").
+- Pointer probes (3 in parallel, ~27 min): 120/118/119 data words; + EN/DE findings mapped by 12 bytes of context
+  (pointer_probe.py list ... OTHER_GS1.gba) -> AGSF 128, AGSI 127, AGSS 127.
+- Tests FR/IT/ES: map tour 0 stray reads / 0 crashes; battle tour 0 crashes / 0 stray reads; saves, menu,
+  transition PASS. Differing map screens = timing (checked; ES map 7 light effect and map 182 cutscene not
+  reproducible / pixel-identical with equal timing). EN transition re-run PASS, DE output unchanged.
+- Builder: SUPPORTED/PAIRS/NAMES for FR/IT/ES, reference SHA-1 FR 2de01797..., IT 569f1cbb..., ES d64dedca...;
+  player build from roms/ zips byte-identical to the dev builds. VERSION 1.1.0 (not released, not committed).

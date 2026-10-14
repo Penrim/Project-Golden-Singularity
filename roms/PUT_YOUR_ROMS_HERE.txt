@@ -2,6 +2,9 @@ Put your ROM files here (.gba or .zip):
 
   English version:  Golden Sun (USA, Europe)  and  Golden Sun - The Lost Age (USA, Europe)
   German version:   Golden Sun (Germany)       and  Golden Sun - Die Vergessene Epoche (Germany)
+  French version:   Golden Sun (France)        and  Golden Sun - L'Age Perdu (France)
+  Italian version:  Golden Sun (Italy)         and  Golden Sun - L'Era Perduta (Italy)
+  Spanish version:  Golden Sun (Spain)         and  Golden Sun - La Edad Perdida (Spain)
 
 Then double-click the build launcher for your system in the main folder.
 The file names do not matter - the builder recognises the games itself.

@@ -34,7 +34,9 @@ runs between commands; `wait N` advances N frames.
 Watchpoint callbacks receive an `info` table: `address, width, oldValue, newValue, accessType, segment`.
 
 **Gotchas**
-- Only one bridge at a time; a leftover mGBA keeps port 61337 busy ("bridge did not come up"). Kill it by path:
+- Parallel runs: set `GSMERGE_PORT` (e.g. 61351, 61352, ...) per test process; `emu.py` and `bridge.lua`
+  both read it (default 61337). Used to probe/test several languages at once.
+- One bridge per port; a leftover mGBA keeps its port busy ("bridge did not come up"). Kill it by path:
   `Get-Process mGBA | ? { $_.Path -like '*GoldenSunMerge*' } | Stop-Process -Force`.
 - An mGBA crash dialog ("Jumped to invalid address …") pauses emulation → socket timeout. Tests treat a timeout as
   a crash and restart the emulator.
@@ -51,11 +53,11 @@ Watchpoint callbacks receive an `info` table: `address, width, oldValue, newValu
 | `test_saves.py MERGED OUT` | save in GS1, save in TLA, check banks, reload both | GS1 → bank 1, TLA → bank 0, no interference, both reload |
 | `test_menu.py MERGED OUT [GS1_BANK.sav]` | start menu with no save / TLA save / GS1-only save (GS1 bank of the same language; default `build/tour/gs1_backup.sav`) | 2 entries / Continue → TLA / Continue → GS1 |
 | `test_transition.py MERGED OUT [DEMO.ss1]` | empty cart → Chapter 1 → simulated end of credits → (saves the demo state) → Isaac renamed "Alex" → clear save, chapter card, TLA new game | prints `RESULT: PASS`: "Alex" in TLA RAM (0x02000520), bank 1 holds clear data |
-| `pointer_probe.py run MERGED ORIG OUT [states]` + `list ORIG OUT` | which relocated words the game reads byte-wise (data, not pointers) | writes `data/reloc_exclude_<code>.txt`; rebuild afterwards (~25 min) |
+| `pointer_probe.py run MERGED ORIG OUT [states]` + `list ORIG OUT [OTHER_GS1 ...]` | which relocated words the game reads byte-wise (data, not pointers) | writes `data/reloc_exclude_<code>.txt`; rebuild afterwards (~25 min) |
 | `difftest.py ORIG TEST OUT` | same scripted input on two ROMs | (early tool; screens differ by timing because recompressed map code decompresses at a different speed) |
 
 Run the tours per language: the original GS1 of that language is the reference (e.g. `"Golden Sun (Germany).gba"
-build/gsmerge_de.gba build/tour_de`). The battle tour takes the encounter addresses from the profile.
+build/gsmerge_de.gba build/tour_de`; likewise France/Italy/Spain with `gsmerge_fr/it/es`). The battle tour takes the encounter addresses from the profile.
 
 The state files `build/tour/orig_field.ss` / `merged_field.ss` (Vale, start of the game) are created on demand
 by `maptour.field_state`. Delete them after rebuilding the ROM.

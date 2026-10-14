@@ -29,12 +29,12 @@ upper half of the ROM ("relocated").
 | Separate saves (Flash 128K, bank per game) | done, tested (save, reload, no interference) |
 | GS1 → TLA chapter transition with automatic party import | done, tested from power-on and with the real credits |
 | Real ending, fully scripted | final battle, ending scenes and credits scripted; the one story step "Lalivero → ship departure scene" is **not** scripted (see `docs/TESTING.md`) |
-| Languages | done: **one cartridge per language**, English (`--lang en`) and German (`--lang de`) from the official ROMs; all addresses found automatically (`tools/profiles.py`), so FR/IT/ES only need their ROMs + a `LANGUAGES` entry |
+| Languages | done: **one cartridge per language**: English, German, French, Italian, Spanish (`--lang en/de/fr/it/es`) from the official ROMs; all addresses found automatically (`tools/profiles.py`). Japanese is not supported |
 | Start screen | done: GS1's original intro with its music (replayed; GS1's own sound engine) -> white flash -> slowly panning panorama from GS1's intro scene to TLA's intro valley (both unchanged, only the middle generated with ComfyUI), TLA logo from the ROM, game-style menu window; see `art/README.md` |
-| Release builder | open |
+| Release builder | done (`build.py`, double-click launchers) |
 
 Languages: one cartridge per language, built from that language's official GS1 + TLA ROMs (full official
-translation, keyboard, logos). A runtime language switch was rejected: both languages complete would need 48 MiB,
+translation, keyboard, logos). A runtime language switch was rejected: two complete language pairs alone would need 48 MiB,
 and German uses different string numbering than English (see MODLOG session 9).
 
 ---
@@ -44,7 +44,7 @@ and German uses different string numbering than English (see MODLOG session 9).
 All commands from this folder (`GoldenSunMerge/`), Git Bash or PowerShell.
 
 **Play the current build:** double-click `PLAYTEST_EN.bat` or `PLAYTEST_DE.bat` (mGBA dev build + background
-logger). Keys: arrows,
+logger; other languages: `tools/mgba-dev/mGBA.exe --script tools/playtest_watch.lua build/gsmerge_fr.gba`). Keys: arrows,
 X = A, Z = B, Enter = Start, Backspace = Select, Tab = fast forward, F1 = load quick save 1.
 The demo states `build/gsmerge_en.ss1` / `build/gsmerge_de.ss1` are GS1 right after the credits: press F1 to watch
 the chapter change. **Seen a glitch?** Press **L + R + Select** together: screenshot, savestate, video memory and the
@@ -57,7 +57,7 @@ added to `data/asm_cache.json`):
 
 ```
 .venv/Scripts/python -I tools/build_merge.py --lang en
-.venv/Scripts/python -I tools/build_merge.py --lang de
+.venv/Scripts/python -I tools/build_merge.py --lang de          (likewise fr, it, es)
 .venv/Scripts/python -I tools/build_merge.py GS1.gba TLA.gba out.gba --lang en     (explicit files)
 ```
 
@@ -72,9 +72,10 @@ Both ROMs must be the same language. `tools/profiles.py` finds every version-spe
 .venv/Scripts/python -I tools/test_saves.py build/gsmerge_en.gba build/tour/saves
 .venv/Scripts/python -I tools/test_menu.py  build/gsmerge_en.gba build/tour/menu
 ```
-(German: `build/gsmerge_de.gba`, output folder e.g. `build/tour_de`.)
+(German: `build/gsmerge_de.gba`, output folder e.g. `build/tour_de`; likewise fr, it, es.)
 
-The tests open (minimised) mGBA windows and talk to them over TCP port 61337. Only one test can run at a time.
+The tests open (minimised) mGBA windows and talk to them over TCP port 61337. To run several tests at the same
+time (e.g. one per language), give each its own port: `GSMERGE_PORT=61351 .venv/Scripts/python -I tools/...`.
 
 ---
 
@@ -91,6 +92,12 @@ Everything lives in this folder; nothing is installed system-wide.
    | Golden Sun - The Lost Age (USA, Europe).gba | AGFE | b500663220cb9bf56b9f8e8c0c544f1d6fa3a824 |
    | Golden Sun (Germany).gba | AGSD | c23ab91a39434623cf1a999f387d743ade1a22a6 |
    | Golden Sun - Die Vergessene Epoche (Germany).gba | AGFD | 7820b4c7ba9002b0e9be23a6f45a9ab204986438 |
+   | Golden Sun (France).gba | AGSF | 42f3b262c16cfc5bde1fa2b25016fb74046de1b3 |
+   | Golden Sun - L'Age Perdu (France).gba | AGFF | f14855c0f8c87a95cc52189e8e3b2bd9df186322 |
+   | Golden Sun (Italy).gba | AGSI | ca45e04b26b2f040ac63e679a459d21869f5f28d |
+   | Golden Sun - L'Era Perduta (Italy).gba | AGFI | 57f1d005666b81645e55412658427e27099c5907 |
+   | Golden Sun (Spain).gba | AGSS | de0bdc889594b012cad213ca83707feb81ada28b |
+   | Golden Sun - La Edad Perdida (Spain).gba | AGFS | a2e3e80036195343c2713410ac14f4e329e3f40d |
 
    The US hashes match No-Intro "verified" (checked against mGBA's `nointro.dat`).
 
@@ -174,11 +181,12 @@ Main tools (details in `docs/TECHNICAL.md` / `docs/TESTING.md`):
 
 ### Roadmap / open items
 
-1. **More languages** (French/Italian/Spanish): add the ROM pair to `LANGUAGES` in `build_merge.py` and the
-   menu texts to `TEXT` in `bootmenu.py`, build, run the tests. If a pattern in `profiles.py` fails, that version
-   differs and the pattern needs a look.
-2. **"Continue" straight into the save** (skip the game's own title screen).
-3. **Release builder**: a small program that builds the cartridge from the player's own ROMs (no ROM data in
-   the release; patches are applied to the user's files).
-4. **Close the ending-script gap** (Lalivero → ship departure scene, needs a realistic late-game flag set).
-5. Optional: verify on real hardware / flash carts (needs FLASH1M save type).
+1. **"Continue" straight into the save** (skip the game's own title screen).
+2. **Close the ending-script gap** (Lalivero → ship departure scene, needs a realistic late-game flag set).
+3. Optional: verify on real hardware / flash carts (needs FLASH1M save type).
+
+Adding a language version (done this way for FR/IT/ES): MFT offsets in `gsfs.py` (`MFT_OFFSETS`; GS1 = longest
+run of ROM pointers starting with 0x08000000, TLA at 0x680000), the ROM pair in `LANGUAGES` (`build_merge.py`) and
+`SUPPORTED`/`PAIRS`/`NAMES` (`build.py`), menu texts in `TEXT` (`bootmenu.py`, then `python tools/bootmenu.py ui
+<lang>`), build, check the logo cut-out, run the pointer probe (exclusion list) and the tests. If a pattern in
+`profiles.py` fails, that version differs and the pattern needs a look.

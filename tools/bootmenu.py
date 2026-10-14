@@ -297,6 +297,15 @@ TEXT = {   # all player-visible text of the start menu and chapter card, per lan
     "de": {"collection": "Sammlung", "hint": "Hoch/Runter: wählen     A: starten", "continue": "Fortsetzen",
            "ch1": "Kapitel 1 · Golden Sun", "ch2": "Kapitel 2 · Die vergessene Epoche",
            "chapter2": "Kapitel 2", "tla": "Die vergessene Epoche", "continues": "Deine Reise geht weiter..."},
+    "fr": {"collection": "Collection", "hint": "Haut/Bas : choisir     A : lancer", "continue": "Continuer",
+           "ch1": "Chapitre 1 · Golden Sun", "ch2": "Chapitre 2 · L'Âge Perdu", "chapter2": "Chapitre 2",
+           "tla": "L'Âge Perdu", "continues": "Votre voyage continue..."},
+    "it": {"collection": "Collezione", "hint": "Su/Giù: scegli     A: avvia", "continue": "Continua",
+           "ch1": "Capitolo 1 · Golden Sun", "ch2": "Capitolo 2 · L'Era Perduta", "chapter2": "Capitolo 2",
+           "tla": "L'Era Perduta", "continues": "Il tuo viaggio continua..."},
+    "es": {"collection": "Colección", "hint": "Arriba/Abajo: elegir     A: empezar", "continue": "Continuar",
+           "ch1": "Capítulo 1 · Golden Sun", "ch2": "Capítulo 2 · La Edad Perdida", "chapter2": "Capítulo 2",
+           "tla": "La Edad Perdida", "continues": "Tu viaje continúa..."},
 }
 
 

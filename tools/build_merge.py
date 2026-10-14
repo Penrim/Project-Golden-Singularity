@@ -4,7 +4,7 @@ One cartridge per language: both ROMs must be the same language version. Every v
 found automatically (tools/profiles.py).
 
 Usage:
-  python build_merge.py --lang en|de              (ROMs from ../work/goldensun/clean, output build/gsmerge_<lang>.gba)
+  python build_merge.py --lang en|de|fr|it|es             (ROMs from ../work/goldensun/clean, output build/gsmerge_<lang>.gba)
   python build_merge.py GS1.gba TLA.gba out.gba [--lang xx]
 """
 import json, os, struct, sys
@@ -23,6 +23,9 @@ ROM_DIR = os.path.join(HERE, "..", "..", "work", "goldensun", "clean")
 LANGUAGES = {   # language -> (GS1 file, TLA file, expected game codes)
     "en": ("Golden Sun (USA, Europe).gba", "Golden Sun - The Lost Age (USA, Europe).gba", ("AGSE", "AGFE")),
     "de": ("Golden Sun (Germany).gba", "Golden Sun - Die Vergessene Epoche (Germany).gba", ("AGSD", "AGFD")),
+    "fr": ("Golden Sun (France).gba", "Golden Sun - L'Age Perdu (France).gba", ("AGSF", "AGFF")),
+    "it": ("Golden Sun (Italy).gba", "Golden Sun - L'Era Perduta (Italy).gba", ("AGSI", "AGFI")),
+    "es": ("Golden Sun (Spain).gba", "Golden Sun - La Edad Perdida (Spain).gba", ("AGSS", "AGFS")),
 }
 
 GS1_BASE = build_gs1_reloc.SHIFT          # file offset of GS1 in the merged ROM

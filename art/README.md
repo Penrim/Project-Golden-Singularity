@@ -20,8 +20,8 @@ Nothing from the original games is stored here; the builder reads the screens an
 - GS1 frame: snapshot of frame 558 in mGBA (`build/art/intro/gs1f_*`), scroll offsets found by matching (BG1 0/5,
   BG2 0/216), `python tools/scene_recipe.py make "<GS1>" build/art/intro/gs1f build/art/intro/gs1f.png
   '{"1": [0, 5], "2": [0, 216]}' art/gs1_intro_recipe.json`. Rebuilt-from-ROM == rebuilt-from-snapshot; the same
-  recipe gives an identical picture with the German ROM.
-- TLA: intro valley picture = MFT file with palette + graphics LZ, 240x384 (file 25 in USA/DE), rows 128..287.
+  recipe gives an identical picture with the German, French, Italian and Spanish ROMs.
+- TLA: intro valley picture = MFT file with palette + graphics LZ, 240x384 (file 25 in all five versions), rows 128..287.
 - Middle: `python tools/panorama.py generate build/art/pano_v6 1,...,8` (ComfyUI, Z-Image Turbo inpainting of
   the middle third at 2160x480; the mask fades 24 px into both originals so the model continues them, but the
   stored patch keeps only the middle), chosen **seed 7**, `python tools/panorama.py pick build/art/pano_v6/seed7.png`

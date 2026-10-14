@@ -3,6 +3,7 @@ import os, socket, subprocess, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 MGBA = os.path.join(HERE, "mgba-dev", "mGBA.exe")
+PORT = int(os.environ.get("GSMERGE_PORT", "61337"))   # bridge.lua reads the same variable (parallel runs)
 
 KEY = {"A": 1, "B": 2, "SELECT": 4, "START": 8, "RIGHT": 16, "LEFT": 32, "UP": 64, "DOWN": 128, "R": 256, "L": 512}
 
@@ -22,7 +23,7 @@ class Emu:
         t0 = time.time()
         while time.time() - t0 < timeout:
             try:
-                s = socket.create_connection(("127.0.0.1", 61337), timeout=2)
+                s = socket.create_connection(("127.0.0.1", PORT), timeout=2)
                 s.settimeout(120)
                 e = cls(proc, s)
                 if e.cmd("ping") == "pong":
