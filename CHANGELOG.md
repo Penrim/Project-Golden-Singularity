@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.0 (not released yet)
+## 1.1.0 — French, Italian and Spanish
 
 - New languages: French, Italian and Spanish (built from the French/Italian/Spanish games, as with English and
   German). The builder recognises the new ROMs automatically.
