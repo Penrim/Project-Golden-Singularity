@@ -24,11 +24,14 @@ ROM_LO = 0x08000000
 
 
 def relocate_blob(blob, size):
-    """Relocate ROM pointers inside a decompressed map code blob (literal pools only)."""
+    """Relocate ROM pointers inside a decompressed map code blob. Map code reaches the engine only through
+    jump-table entries (ldr r4,[pc,#0]; bx r4; .word fn), at the file start and as import stubs; tools/mapflow.py
+    shows these are the only ROM addresses in map code. Other literal-pool words that look like addresses are
+    16.16 fixed-point coordinates (e.g. 0x08380000 = 2104.0 in map code 881) and must stay unchanged."""
     b = bytearray(blob)
     n = 0
-    for a in literal_targets(b, 0, len(b)):
-        if a % 4 == 0 and a + 4 <= len(b):
+    for a in range(4, len(b) - 3, 4):
+        if b[a - 4:a] == reloc.STUB:
             w = struct.unpack_from("<I", b, a)[0]
             if is_ptr(w, size):
                 struct.pack_into("<I", b, a, w + SHIFT); n += 1

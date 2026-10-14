@@ -41,6 +41,10 @@ class Flow:
             stubs = reloc.stub_targets(self.g, self.end)
             code = reloc.strict_code(self.d, stubs, self.end, parts["roots"] - stubs, parts["runs"] | parts["strided"])
         self.code = code
+        # code space (where the analysed instructions live) and ROM space (GS1, whose tables they read) are the
+        # same for the engine; mapflow.py analyses map code at 0x02008000 against the ROM
+        self.base, self.rom, self.rom_size, self.rom_code, self.rom_end = ROM, self.d, self.size, code, self.end
+        self.lit_use = collections.defaultdict(collections.Counter)   # literal offset -> how its value is used
         self.md = Cs(CS_ARCH_ARM, CS_MODE_THUMB)
         self.md.detail = True
         self.insns = self._decode()
@@ -59,8 +63,8 @@ class Flow:
             while j + 1 < len(hs) and hs[j + 1] == hs[j] + 2:
                 j += 1
             a, b = hs[i], hs[j] + 2
-            for ins in self.md.disasm(self.d[a:b + 2], ROM + a):
-                o = ins.address - ROM
+            for ins in self.md.disasm(self.d[a:b + 2], self.base + a):
+                o = ins.address - self.base
                 if o >= b:
                     break
                 if o in self.code:
@@ -72,11 +76,11 @@ class Flow:
         targets, entries = set(), set(stubs)
         for o, ins in self.insns.items():
             if ins.mnemonic in ("bl",) and ins.operands and ins.operands[0].type == ARM_OP_IMM:
-                t = ins.operands[0].imm - ROM
+                t = ins.operands[0].imm - self.base
                 entries.add(t); entries.add(self.resolve(t))
             elif ins.mnemonic.startswith("b") and ins.mnemonic not in ("bx", "bic", "bics", "bkpt") \
                     and ins.operands and ins.operands[0].type == ARM_OP_IMM:
-                targets.add(ins.operands[0].imm - ROM)
+                targets.add(ins.operands[0].imm - self.base)
         return targets, entries
 
     def resolve(self, t):
@@ -91,8 +95,25 @@ class Flow:
     def u32(self, a):
         return struct.unpack_from("<I", self.d, a)[0] if 0 <= a <= self.size - 4 else None
 
+    def rom_u32(self, a):
+        return struct.unpack_from("<I", self.rom, a)[0] if 0 <= a <= self.rom_size - 4 else None
+
     def is_rom(self, v):
-        return v is not None and ROM <= v < ROM + self.size
+        return v is not None and ROM <= v < ROM + self.rom_size
+
+    @staticmethod
+    def _org(v):
+        """Literal-pool offset a constant (or a table base) came from, if any."""
+        if v and v[0] == "c" and len(v) > 2:
+            return v[2]
+        if v and v[0] == "idx" and len(v) > 3:
+            return v[3]
+        return None
+
+    def use_lit(self, v, how):
+        o = self._org(v)
+        if o is not None and self._rec:
+            self.lit_use[o][how] += 1
 
     def mark_ptr(self, val, why):
         if val and val[0] == "ld":
@@ -139,7 +160,7 @@ class Flow:
             nxt = last + (4 if ins.mnemonic == "bl" else 2)
             s_ = []
             if ins.mnemonic.startswith("b") and ins.mnemonic not in ("bl", "bx", "bic", "bics") and ins.operands                     and ins.operands[0].type == ARM_OP_IMM:
-                s_.append(ins.operands[0].imm - ROM)
+                s_.append(ins.operands[0].imm - self.base)
             if not end and nxt in blocks:
                 s_.append(nxt)
             succ[b] = [x for x in s_ if x in blocks]
@@ -192,10 +213,11 @@ class Flow:
         if m in ("ldr", "ldrh", "ldrb", "ldrsh", "ldrsb") and len(ops) == 2 and ops[1].type == ARM_OP_MEM:
             mem = ops[1].mem
             if self.md.reg_name(mem.base) == "pc":                    # literal pool
-                la = ((ins.address + 4) & ~3) + mem.disp - ROM
-                regs[dst] = ("c", self.u32(la))
+                la = ((ins.address + 4) & ~3) + mem.disp - self.base
+                regs[dst] = ("c", self.u32(la), la)
                 return
             base, idx, disp, has_idx = self._base(regs, mem)
+            self.use_lit(base, "addr"); self.use_lit(idx, "addr")
             width = 4 if m == "ldr" else 2 if m in ("ldrh", "ldrsh") else 1
             src = self._source(base, idx, disp, has_idx)
             self._deref(base, idx, func, ins)
@@ -207,6 +229,7 @@ class Flow:
         if m in ("str", "strh", "strb") and len(ops) == 2 and ops[1].type == ARM_OP_MEM:
             mem = ops[1].mem
             base, idx, disp, _ = self._base(regs, mem)
+            self.use_lit(base, "addr"); self.use_lit(idx, "addr"); self.use_lit(regs.get(dst), "stored")
             self._deref(base, idx, func, ins)
             if base and base[0] == "c" and base[1] is not None and base[1] + disp in IO_DMA and m == "str":
                 self.mark_ptr(regs.get(dst), ("dma", ins.address))
@@ -214,10 +237,12 @@ class Flow:
             return
         # ---- calls
         if m == "bl" and ops and ops[0].type == ARM_OP_IMM:
-            t = self.resolve(ops[0].imm - ROM)
+            t = self.resolve(ops[0].imm - self.base)
             veneer = self.insns.get(t)
             if veneer is not None and veneer.mnemonic == "bx" and veneer.op_str != "lr":
                 self.mark_ptr(regs.get(veneer.op_str), ("call", ins.address))     # bl _call_via_rN
+            for k in range(4):
+                self.use_lit(regs.get(f"r{k}"), "arg-deref" if k in self.deref.get(t, ()) else "arg")
             for k in sorted(self.deref.get(t, ())):
                 v = regs.get(f"r{k}")
                 if not self.mark_ptr(v, ("arg", t, k)) and v and v[0] == "par" and func is not None:
@@ -228,6 +253,7 @@ class Flow:
         if m == "svc" and ops:
             if ops[0].imm in SWI_SRC:
                 v = regs.get("r0")
+                self.use_lit(v, "swi")
                 if not self.mark_ptr(v, ("swi", ins.address)) and v and v[0] == "par" and func is not None:
                     self.deref[func].add(v[1])
             for r in ("r0", "r1", "r3"):
@@ -235,6 +261,7 @@ class Flow:
             return
         if m == "bx" or (m == "mov" and dst == "pc"):
             v = regs.get(name(ops[-1]))
+            self.use_lit(v, "jump")
             self.mark_ptr(v, ("jump", ins.address))
             if v and v[0] == "par" and func is not None and m == "bx" and name(ops[-1]) != "lr":
                 self.deref[func].add(v[1])
@@ -243,7 +270,15 @@ class Flow:
         #      (i << 3) - i, (i << 1) + i is recognised as 7*i, 3*i)
         if dst is None:
             return
+        if m in ("cmp", "cmn", "tst"):                # flags only: no register is written
+            for op in ops:
+                if op.type == ARM_OP_REG:
+                    self.use_lit(regs.get(name(op)), "cmp")
+            return
         srcs = list(ops[1:])
+        for op in srcs:
+            if op.type == ARM_OP_REG and m not in ("adds", "add", "subs", "sub", "mov", "movs"):
+                self.use_lit(regs.get(name(op)), "arith")
         val_of = lambda op: ("c", op.imm) if op.type == ARM_OP_IMM else self._val(regs, name(op), ins)
         val = None
         if m in ("movs", "mov") and len(srcs) == 1:
@@ -302,7 +337,9 @@ class Flow:
         if b and b[0] == "c" and b[1] == 0:
             return a
         if a and b and a[0] == "c" and b[0] == "c" and a[1] is not None and b[1] is not None:
-            return ("c", (a[1] + b[1]) & 0xFFFFFFFF)
+            o = self._org(a) if self._org(a) is not None and abs(b[1]) < 0x10000 else \
+                self._org(b) if self._org(b) is not None and abs(a[1]) < 0x10000 else None
+            return ("c", (a[1] + b[1]) & 0xFFFFFFFF) + ((o,) if o is not None else ())
         for x, y in ((a, b), (b, a)):                 # pointer/argument plus offset or index keeps its origin
             if x and x[0] in ("ld", "par") and (y is None or y[0] in ("c", "lin", "var")):
                 return x
@@ -314,11 +351,12 @@ class Flow:
                 if y and y[0] == "c":
                     return ("c", x[1] + (y[1] or 0))
                 ly = self._lin(y)
-                return ("idx", x[1], ly[1] if ly and y[0] == "lin" and ly[1] > 0 else 0)
+                return ("idx", x[1], ly[1] if ly and y[0] == "lin" and ly[1] > 0 else 0) + \
+                    ((self._org(x),) if self._org(x) is not None else ())
             if x and x[0] == "idx" and y and y[0] == "c" and y[1] is not None and abs(y[1]) < 0x1000:
-                return ("idx", x[1] + y[1], x[2])
+                return ("idx", x[1] + y[1], x[2]) + x[3:]
             if x and x[0] == "idx":
-                return ("idx", x[1], 0)
+                return ("idx", x[1], 0) + x[3:]
         return None
 
     def _source(self, base, idx, disp, has_idx):
@@ -367,7 +405,7 @@ class Flow:
             lab = set()
             for o, ins in self.insns.items():
                 if ins.mnemonic == "ldr" and len(ins.operands) == 2 and ins.operands[1].type == ARM_OP_MEM                         and self.md.reg_name(ins.operands[1].mem.base) == "pc":
-                    v = self.u32(((ins.address + 4) & ~3) + ins.operands[1].mem.disp - ROM)
+                    v = self.u32(((ins.address + 4) & ~3) + ins.operands[1].mem.disp - self.base)
                     if self.is_rom(v):
                         lab.add((v & ~1) - ROM)
             self._labels = sorted(lab)
@@ -379,23 +417,23 @@ class Flow:
         import bisect
         if src[0] == "at":
             a = src[1] & ~3
-            return [a] if 0 <= a < self.size - 3 else []
+            return [a] if 0 <= a < self.rom_size - 3 else []
         _, T, s, off = src
         start = T + off
         if not s:
-            return [start & ~3] if 0 <= start < self.size - 3 else []
+            return [start & ~3] if 0 <= start < self.rom_size - 3 else []
         lab = self.labels()
         k = bisect.bisect_right(lab, T)
-        limit = lab[k] if k < len(lab) else self.end
+        limit = lab[k] if k < len(lab) else self.rom_end
         out, i = [], 0
         while i < 4096:
             e = T + i * s
-            if e >= limit or e + off > self.size - 4:
+            if e >= limit or e + off > self.rom_size - 4:
                 break
             a = (e + off) & ~3
-            if a in self.code or a + 2 in self.code:   # a table never runs over code
+            if a in self.rom_code or a + 2 in self.rom_code:   # a table never runs over code
                 break
-            w = self.u32(a)
+            w = self.rom_u32(a)
             if want_ptr and not (w == 0 or self.is_rom(w)):
                 break
             out.append(a)
