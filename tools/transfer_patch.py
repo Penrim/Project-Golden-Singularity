@@ -52,8 +52,11 @@ def build_runtime(gp, tp):
         ""])
     open(os.path.join(out, "profile.h"), "w").write(header)
     pair = f"{gp['code']}_{tp['code']}"
-    src_hash = hashlib.sha1(open(os.path.join(ROOT, "cart", "runtime.c"), "rb").read() +
-                            open(os.path.join(ROOT, "cart", "link.ld"), "rb").read()).hexdigest()
+    # Line endings depend on how the project was downloaded (GitHub ZIP: LF, git on Windows: CRLF), so the
+    # source fingerprint is taken with LF line endings.
+    src = b"".join(open(os.path.join(ROOT, "cart", f), "rb").read().replace(b"\r\n", b"\n")
+                   for f in ("runtime.c", "link.ld"))
+    src_hash = hashlib.sha1(src).hexdigest()
     pre = os.path.join(ROOT, "cart", "prebuilt", pair)
     gcc = _find_gcc()
     if gcc is None or os.environ.get("GSMERGE_PREBUILT") == "1":

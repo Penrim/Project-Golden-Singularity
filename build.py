@@ -19,7 +19,7 @@ import argparse, hashlib, os, sys, tempfile, zipfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "tools"))
 
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 
 # Verified dumps (No-Intro). Other dumps of the same version may work but are untested.
 SUPPORTED = {

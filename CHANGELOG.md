@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1 — fix: building works again
+
+- Fixed: building stopped with "cart/prebuilt/... does not match cart/runtime.c" for everyone who downloaded the
+  project (GitHub ZIP or git clone) and has no ARM compiler installed, which is every player. Versions 1.0.0 and
+  1.1.0 were affected. The finished cartridges are unchanged (same checksums as 1.1.0).
+
 ## 1.1.0 — French, Italian and Spanish
 
 - New languages: French, Italian and Spanish (built from the French/Italian/Spanish games, as with English and
