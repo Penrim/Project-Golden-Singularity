@@ -1,2 +1,2 @@
 # GS1 AGSD: pointers no relocation rule finds (step-5 proofs). One file offset per line (+ evidence).
-2aff54  pointer: data,singles,tables-side
+2aff54  pointer: step5

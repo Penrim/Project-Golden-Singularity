@@ -35,10 +35,11 @@ def collect(lang):
         v = "P" if c in ("address", "function", "size-pair", "size end") else "D" if c == "number" else "S"
         add(la, "literals", v, c)
 
-    for row in csv.reader(open(os.path.join(ROOT, "docs", "step5_singles_words.tsv"), encoding="utf-8"), delimiter="\t"):
-        if len(row) >= 5 and row[0] == lang:
-            k = row[4]
-            add(int(row[1], 16), "singles", "P" if k.startswith("pointer") else "D" if k.startswith("data") else "S", k)
+    import singles                                   # full classification (the TSV holds only contradictions)
+    usa = os.path.join(ROOT, "..", "work", "goldensun", "clean", ROMS["en"])
+    res, cat, extra = singles.classify(rom, probe, usa)
+    for a, (k, why) in list(res.items()) + list(singles.side_words(cat, extra).items()):
+        add(a, "singles", "P" if k.startswith("pointer") else "D" if k.startswith("data") else "S", k)
 
     for row in csv.DictReader(open(os.path.join(ROOT, "docs", "step5_data_words.tsv"), encoding="utf-8"), delimiter="\t"):
         if row["lang"] == CODES[lang]:

@@ -2,62 +2,76 @@
 # line (+ evidence). Sources: pointer probe (tools/pointer_probe.py) and the step-5 code/format proofs
 # (tools/step5_collect.py: tableproof, singles, dataproof, litproof; 'weak' = data evidence whose table
 # bound rests on the next label, with no pointer evidence at all). See docs/TECHNICAL.md.
-01823c  data: singles
-032bd4  probe
-032f40  probe
-032f44  probe
-0361c8  probe
-082908  weak data: data
-082934  weak data: data
-082960  weak data: data
-08298c  weak data: data
-0829b8  weak data: data
-0829e4  weak data: data
-082a10  weak data: data
-082a3c  weak data: data
-082c78  weak data: data
-082ca4  weak data: data
-082cd0  weak data: data
-082cfc  weak data: data
-082d28  weak data: data
-082d54  weak data: data
-082e30  weak data: data
-082e88  weak data: data
-082f64  weak data: data
-083040  weak data: data
-08306c  weak data: data
-083098  weak data: data
-0a17b4  data: data,tables-side
-0a17ec  data: data,tables-side
-0a1824  data: data,tables-side
-0a1bfc  data: data,tables-side
-0a1cdc  data: data,tables-side
-0a1e2c  data: data,tables-side
-0bff24  data: singles
-0c9c38  probe
-0c9c3c  probe
-0c9e40  probe
-0d71d0  data: literals
-0edfa0  data: singles
-0f18d0  weak data: data
-0f18dc  probe
-0f18e0  probe
-0f21f4  data: singles
-0f222c  probe
-0f2294  weak data: data
-0f229c  weak data: data
-0f22c4  weak data: data
-0f22e0  data: data,tables-side
-0f24f4  probe
-0f2588  data: tables-side
-0f4244  data: data,tables-side
-0f4260  data: data,tables-side
-0f4264  data: data,tables-side
-0f426c  data: data,tables-side
-0f4270  data: data,tables-side
-0f4274  data: data,tables-side
-0f4278  data: data,tables-side
-0f69ac  weak data: data
+01823c  probe
+028d54  data: tiling: inside nibble stream of table 028b20
+02bf64  data: tiling: inside nibble stream of table 028e9c
+02c018  data: tiling: inside nibble stream of table 028e9c
+02c090  data: tiling: inside nibble stream of table 028e9c
+02c678  data: tiling: inside nibble stream of table 028e9c
+02c850  data: tiling: inside nibble stream of table 028e9c
+02c890  data: tiling: inside nibble stream of table 028e9c
+02c8d0  data: tiling: inside nibble stream of table 028e9c
+02c908  data: tiling: inside nibble stream of table 028e9c
+02c944  data: tiling: inside nibble stream of table 028e9c
+02c988  data: tiling: inside nibble stream of table 028e9c
+02ca00  data: tiling: inside nibble stream of table 028e9c
+02ca3c  data: tiling: inside nibble stream of table 028e9c
+02d678  data: tiling: inside nibble stream of table 02ce40
+032bd4  data: probe-data
+032f40  data: probe-data
+032f44  data: probe-data
+0361c8  data: probe-data
+082908  data: step5 (weak bound)
+082934  data: step5 (weak bound)
+082960  data: step5 (weak bound)
+08298c  data: step5 (weak bound)
+0829b8  data: step5 (weak bound)
+0829e4  data: step5 (weak bound)
+082a10  data: step5 (weak bound)
+082a3c  data: step5 (weak bound)
+082c78  data: step5 (weak bound)
+082ca4  data: step5 (weak bound)
+082cd0  data: step5 (weak bound)
+082cfc  data: step5 (weak bound)
+082d28  data: step5 (weak bound)
+082d54  data: step5 (weak bound)
+082e30  data: step5 (weak bound)
+082e88  data: step5 (weak bound)
+082f64  data: step5 (weak bound)
+083040  data: step5 (weak bound)
+08306c  data: step5 (weak bound)
+083098  data: step5 (weak bound)
+0a17b4  data: step5 (weak bound)
+0a17ec  data: step5 (weak bound)
+0a1824  data: step5 (weak bound)
+0a1bfc  data: step5 (weak bound)
+0a1cdc  data: step5 (weak bound)
+0a1e2c  data: step5 (weak bound)
+0bff24  probe
+0c9c38  data: probe-data
+0c9c3c  data: probe-data
+0c9e40  data: probe-data
+0d71d0  data: step5
+0edfa0  probe
+0f18d0  data: step5 (weak bound)
+0f18dc  data: step5 (weak bound)
+0f18e0  data: step5 (weak bound)
+0f21f4  probe
+0f222c  data: step5 (weak bound)
+0f2294  data: step5 (weak bound)
+0f229c  data: step5 (weak bound)
+0f22c4  data: step5 (weak bound)
+0f22e0  data: step5 (weak bound)
+0f24f4  data: probe-data
+0f2588  probe
+0f4244  data: step5 (weak bound)
+0f4260  data: step5 (weak bound)
+0f4264  data: step5 (weak bound)
+0f426c  data: step5 (weak bound)
+0f4270  data: step5 (weak bound)
+0f4274  data: step5 (weak bound)
+0f4278  data: step5 (weak bound)
+0f69ac  data: step5 (weak bound)
 1007b8  probe
 100e70  probe
 100e74  probe
@@ -102,299 +116,304 @@
 1554b8  probe
 15553c  probe
 157838  probe
-184a00  probe
-1879e0  probe
-187a08  data: data,tables-side
-187a1c  probe
-188980  probe
-188b24  probe
-188b88  probe
-188bec  probe
-188c00  data: data,tables-side
-188c14  data: data,tables-side
-188c28  probe
-188c3c  probe
-188cc8  probe
-188d2c  probe
-188d68  probe
-188da4  probe
-188db8  probe
-188ee4  probe
-188f70  probe
-189740  probe
-189754  probe
-189f74  data: data,tables-side
-18a02c  data: singles
-18a030  data: singles
-18a088  data: data,singles
-18a090  data: data,singles
-18a094  data: data,singles
-18a098  data: data,singles
-18a2d4  data: singles
-18a2e8  data: singles
-18a4f8  data: singles
-18a50c  data: singles
-18a738  probe
-18a73c  probe
-18a740  probe
-18a744  probe
-18a8e8  probe
-18abe0  data: singles
-18ace0  data: data,singles
-18ace4  data: data,singles
-18ace8  data: data,singles
-18ad98  data: data,singles
-18ad9c  data: data,singles
-18ada0  data: data,singles
-18ae04  data: data,singles
-18ae08  data: data,singles
-18ae0c  data: data,singles
-18ae44  data: singles
-18ae4c  data: singles
-18ae50  data: singles
-18ae54  data: singles
-18ae58  data: singles
-18ae5c  data: singles
-18ae7c  data: singles
-18ae80  data: singles
-18ae84  data: singles
-18aea8  data: singles
-18aeb0  data: singles
-18aeb4  data: singles
-18af58  data: data,singles
-18afa0  data: data,singles
-18b0f8  probe
-18b100  data: singles
-18b104  data: singles
-18b170  data: data,singles
-18b174  data: data,singles
-18b178  data: data,singles
-18b1d8  data: data,singles
-18b1dc  data: data,singles
-18b1e0  data: data,singles
-18b478  data: singles
-18b56c  data: singles
-18b574  data: singles
-18b578  data: singles
-18b57c  data: singles
-18b580  data: singles
-18b584  data: singles
-18b60c  probe
-18b614  data: singles
-18b618  data: singles
-18b61c  data: singles
-18b620  data: singles
-18b624  data: singles
-18b6c0  data: data,singles
-18b6c4  data: data,singles
-18b6c8  data: data,singles
-18b700  probe
-18b708  data: singles
-18b70c  data: singles
-18b710  data: singles
-18b714  data: singles
-18b718  data: singles
-18b768  data: data,singles
-18b8ec  probe
-18b938  probe
-18b9bc  data: singles
-18b9c0  data: singles
-18ba50  probe
-18ba54  probe
-18ba58  probe
-18baf0  probe
-18baf8  probe
-18bb60  data: singles
-18bb64  data: singles
-18bbb4  probe
-18bbb8  probe
-18bbbc  data: data,singles
-18bc0c  data: data,singles
-18bcd4  probe
-18bd44  probe
-18bd48  probe
-18be70  data: data,singles
-18be74  data: data,singles
-18be78  data: data,singles
-18beb8  data: data,singles
-18bebc  data: data,singles
-18bec0  data: data,singles
-18bf60  data: data,singles
-18bfac  data: data,singles
-18bfb0  data: data,singles
-18bfb4  data: data,singles
-18c02c  probe
-18c030  probe
-18c034  data: data,singles
-18c080  data: data,singles
-18c084  data: data,singles
-18c088  data: data,singles
-18c08c  data: data,singles
-18c15c  data: data,singles
-18c160  data: data,singles
-18c164  data: data,singles
-18c16c  data: data,singles
-18c174  data: data,singles
-18c178  data: data,singles
-18c1d8  data: data,singles
-18c1dc  data: data,singles
-18c234  data: data,singles
-18c238  data: data,singles
-18c23c  data: data,singles
-18c294  data: data,singles
-18c298  data: data,singles
-18c29c  data: data,singles
-18c2a0  data: data,singles
-18c2a4  data: data,singles
-18c308  data: data,singles
-18c30c  data: data,singles
-18c310  data: data,singles
-18c358  probe
-18c370  data: data,singles
-18c3bc  probe
-18c3c0  probe
-18c3c4  probe
-18c3c8  probe
-18c3cc  probe
-18c650  data: data,singles
-18c654  data: data,singles
-18c658  data: data,singles
-18c704  data: singles
-18c708  data: singles
-18c7bc  probe
-18c860  probe
-18c8c0  data: singles
-18c8c4  data: singles
-18c980  data: singles
-18c988  data: singles
-18c98c  data: singles
-18c990  data: singles
-18c994  data: singles
-18c998  data: singles
-18c9e4  probe
-18c9e8  probe
-18c9ec  probe
-18cb20  data: data,singles
-18cb24  data: data,singles
-18cb28  data: data,singles
-18cc04  probe
-18cc10  data: data,singles
-18cc14  data: data,singles
-18cc18  data: data,singles
-18cd54  data: data,singles
-18cd98  data: singles
-18cd9c  data: singles
-18ce40  data: data,singles
-18ce68  probe
-18ce6c  data: singles
-18cfbc  data: data,singles
-18d68c  probe
-18d690  probe
-18d694  probe
-18d698  data: data,singles
-18d6f0  probe
-18d6f4  data: data,singles
-18d6f8  data: data,singles
-18d700  probe
-18d704  data: singles
-18d96c  probe
-18d970  data: data,singles
-18d974  data: data,singles
-18d978  data: data,singles
-18d980  probe
-18da84  data: data,singles
-18da88  data: data,singles
-18da8c  data: data,singles
-18daa0  data: data,singles
-18daa4  data: data,singles
-18e7f0  data: singles
-18e89c  data: singles
-18e94c  data: singles
-18e9bc  data: singles
-18ea68  data: singles
-18eaa4  data: singles
-18eb3c  data: singles
-18ec54  probe
-18ec68  data: singles
-18ecdc  probe
-18ed18  data: singles
-18ed54  probe
-18edc8  data: singles
-18ee44  probe
-18ef74  data: singles
-18efb0  data: singles
-18efec  data: singles
-18f028  data: singles
-18f064  probe
-18f0dc  probe
-18f118  probe
-18fb90  data: singles
-18fb94  data: singles
-18fba0  data: data,singles
-18fba4  data: data,singles
-18fbb0  data: data,singles
-18fbb4  data: data,singles
-18fbc0  probe
-18fbc4  probe
-18fbd0  data: data,singles
-18fbd4  data: data,singles
-18fbe0  probe
-18fbe4  probe
-18fbf0  data: data,singles
-18fbf4  data: data,singles
-18fc00  data: singles
-18fc0c  data: singles
-18fc18  data: singles
-18fc24  data: singles
-18fc30  data: singles
-18fc3c  data: singles
-18fc48  data: singles
-18fc54  data: data,singles
-18fc58  data: data,singles
-18fc64  data: data,singles
-18fc68  data: data,singles
-18fc74  data: data,singles
-18fc78  data: data,singles
-18fc84  data: data,singles
-18fc88  data: data,singles
-18fc94  data: data,singles
-18fc98  data: data,singles
-18fca4  data: data,singles
-18fca8  data: data,singles
-18fcb4  data: data,singles
-18fcb8  data: data,singles
-18fcc4  data: singles
-18fcd0  data: singles
-18fcdc  data: singles
-18fce8  data: singles
-18fcf4  data: singles
-18fd00  data: singles
-18fd0c  data: singles
-194e58  data: singles
-19df1c  data: singles
-1a1330  data: singles
-1a1e48  data: singles
-1b1c78  data: singles
-1b9ebc  data: singles
-1bdcd0  data: singles
-1dc4bc  data: singles
-1ded90  data: singles
-22c0a0  data: singles
-22cc38  data: singles
-245204  data: singles
-2490d8  probe
-28f734  data: data,singles
-2bdc54  probe
-2c7124  data: singles
-3046c4  data: data,singles,tables-side
-3061d0  data: data,singles
-30f1f4  data: singles
-313558  data: singles
-313574  data: singles
-3142f8  data: singles
-31854c  data: singles
-31b158  data: singles
-31b210  data: singles
-31d358  data: singles
-31d35c  data: singles
-321498  data: singles
+184a00  data: probe-data
+1879e0  data: probe-data
+187a08  data: step5
+187a1c  data: probe-data
+188980  data: probe-data
+188b24  data: probe-data
+188b88  data: probe-data
+188bec  data: probe-data
+188c00  data: step5
+188c14  data: step5
+188c28  data: probe-data
+188c3c  data: probe-data
+188cc8  data: probe-data
+188d2c  data: probe-data
+188d68  data: probe-data
+188da4  data: probe-data
+188db8  data: probe-data
+188ee4  data: probe-data
+188f70  data: probe-data
+189740  data: probe-data
+189754  data: probe-data
+189f74  data: step5
+18a02c  probe
+18a030  probe
+18a088  data: step5
+18a090  data: step5
+18a094  data: step5
+18a098  data: step5
+18a2d4  probe
+18a2e8  probe
+18a4f8  probe
+18a50c  probe
+18a738  data: probe-data
+18a73c  data: probe-data
+18a740  data: probe-data
+18a744  data: step5
+18a8e8  data: probe-data
+18abe0  probe
+18ace0  data: step5
+18ace4  data: step5
+18ace8  data: step5
+18ad98  data: step5
+18ad9c  data: step5
+18ada0  data: step5
+18ae04  data: step5
+18ae08  data: step5
+18ae0c  data: step5
+18ae44  probe
+18ae4c  probe
+18ae50  probe
+18ae54  probe
+18ae58  probe
+18ae5c  probe
+18ae7c  probe
+18ae80  probe
+18ae84  probe
+18aea8  probe
+18aeb0  probe
+18aeb4  probe
+18af58  data: step5
+18afa0  data: step5
+18b0f8  data: probe-data
+18b100  probe
+18b104  probe
+18b170  data: step5
+18b174  data: step5
+18b178  data: step5
+18b1d8  data: step5
+18b1dc  data: step5
+18b1e0  data: step5
+18b478  probe
+18b56c  probe
+18b574  probe
+18b578  probe
+18b57c  probe
+18b580  probe
+18b584  probe
+18b60c  data: probe-data
+18b614  probe
+18b618  probe
+18b61c  probe
+18b620  probe
+18b624  probe
+18b6c0  data: step5
+18b6c4  data: step5
+18b6c8  data: step5
+18b700  data: probe-data
+18b708  probe
+18b70c  probe
+18b710  probe
+18b714  probe
+18b718  probe
+18b768  data: step5
+18b8ec  data: probe-data
+18b938  data: probe-data
+18b9bc  probe
+18b9c0  probe
+18ba50  data: probe-data
+18ba54  data: probe-data
+18ba58  data: probe-data
+18baf0  data: probe-data
+18baf8  data: probe-data
+18bb60  probe
+18bb64  probe
+18bbb4  data: probe-data
+18bbb8  data: probe-data
+18bbbc  data: step5
+18bc0c  data: step5
+18bcd4  data: probe-data
+18bd44  data: probe-data
+18bd48  data: probe-data
+18be70  data: step5
+18be74  data: step5
+18be78  data: step5
+18beb8  data: step5
+18bebc  data: step5
+18bec0  data: step5
+18bf60  data: step5
+18bfac  data: step5
+18bfb0  data: step5
+18bfb4  data: step5
+18c02c  data: probe-data
+18c030  data: probe-data
+18c034  data: step5
+18c080  data: step5
+18c084  data: step5
+18c088  data: step5
+18c08c  data: step5
+18c15c  data: step5
+18c160  data: step5
+18c164  data: step5
+18c16c  data: step5
+18c174  data: step5
+18c178  data: step5
+18c1d8  data: step5
+18c1dc  data: step5
+18c234  data: step5
+18c238  data: step5
+18c23c  data: step5
+18c294  data: step5
+18c298  data: step5
+18c29c  data: step5
+18c2a0  data: step5
+18c2a4  data: step5
+18c308  data: step5
+18c30c  data: step5
+18c310  data: step5
+18c358  data: probe-data
+18c370  data: step5
+18c3bc  data: probe-data
+18c3c0  data: probe-data
+18c3c4  data: probe-data
+18c3c8  data: probe-data
+18c3cc  data: probe-data
+18c650  data: step5
+18c654  data: step5
+18c658  data: step5
+18c704  probe
+18c708  probe
+18c7bc  data: probe-data
+18c860  data: probe-data
+18c8c0  probe
+18c8c4  probe
+18c980  probe
+18c988  probe
+18c98c  probe
+18c990  probe
+18c994  probe
+18c998  probe
+18c9e4  data: probe-data
+18c9e8  data: probe-data
+18c9ec  data: probe-data
+18cb20  data: step5
+18cb24  data: step5
+18cb28  data: step5
+18cc04  data: probe-data
+18cc10  data: step5
+18cc14  data: step5
+18cc18  data: step5
+18cd54  data: step5
+18cd98  probe
+18cd9c  probe
+18ce40  data: step5
+18ce68  data: probe-data
+18ce6c  probe
+18cfbc  data: step5
+18d68c  data: probe-data
+18d690  data: probe-data
+18d694  data: probe-data
+18d698  data: step5
+18d6f0  data: probe-data
+18d6f4  data: step5
+18d6f8  data: step5
+18d700  data: probe-data
+18d704  probe
+18d96c  data: probe-data
+18d970  data: step5
+18d974  data: step5
+18d978  data: step5
+18d980  data: probe-data
+18da84  data: step5
+18da88  data: step5
+18da8c  data: step5
+18daa0  data: step5
+18daa4  data: step5
+18e7f0  probe
+18e89c  probe
+18e94c  probe
+18e9bc  probe
+18ea68  probe
+18eaa4  probe
+18eb3c  probe
+18ec54  data: probe-data
+18ec68  probe
+18ecdc  data: step5
+18ed18  probe
+18ed54  data: step5
+18edc8  probe
+18ee44  data: probe-data
+18ef74  probe
+18efb0  probe
+18efec  probe
+18f028  probe
+18f064  data: step5
+18f0dc  data: probe-data
+18f118  data: probe-data
+18fb90  probe
+18fb94  probe
+18fba0  data: step5
+18fba4  data: step5
+18fbb0  data: step5
+18fbb4  data: step5
+18fbc0  data: probe-data
+18fbc4  data: probe-data
+18fbd0  data: step5
+18fbd4  data: step5
+18fbe0  data: probe-data
+18fbe4  data: probe-data
+18fbf0  data: step5
+18fbf4  data: step5
+18fc00  probe
+18fc0c  probe
+18fc18  probe
+18fc24  probe
+18fc30  probe
+18fc3c  probe
+18fc48  probe
+18fc54  data: step5
+18fc58  data: step5
+18fc64  data: step5
+18fc68  data: step5
+18fc74  data: step5
+18fc78  data: step5
+18fc84  data: step5
+18fc88  data: step5
+18fc94  data: step5
+18fc98  data: step5
+18fca4  data: step5
+18fca8  data: step5
+18fcb4  data: step5
+18fcb8  data: step5
+18fcc4  probe
+18fcd0  probe
+18fcdc  probe
+18fce8  probe
+18fcf4  probe
+18fd00  probe
+18fd0c  probe
+194e58  probe
+19df1c  probe
+1a1330  probe
+1a1e48  probe
+1b1c78  probe
+1b9ebc  probe
+1bdcd0  probe
+1dc4bc  probe
+1ded90  probe
+22c0a0  probe
+22cc38  probe
+245204  probe
+2490d8  data: probe-data
+28f734  data: step5
+2b6958  data: tiling: inside gs stream of table 2b6c30
+2bc0b4  data: tiling: inside gs stream of table 2bc124
+2bdc54  data: probe-data
+2c7124  probe
+2cd788  data: tiling: inside gs stream of table 2cda04
+2cd7e4  data: tiling: inside gs stream of table 2cda04
+2cd840  data: tiling: inside gs stream of table 2cda04
+3046c4  data: step5
+3061d0  data: probe-data
+30f1f4  probe
+313558  probe
+313574  probe
+3142f8  probe
+31854c  probe
+31b158  data: tiling: inside gs stream of table 31b5b8
+31b210  data: tiling: inside gs stream of table 31b5b8
+31d358  probe
+31d35c  probe
+321498  probe
