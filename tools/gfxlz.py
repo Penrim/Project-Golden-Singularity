@@ -7,6 +7,11 @@ distance 0 (with nibble 0) ends the stream. A flag byte of 0 means 8 literal byt
 
 
 def decompress(src, pos=0):
+    return decompress_span(src, pos)[0]
+
+
+def decompress_span(src, pos=0):
+    """(data, end): end = offset after the last byte read."""
     out = bytearray()
     while True:
         flags = src[pos]; pos += 1
@@ -24,7 +29,7 @@ def decompress(src, pos=0):
                 n += 1
             else:
                 if dist == 0:
-                    return bytes(out)
+                    return bytes(out), pos
                 n = src[pos] + 17; pos += 1
             for _ in range(n):
                 out.append(out[-dist])

@@ -59,6 +59,11 @@ class Rom:
 
 
 def decompress(src, pos):
+    return decompress_span(src, pos)[0]
+
+
+def decompress_span(src, pos):
+    """(data, end): end = offset after the last byte the decoder read (tools/wordmap.py proves files packed)."""
     fmt = src[pos]
     if fmt == 0:
         return _decompress_c0(src, pos + 1)
@@ -97,7 +102,7 @@ def _decompress_c0(src, pos):
                 count = 10 + (bits & 0x7F)
                 bits >>= 7; bitnum -= 7
                 if count == 10:
-                    return bytes(dest)
+                    return bytes(dest), pos
         if bitnum < 0:
             bitnum += 16
             bits += (src[pos] << bitnum) + (src[pos + 1] << (8 + bitnum))
@@ -137,7 +142,7 @@ def _decompress_c1(src, pos):
                 pos += 2
                 if count == 0:
                     if offset == 0:
-                        return bytes(dest)
+                        return bytes(dest), pos
                     count = src[pos] + 16; pos += 1
                 for _ in range(count + 1):
                     dest.append(dest[len(dest) - offset])
