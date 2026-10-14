@@ -6,7 +6,7 @@ relocated, recompressed and appended after GS1.
 
 Usage: python build_gs1_reloc.py GS1.gba out.gba [extra_relocs.txt]
 """
-import os, struct, sys
+import bisect, os, struct, sys
 sys.path.insert(0, __file__.rsplit("\\", 1)[0].rsplit("/", 1)[0])
 from gsfs import Rom, decompress
 import reloc
@@ -75,13 +75,25 @@ def classify(g, gp, extra=(), info=None):
     typed_data = {a for a in data_ev if a in relocs and a not in proven and a not in music and a not in ptr_ev}
     typed_ptr = {a for a in ptr_ev if is_ptr_word(a) and a not in relocs and a not in data_ev and a not in excl
                  and not (text["data_start"] <= a < text["data_end"]) and a < gp["code_end"]}
-    relocs = (set(relocs) - in_music - excl - in_code - typed_data) | typed_ptr | set(extra) | music
+    # Music sample data (m4a wave data: signed 8-bit PCM) is never a pointer, e.g. f2 f1 f1 f0 ef ef f1 f5 fa 00 04 08
+    # at 0x106968. Guessed words touching it are dropped; a format-proven pointer there would mean a wrong range.
+    samples = m4a.sample_ranges(g.data, gp["song_table"])
+    starts = [lo for lo, _ in samples]
+    def in_sample(a):
+        i = bisect.bisect_right(starts, a + 3) - 1
+        return i >= 0 and a < samples[i][1]
+    sure = proven | music | set(ptr_ev) | typed_ptr | set(extra)
+    proven_in_samples = {a for a in sure if in_sample(a)}
+    in_samples = {a for a in relocs if in_sample(a) and a not in sure}
+    relocs = (set(relocs) - in_music - excl - in_code - typed_data - in_samples) | typed_ptr | set(extra) | music
     if info is not None:
         info.update(parts=parts, text=text, music=music, music_overlap=in_music, excluded=excl, stats=stats,
                     code=code, in_code=in_code, typed_ptr=typed_ptr, typed_data=typed_data, ptr_ev=ptr_ev,
-                    data_ev=data_ev)
+                    data_ev=data_ev, samples=samples, in_samples=in_samples, proven_in_samples=proven_in_samples)
     print("analysis:", stats, "music:", len(music), "extra:", len(extra), "excluded:", len(excl), "in code:", len(in_code),
-          "typed data:", len(typed_data), "typed pointers:", len(typed_ptr), "total:", len(relocs))
+          "typed data:", len(typed_data), "typed pointers:", len(typed_ptr), "samples:", len(samples),
+          f"({sum(hi - lo for lo, hi in samples)} bytes, {len(in_samples)} guessed words dropped,"
+          f" {len(proven_in_samples)} proven pointers inside)", "total:", len(relocs))
     return relocs
 
 

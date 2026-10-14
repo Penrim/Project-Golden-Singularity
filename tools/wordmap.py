@@ -5,6 +5,7 @@ A word is "pointer-like" if its value lies in 0x08000000..0x08000000+size (only 
 Categories (first match wins):
   mft, music, text-ptr        relocated, proven by a format parser
   literal                     relocated, loaded PC-relative by code reached from trusted roots
+  sample-data                 inside m4a wave data (8-bit PCM samples; not relocated)
   probe-pointer / probe-data  the pointer probe saw it used as an address / read byte-wise (exclusion list)
   code                        part of an instruction (not relocated)
   text-data, music-data       inside text / music track data (not relocated)
@@ -55,6 +56,8 @@ def account(gs1_path, probe_path=None):
             lit_proven.add(((h + 4) & ~3) + (ins & 0xFF) * 4)
     music = set(info["music"])
     music_bytes = {o + k for o in info["music"] for k in range(4)}
+    samples = info["samples"]
+    sample_starts = [lo for lo, _ in samples]
     text = info["text"]
     text_ptrs = set(text["pointers"])
     mft_table = set(p["mft"])
@@ -106,6 +109,8 @@ def account(gs1_path, probe_path=None):
             c = "typed-pointer" if r else "SUSPECT-typed-pointer-not-relocated"
         elif a in info["data_ev"]:
             c = "typed-data" if not r else "SUSPECT-typed-data-relocated"
+        elif (j := bisect.bisect_right(sample_starts, a + 3) - 1) >= 0 and a < samples[j][1]:
+            c = "sample-data" if not r else "SUSPECT-sample-relocated"  # mixer reads words: probe "used" is chance
         elif pe and pe[2]:
             c = "probe-pointer" if r else "SUSPECT-probe-used-not-relocated"
         elif pe and pe[0] and not r:

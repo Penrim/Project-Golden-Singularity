@@ -338,3 +338,14 @@ address range (0x08000000 + size) can need relocation (USA: 27 031).
   real pointers in irregular structs and ARM literal pools, and data such as f1 00 00 08). A pure byte-pattern
   rule is not enough (real function pointer 0x08011D11 has small bytes); next step: combine run-level byte
   patterns with target plausibility (function start, label, file start) and a probe over exactly these words.
+- Music sample data (branch `music-sample-data`): `m4a.sample_ranges` walks the song table's voicegroups (12-byte
+  voices; DirectSound 0x00/0x08/0x10/0x18 -> WaveData {u16 type, u16 loop flag, u32 freq, u32 loop start, u32 size}
+  + size + 1 bytes, the mixer interpolates with sample[size]; programmable wave 0x03/0x0B -> 16 bytes; keysplit 0x40
+  and drum 0x80 subgroups recursively; implausible headers rejected). All five versions: 39 waves (37 DirectSound,
+  incl. 5 size-0 Camelot synth voices, + 2 programmable), 404 227 bytes, ~0x0FC604-0x15FB77 (USA). `classify` drops
+  every guessed word touching it (no format-proven/loaded/typed pointer lies inside). This covers all exclusion-list
+  words in sample data (USA 41 of 116, DE 41/118, FR 44/128, IT 45/127, ES 47/127; a few were never guessed) plus
+  168-173 more per version that the probe had not seen as byte reads (the mixer reads samples word-wise, so the probe
+  saw 32-bit reads and, by chance, "used" on ~12-30 of them: wordmap now puts `sample-data` before the probe).
+  Still needed from the lists: 1 word in m4a track data (USA 0x182200) and the byte tables (USA 74: 0x0C5C20..,
+  0x0EEA2C, 0x0EECF4, small-number fields in record tables 0x1851E0-0x18D3E4, 0x2468D8, packed sprite 0x2BB454).

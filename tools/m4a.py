@@ -127,3 +127,48 @@ def all_pointers(d, table_off):
                 ptrs.add(o)
                 ptrs.update(track_pointers(d, t - ROM, size))
     return ptrs
+
+
+def wave_end(d, w):
+    """End of the WaveData at w {u16 type, u16 status (0x4000 = loop), u32 freq, u32 loop start, u32 size, s8
+    samples[size]}, or None if the header is implausible. The mixer interpolates with the next sample, so it also
+    reads samples[size] (the ROM always has that extra byte). GS1's size-0 waves are Camelot synth voices."""
+    if not 0 <= w <= len(d) - 16:
+        return None
+    t, st, fr, lp, sz = struct.unpack_from("<HHIII", d, w)
+    if t != 0 or st not in (0, 0x4000) or not fr or sz > 0x100000 or lp > sz or w + 17 + sz > len(d):
+        return None
+    return w + 16 + sz + 1
+
+
+def _sample_voices(d, vg, n, seen, out):
+    """Collect {start: end} of the sample data used by n voices at vg (12-byte entries), recursing into
+    keysplit (0x40: subgroup + 128-byte key table) and drum (0x80: 128-entry subgroup) voices."""
+    size = len(d)
+    if (vg, n) in seen:
+        return
+    seen.add((vg, n))
+    for k in range(n):
+        e = vg + 12 * k
+        if not 0 <= e <= size - 12:
+            break
+        t, p1, p2 = d[e], _u32(d, e + 4) - ROM, _u32(d, e + 8) - ROM
+        if t in (0x00, 0x08, 0x10, 0x18) and d[e + 1] < 0x80:     # DirectSound (0x08: fixed frequency)
+            end = wave_end(d, p1)
+            if end:
+                out[p1] = max(out.get(p1, 0), end)
+        elif t in (0x03, 0x0B) and 0 <= p1 <= size - 16:            # programmable wave: 16 bytes of 4-bit samples
+            out[p1] = max(out.get(p1, 0), p1 + 16)
+        elif t == 0x40 and 0 <= p1 < size and 0 <= p2 <= size - 128:
+            _sample_voices(d, p1, max(d[p2:p2 + 128]) + 1, seen, out)
+        elif t == 0x80 and 0 <= p1 < size:
+            _sample_voices(d, p1, 128, seen, out)
+
+
+def sample_ranges(d, table_off):
+    """Sorted (start, end) byte ranges of all wave data (header + samples) reachable from the song table."""
+    out, seen = {}, set()
+    for _, h in song_headers(d, table_off):
+        if h + 8 <= len(d) and d[h]:
+            _sample_voices(d, _u32(d, h + 4) - ROM, 128, seen, out)
+    return sorted(out.items())
