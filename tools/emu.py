@@ -20,6 +20,11 @@ class Emu:
         proc = subprocess.Popen(startupinfo=si, args=[MGBA, "--script", os.path.join(HERE, "bridge.lua"), "-C", "pauseOnFocusLost=0",
                                  "-C", "audioSync=0", "-C", "videoSync=0", "-C", "fpsTarget=600",
                                  "-C", "mute=1", "-C", "volume=0", rom])   # tests run silent (no fast-forward noise)
+        try:                                          # at most GSMERGE_CPU (default 60 %) of one core, low priority
+            import cpucap
+            cpucap.cap(proc.pid)
+        except OSError:
+            pass
         t0 = time.time()
         while time.time() - t0 < timeout:
             try:

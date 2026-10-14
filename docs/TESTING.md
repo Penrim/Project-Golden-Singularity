@@ -34,6 +34,9 @@ runs between commands; `wait N` advances N frames.
 Watchpoint callbacks receive an `info` table: `address, width, oldValue, newValue, accessType, segment`.
 
 **Gotchas**
+- CPU: every emulator started by `emu.py` is capped at `GSMERGE_CPU` of one core (default 0.6 = 60 %) with a
+  Windows job object and runs at below-normal priority (`tools/cpucap.py`; `python tools/cpucap.py PID` caps a
+  running one). Tests take correspondingly longer but never saturate a core.
 - Parallel runs: set `GSMERGE_PORT` (e.g. 61351, 61352, ...) per test process; `emu.py` and `bridge.lua`
   both read it (default 61337). Used to probe/test several languages at once.
 - One bridge per port; a leftover mGBA keeps its port busy ("bridge did not come up"). Kill it by path:

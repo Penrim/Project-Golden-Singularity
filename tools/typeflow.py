@@ -25,6 +25,10 @@ import profiles, reloc
 
 ROM = 0x08000000
 IO_DMA = range(0x040000B0, 0x040000E0)
+# ARM routines GS1 copies to IWRAM (ROM 0x08000770 -> 0x03000000, same in all versions) and the arguments they read
+# through (from their code): 0x03000214 ldrh [r0] (bit-flag unpacker), 0x030002C0 ldm r0! (matrix data),
+# 0x03001388 ldm r1! (fast copy: r0 = destination, r1 = source)
+IWRAM_DEREF = {0x03000214: (0,), 0x030002C0: (0,), 0x03001388: (1,)}
 SWI_SRC = {0x0B, 0x0C, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18}   # CpuSet, CpuFastSet, decompressors
 
 
@@ -233,14 +237,35 @@ class Flow:
             self._deref(base, idx, func, ins)
             if base and base[0] == "c" and base[1] is not None and base[1] + disp in IO_DMA and m == "str":
                 self.mark_ptr(regs.get(dst), ("dma", ins.address))
+                self.use_lit(regs.get(dst), "dma")
             regs_val = regs.get(dst)
+            return
+        if m in ("stm", "stmia") and ops and ops[0].type == ARM_OP_REG:
+            # stm rB!, {r0, r1, r2} with rB = 0x040000D4 etc.: DMA source, destination, control (copy routines)
+            base = regs.get(name(ops[0]))
+            vals = [regs.get(name(op)) for op in ops[1:] if op.type == ARM_OP_REG]
+            if base and base[0] == "c" and base[1] in IO_DMA and vals:
+                self.use_lit(vals[0], "dma")
+                self.mark_ptr(vals[0], ("dma", ins.address))
+                vals = vals[1:]
+            for v in vals:
+                self.use_lit(v, "stored")
+            if "!" in ins.op_str and base and base[0] == "c" and base[1] is not None:
+                regs[name(ops[0])] = ("c", base[1] + 4 * (len(ops) - 1))
             return
         # ---- calls
         if m == "bl" and ops and ops[0].type == ARM_OP_IMM:
             t = self.resolve(ops[0].imm - self.base)
-            veneer = self.insns.get(t)
+            veneer = self.insns.get(t) if isinstance(t, int) else None
             if veneer is not None and veneer.mnemonic == "bx" and veneer.op_str != "lr":
-                self.mark_ptr(regs.get(veneer.op_str), ("call", ins.address))     # bl _call_via_rN
+                target = regs.get(veneer.op_str)
+                self.mark_ptr(target, ("call", ins.address))     # bl _call_via_rN
+                self.use_lit(target, "jump")
+                if target and target[0] == "c" and target[1] in IWRAM_DEREF:
+                    for k in IWRAM_DEREF[target[1]]:
+                        v = regs.get(f"r{k}")
+                        self.use_lit(v, "arg-deref")
+                        self.mark_ptr(v, ("iwram", target[1], k))
             for k in range(4):
                 self.use_lit(regs.get(f"r{k}"), "arg-deref" if k in self.deref.get(t, ()) else "arg")
             for k in sorted(self.deref.get(t, ())):
