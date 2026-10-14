@@ -15,6 +15,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gsfs import Rom, decompress_span
 import gfxlz
 import bgdecode
+import nibbledecode
 
 PREFIXES = (0, 0x20, 0x80, 0x1C0, 0x200)
 
@@ -117,6 +118,30 @@ def battle_background(d, s, end):
     return "battle background", [(s, s + 0x100, "palette/header"), (s + 0x100, end, "packed (battle background)")]
 
 
+def nibble_records(d, s, end):
+    """File 240 (portraits, loaded by FR 0x08019432): a u16 offset table indexed by character (0 = unused); each
+    record is a 0x20-byte header and a stream of the nibble decoder (nibbledecode.py) that ends exactly where the
+    next record starts."""
+    first = struct.unpack_from("<H", d, s)[0]
+    if not (4 <= first < end - s) or first % 2:
+        return None
+    offs = sorted({struct.unpack_from("<H", d, s + k)[0] for k in range(0, first, 2)} - {0})
+    if not offs or offs[0] < first or offs[-1] + 0x20 >= end - s:
+        return None
+    spans, bounds = [(s, s + first, "u16 offset table")], offs + [end - s]
+    if bounds[0] > first and not _padding_ok(d, s + first, s + bounds[0]):
+        return None
+    for a, b in zip(bounds, bounds[1:]):
+        try:
+            _, stop = nibbledecode.span(d, s + a + 0x20)
+        except (ValueError, struct.error):
+            return None
+        if stop != s + b or not _padding_ok(d, s + a, s + a + 0x20):
+            return None
+        spans += [(s + a, s + a + 0x20, "palette/header"), (s + a + 0x20, s + b, "packed (nibble records)")]
+    return f"{len(offs)} nibble-coded records", spans
+
+
 def _decode_upto(d, pos, nxt):
     """(decoder name, stop) when a decoder at pos stops at or before nxt and the gap holds no pointer-like word."""
     for name, fn in (("gs", decompress_span), ("lz", gfxlz.decompress_span)):
@@ -157,7 +182,7 @@ def file_kinds(rom):
             if n:
                 kind = ("packed", f"gfxlz+{pre:#x} -> {n} bytes"); break
         if kind is None:
-            t = offset_table(d, s, end) or header_offsets(d, s, end) or battle_background(d, s, end)
+            t = offset_table(d, s, end) or header_offsets(d, s, end) or battle_background(d, s, end) or nibble_records(d, s, end)
             if t:
                 kind = ("packed", t[0])
                 spans[i] = t[1]
