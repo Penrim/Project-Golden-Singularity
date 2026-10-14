@@ -141,6 +141,41 @@ def strong_code_coverage(d, roots, end, size):
     return code
 
 
+def strict_code(d, roots, end, table_roots=(), tables=frozenset()):
+    """Like reloc.strong_code_coverage, but stricter about what counts as a function:
+    - an odd literal only becomes a new root if its target is a BL target of confirmed code or starts with
+      push {..., lr} (odd data pointers, e.g. 0x080F11BD = a byte table after the credits text, made whole
+      tables look like code);
+    - roots taken from pointer tables (table_roots) are accepted only if the code they lead to does not run over
+      a table word (odd pointers into packed sprite data hit a 0xB5 'push' byte about once in 256)."""
+    roots = {r for r in roots if 0 <= r < end}
+    for r in table_roots:
+        c = code_coverage(d, {r}, end)
+        if 0 <= r < end and not any(h & ~3 in tables for h in c):
+            roots.add(r)
+    code, done = set(), set()
+    while roots - done:
+        new = roots - done
+        done |= new
+        code |= code_coverage(d, new, end)
+        bls = set()                                   # BL targets of confirmed code only (data bytes can look like BL)
+        for h in code:
+            hi, lo = d[h] | d[h + 1] << 8, d[h + 2] | d[h + 3] << 8
+            if hi & 0xF800 == 0xF000 and lo & 0xF800 == 0xF800:
+                off = ((hi & 0x7FF) << 12) | ((lo & 0x7FF) << 1)
+                bls.add(h + 4 + (off - 0x800000 if off & 0x400000 else off))
+        for h in list(code):
+            ins = d[h] | d[h + 1] << 8
+            if ins & 0xF800 == 0x4800:
+                la = ((h + 4) & ~3) + (ins & 0xFF) * 4
+                if la + 4 <= len(d):
+                    w = struct.unpack_from("<I", d, la)[0]
+                    t = (w & ~1) - ROM
+                    if w & 1 and 0 <= t < end and (t in bls or is_prologue(d, t)):
+                        roots.add(t)
+    return code
+
+
 def stub_targets(rom, end):
     """Targets of engine jump-table stubs (ldr r4,[pc]; bx r4; .word fn) at the start of MFT code files."""
     d = rom.data
@@ -165,11 +200,12 @@ def is_prologue(d, off):
     return h & 0xFF00 == 0xB500
 
 
-def analyse(rom, code_end, protected=(), explicit=(), extra_roots=()):
+def analyse(rom, code_end, protected=(), explicit=(), extra_roots=(), parts=None):
     """Return (relocs, stats). relocs = sorted word offsets whose value is a ROM pointer to relocate.
 
     protected: (start, end) ranges of known data blobs (e.g. text) where no heuristic applies;
-    explicit: pointer offsets known from format parsers (always relocated)."""
+    explicit: pointer offsets known from format parsers (always relocated);
+    parts: optional dict, filled with the set behind each rule (for tools/wordmap.py)."""
     d, size = rom.data, len(rom.data)
     lits = {a for a in literal_targets(d, 0, code_end) if a % 4 == 0 and is_ptr(struct.unpack_from("<I", d, a)[0], size)}
     mft = {rom.mft_off + 4 * i for i in range(len(rom.entries))}
@@ -203,6 +239,9 @@ def analyse(rom, code_end, protected=(), explicit=(), extra_roots=()):
     relocs |= singles
     dropped = {a for a in relocs if any(lo <= a < hi for lo, hi in protected)}
     relocs = (relocs - dropped) | set(explicit)
+    if parts is not None:
+        parts.update(lits=lits, mft=mft, runs=runs_code, strided=strided, singles=singles, dropped=dropped,
+                     code=code, roots=roots)
     allptr = {a for a in range(0, size - 3, 4) if is_ptr(struct.unpack_from("<I", d, a)[0], size)}
     stats = {
         "pointer_like_words": len(allptr),

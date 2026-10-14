@@ -303,3 +303,38 @@ USA probe (prologue + 201 maps + 255 battles): 3199 candidate words read; confir
 result. Other versions: German 118, French 128, Italian 127, Spanish 127 (own probe run + the findings of the
 versions done before, mapped by 12 bytes of surrounding context: `pointer_probe.py list ORIG OUT OTHER_GS1...`).
 Byte-pattern rules were rejected: "all low bytes small" would also drop real function pointers (0x08011D11).
+
+## Word accounting and code-use analysis (branch `pointer-analysis`, 2026-10-14)
+
+Goal: replace "the heuristics probably got it right" by a counted list. Only words whose value lies in GS1's
+address range (0x08000000 + size) can need relocation (USA: 27 031).
+
+- `tools/wordmap.py GS1.gba [probe.txt] [--list CATEGORY]` gives every such word one category with its evidence:
+  format-proven (mft, music, text-ptr), literal (loaded by confirmed code), typed-pointer / typed-data (code use,
+  below), probe-pointer / probe-data, not-an-address (code, text-data, music-data, mapcode-file, file/data noise),
+  guesses graded by table structure (guess-table: >= 4 pointer-like words in a row pointing nearby; guess-plausible;
+  guess-WEAK-bytelike; guess-WEAK-isolated) and SUSPECT-* contradictions.
+- `reloc.strict_code`: code coverage that does not wander into data. Odd literals only count as functions when
+  they are BL targets of confirmed code or start with push {..., lr} (0x080F11BD is a byte table after the credits
+  text); function pointers from tables only when their code does not run over table words (odd pointers into
+  packed sprite data hit a 0xB5 byte about once in 256).
+- `tools/typeflow.py`: abstract interpretation of every confirmed Thumb instruction with a control-flow graph
+  (states merged at join points), value identities for index arithmetic ((i << 3) - i = 7i), engine stubs and
+  `_call_via_rN` veneers resolved, per-function summaries "argument k is dereferenced" (fixpoint). A 32-bit load
+  from a ROM table that is then used as an address (load/store base, BIOS decompress/copy source, DMA source,
+  jump, dereferenced argument) proves the field a pointer; 8/16-bit reads prove data. Fields spread over the
+  table up to the next label (an address code loads as a constant) and never over code. USA: ~1 800 words proven
+  pointers, 12 data.
+- Bugs found and fixed in the build (`build_gs1_reloc.classify`), the same in all five languages:
+  - 4-5 Thumb instructions per version were relocated as a "pointer run" (two adjacent instructions forming
+    0x08xxxxxx): lsrs rX,rX,#1 became lsrs #5 (USA 0x0FC6C, 0x0FC70, 0x94C34, 0xA1A4C, 0xA1A80). Guessed words on
+    confirmed instructions are now dropped, except words that confirmed code loads PC-relative (switch tables).
+  - 6 data words per version in halfword tables (code reads them with ldrh): the ID list at 0x0C593C (0x0837 ->
+    0x0937, entries could no longer be found), offsets at 0x0EEAA2 (0x080C -> 0x090C), 0x0EEB58. Guessed words
+    with typed-data evidence are dropped; pointer-like words with typed-pointer evidence are added (0 today).
+  None of these showed in the map/battle tours (no wrong reads, no crash).
+- Remaining risk list (per language): guess-WEAK-bytelike ~290 (mostly visible byte/halfword data such as
+  01 02 03 ... 08 08 09 or 0x080F, 0x0812, ... and never read in the probe) and guess-WEAK-isolated ~535 (mixed:
+  real pointers in irregular structs and ARM literal pools, and data such as f1 00 00 08). A pure byte-pattern
+  rule is not enough (real function pointer 0x08011D11 has small bytes); next step: combine run-level byte
+  patterns with target plausibility (function start, label, file start) and a probe over exactly these words.
