@@ -13,7 +13,7 @@ class Emu:
         self.proc, self.sock, self.f = proc, sock, sock.makefile("r")
 
     @classmethod
-    def launch(cls, rom, timeout=30):
+    def launch(cls, rom, timeout=90):                  # capped emulators start slower under load
         si = subprocess.STARTUPINFO()
         si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
         si.wShowWindow = 7  # SW_SHOWMINNOACTIVE: don't steal focus from the user

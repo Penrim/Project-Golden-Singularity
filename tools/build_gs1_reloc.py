@@ -38,9 +38,10 @@ def relocate_blob(blob, size):
     return bytes(b), n
 
 
-def load_exclusions(code):
-    """data/reloc_exclude_<game code>.txt: file offsets (hex, one per line, # comments) never to relocate."""
-    p = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", f"reloc_exclude_{code}.txt")
+def load_exclusions(code, kind="exclude"):
+    """data/reloc_<kind>_<game code>.txt: file offsets (hex, first field of each line, # comments).
+    exclude = never relocate (data the heuristics take for pointers), include = always relocate (missed pointers)."""
+    p = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", f"reloc_{kind}_{code}.txt")
     if not os.path.exists(p):
         return set()
     return {int(l.split()[0], 16) for l in open(p) if l.strip() and not l.startswith("#")}
@@ -88,7 +89,9 @@ def classify(g, gp, extra=(), info=None):
     sure = proven | music | set(ptr_ev) | typed_ptr | set(extra)
     proven_in_samples = {a for a in sure if in_sample(a)}
     in_samples = {a for a in relocs if in_sample(a) and a not in sure}
-    relocs = (set(relocs) - in_music - excl - in_code - typed_data - in_samples) | typed_ptr | set(extra) | music
+    incl = load_exclusions(g.code, "include")
+    relocs = (set(relocs) - in_music - excl - in_code - typed_data - in_samples) | typed_ptr | set(extra) | music | incl
+    assert not (excl & music), "excluded words inside music pointers"
     if info is not None:
         info.update(parts=parts, text=text, music=music, music_overlap=in_music, excluded=excl, stats=stats,
                     code=code, in_code=in_code, typed_ptr=typed_ptr, typed_data=typed_data, ptr_ev=ptr_ev,

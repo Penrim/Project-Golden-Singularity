@@ -3,6 +3,9 @@ priority, so automated tests never saturate a core of the machine they run on.
 
   GSMERGE_CPU   share of one core per emulator (default 0.6 = 60 %); emu.py applies it at launch
   python cpucap.py PID [PID ...] [--share 0.6]     (cap processes that are already running)
+
+Cap a process only ONCE: a second job nests inside the first and its rate counts as a share of the parent's, so two
+60 % caps leave about 1-3 % of a core (seen 2026-10-14: the tests crawled).
 """
 import ctypes, os, sys
 from ctypes import wintypes

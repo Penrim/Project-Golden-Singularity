@@ -1,118 +1,394 @@
-# GS1 AGSE: words the relocation heuristics take for pointers but the game reads byte/halfword-wise
-# (tools/pointer_probe.py; see docs/TECHNICAL.md). One file offset per line.
-0c5c20
-0c5c24
-0c5e28
-0eea2c
-0eecf4
-0fdfb8
-0fe670
-0fe674
-0fe898
-100490
-102430
-102978
-102d68
-102eb8
-102ebc
-102ec0
-103d88
-106968
-10696c
-107d28
-108440
-108abc
-10a32c
-10b3d8
-10cfa8
-112244
-112264
-11398c
-1139e0
-114af8
-114db0
-115c44
-1189c4
-11ca94
-120d80
-121c40
-122220
-1448d0
-144ab0
-144ab4
-1503c8
-15043c
-1504b0
-150594
-150d1c
-155038
-182200
-1851e0
-18521c
-186180
-186324
-186388
-1863ec
-186428
-18643c
-1864c8
-18652c
-186568
-1865a4
-1865b8
-1866e4
-186f40
-186f54
-187f38
-187f3c
-187f40
-187f44
-1880e8
-1888f8
-188e0c
-188f00
-1890ec
-189138
-189250
-189254
-189258
-1892f0
-1892f8
-1893b4
-1893b8
-189544
-189548
-18982c
-189830
-189b58
-189bbc
-189bc0
-189bc4
-189bc8
-189fbc
-18a060
-18a1e4
-18a1e8
-18a1ec
-18a404
-18a668
-18ae8c
-18ae90
-18ae94
-18aef0
-18af00
-18b16c
-18b180
-18bff0
-18c454
-18c518
-18c644
-18c864
-18c8dc
-18c918
-18d3c0
-18d3c4
-18d3e0
-18d3e4
-2468d8
-2bb454
+# GS1 AGSE: words the relocation heuristics take for pointers but that are data. One file offset per
+# line (+ evidence). Sources: pointer probe (tools/pointer_probe.py) and the step-5 code/format proofs
+# (tools/step5_collect.py: tableproof, singles, dataproof, litproof; 'weak' = data evidence whose table
+# bound rests on the next label, with no pointer evidence at all). See docs/TECHNICAL.md.
+019364  data: singles
+033eec  weak data: data
+07d908  weak data: data
+07d934  weak data: data
+07d960  weak data: data
+07d98c  weak data: data
+07d9b8  weak data: data
+07d9e4  weak data: data
+07da10  weak data: data
+07da3c  weak data: data
+07dc78  weak data: data
+07dca4  weak data: data
+07dcd0  weak data: data
+07dcfc  weak data: data
+07dd28  weak data: data
+07dd54  weak data: data
+07de30  weak data: data
+07de88  weak data: data
+07df64  weak data: data
+07e040  weak data: data
+07e06c  weak data: data
+07e098  weak data: data
+09c65c  data: data,tables-side
+09c694  data: data,tables-side
+09c6cc  data: data,tables-side
+09cb84  data: data,tables-side
+09ccd4  data: data,tables-side
+0a00e8  data: data
+0bbf0c  data: singles
+0c5c20  probe
+0c5c24  probe
+0c5e28  probe
+0d39d0  data: literals
+0ea7a0  data: singles
+0ee0d0  weak data: data
+0ee0dc  weak data: data
+0ee0e0  weak data: data
+0ee9f4  data: singles
+0eea2c  probe
+0eea94  weak data: data
+0eea9c  weak data: data
+0eeac4  weak data: data
+0eeae0  data: data,tables-side
+0eecf4  probe
+0eed88  data: tables-side
+0f11c0  data: data,tables-side
+0f11dc  data: data,tables-side
+0f11e0  data: data,tables-side
+0f11e8  data: data,tables-side
+0f11ec  data: data,tables-side
+0f11f0  data: data,tables-side
+0f11f4  data: data,tables-side
+0fdfb8  probe
+0fe670  probe
+0fe674  probe
+0fe898  probe
+100490  probe
+102430  probe
+102978  probe
+102d68  probe
+102eb8  probe
+102ebc  probe
+102ec0  probe
+103d88  probe
+106968  probe
+10696c  probe
+107d28  probe
+108440  probe
+108abc  probe
+10a32c  probe
+10b3d8  probe
+10cfa8  probe
+112244  probe
+112264  probe
+11398c  probe
+1139e0  probe
+114af8  probe
+114db0  probe
+115c44  probe
+1189c4  probe
+11ca94  probe
+120d80  probe
+121c40  probe
+122220  probe
+1448d0  probe
+144ab0  probe
+144ab4  probe
+1503c8  probe
+15043c  probe
+1504b0  probe
+150594  probe
+150d1c  probe
+155038  probe
+182200  probe
+1851e0  probe
+185208  data: data,tables-side
+18521c  probe
+186180  probe
+186324  probe
+186388  probe
+1863ec  probe
+186400  data: data,tables-side
+186414  data: data,tables-side
+186428  probe
+18643c  probe
+1864c8  probe
+18652c  probe
+186568  probe
+1865a4  probe
+1865b8  probe
+1866e4  probe
+186770  data: data,tables-side
+186f40  probe
+186f54  probe
+187774  data: data,tables-side
+18782c  data: singles
+187830  data: singles
+187888  data: data,singles
+187890  data: data,singles
+187894  data: data,singles
+187898  data: data,singles
+187ad4  data: singles
+187ae8  data: singles
+187cf8  data: singles
+187d0c  data: singles
+187f38  probe
+187f3c  probe
+187f40  probe
+187f44  probe
+1880e8  probe
+1883e0  data: singles
+1884e0  data: data,singles
+1884e4  data: data,singles
+1884e8  data: data,singles
+188598  data: data,singles
+18859c  data: data,singles
+1885a0  data: data,singles
+188604  data: data,singles
+188608  data: data,singles
+18860c  data: data,singles
+188644  data: singles
+18864c  data: singles
+188650  data: singles
+188654  data: singles
+188658  data: singles
+18865c  data: singles
+18867c  data: singles
+188680  data: singles
+188684  data: singles
+1886a8  data: singles
+1886b0  data: singles
+1886b4  data: singles
+188758  data: data,singles
+1887a0  data: data,singles
+1888f8  probe
+188900  data: singles
+188904  data: singles
+188970  data: data,singles
+188974  data: data,singles
+188978  data: data,singles
+1889d8  data: data,singles
+1889dc  data: data,singles
+1889e0  data: data,singles
+188c78  data: singles
+188d6c  data: singles
+188d74  data: singles
+188d78  data: singles
+188d7c  data: singles
+188d80  data: singles
+188d84  data: singles
+188e0c  probe
+188e14  data: singles
+188e18  data: singles
+188e1c  data: singles
+188e20  data: singles
+188e24  data: singles
+188ec0  data: data,singles
+188ec4  data: data,singles
+188ec8  data: data,singles
+188f00  probe
+188f08  data: singles
+188f0c  data: singles
+188f10  data: singles
+188f14  data: singles
+188f18  data: singles
+188f68  data: data,singles
+1890ec  probe
+189138  probe
+1891bc  data: singles
+1891c0  data: singles
+189250  probe
+189254  probe
+189258  probe
+1892f0  probe
+1892f8  probe
+189360  data: singles
+189364  data: singles
+1893b4  probe
+1893b8  probe
+1893bc  data: data,singles
+18940c  data: data,singles
+1894d4  data: data,singles
+189544  probe
+189548  probe
+189670  data: data,singles
+189674  data: data,singles
+189678  data: data,singles
+1896b8  data: data,singles
+1896bc  data: data,singles
+1896c0  data: data,singles
+189760  data: data,singles
+1897ac  data: data,singles
+1897b0  data: data,singles
+1897b4  data: data,singles
+18982c  probe
+189830  probe
+189834  data: data,singles
+189880  data: data,singles
+189884  data: data,singles
+189888  data: data,singles
+18988c  data: data,singles
+18995c  data: data,singles
+189960  data: data,singles
+189964  data: data,singles
+18996c  data: data,singles
+189974  data: data,singles
+189978  data: data,singles
+1899d8  data: data,singles
+1899dc  data: data,singles
+189a34  data: data,singles
+189a38  data: data,singles
+189a3c  data: data,singles
+189a94  data: data,singles
+189a98  data: data,singles
+189a9c  data: data,singles
+189aa0  data: data,singles
+189aa4  data: data,singles
+189b08  data: data,singles
+189b0c  data: data,singles
+189b10  data: data,singles
+189b58  probe
+189b70  data: data,singles
+189bbc  probe
+189bc0  probe
+189bc4  probe
+189bc8  probe
+189bcc  data: data,singles
+189e50  data: data,singles
+189e54  data: data,singles
+189e58  data: data,singles
+189f04  data: singles
+189f08  data: singles
+189fbc  probe
+18a060  probe
+18a0c0  data: singles
+18a0c4  data: singles
+18a180  data: singles
+18a188  data: singles
+18a18c  data: singles
+18a190  data: singles
+18a194  data: singles
+18a198  data: singles
+18a1e4  probe
+18a1e8  probe
+18a1ec  probe
+18a320  data: data,singles
+18a324  data: data,singles
+18a328  data: data,singles
+18a404  probe
+18a410  data: data,singles
+18a414  data: data,singles
+18a418  data: data,singles
+18a554  data: data,singles
+18a598  data: singles
+18a59c  data: singles
+18a640  data: data,singles
+18a668  probe
+18a66c  data: singles
+18a7bc  data: data,singles
+18ae8c  probe
+18ae90  probe
+18ae94  probe
+18ae98  data: data,singles
+18aef0  probe
+18aef4  data: data,singles
+18aef8  data: data,singles
+18af00  probe
+18af04  data: singles
+18b16c  probe
+18b170  data: data,singles
+18b174  data: data,singles
+18b178  data: data,singles
+18b180  probe
+18b284  data: data,singles
+18b288  data: data,singles
+18b28c  data: data,singles
+18b2a0  data: data,singles
+18b2a4  data: data,singles
+18bff0  probe
+18c09c  data: singles
+18c14c  data: singles
+18c1bc  data: singles
+18c268  data: singles
+18c2a4  data: singles
+18c33c  data: singles
+18c454  probe
+18c468  data: singles
+18c4dc  data: singles
+18c518  probe
+18c554  data: singles
+18c5c8  data: singles
+18c644  probe
+18c774  data: singles
+18c7b0  data: singles
+18c7ec  data: singles
+18c828  data: singles
+18c864  probe
+18c8dc  probe
+18c918  probe
+18d390  data: singles
+18d394  data: singles
+18d3a0  data: data,singles
+18d3a4  data: data,singles
+18d3b0  data: data,singles
+18d3b4  data: data,singles
+18d3c0  probe
+18d3c4  probe
+18d3d0  data: data,singles
+18d3d4  data: data,singles
+18d3e0  probe
+18d3e4  probe
+18d3f0  data: data,singles
+18d3f4  data: data,singles
+18d400  data: singles
+18d40c  data: singles
+18d418  data: singles
+18d424  data: singles
+18d430  data: singles
+18d43c  data: singles
+18d448  data: singles
+18d454  data: data,singles
+18d458  data: data,singles
+18d464  data: data,singles
+18d468  data: data,singles
+18d474  data: data,singles
+18d478  data: data,singles
+18d484  data: data,singles
+18d488  data: data,singles
+18d494  data: data,singles
+18d498  data: data,singles
+18d4a4  data: data,singles
+18d4a8  data: data,singles
+18d4b4  data: data,singles
+18d4b8  data: data,singles
+18d4c4  data: singles
+18d4d0  data: singles
+18d4dc  data: singles
+18d4e8  data: singles
+18d4f4  data: singles
+18d500  data: singles
+18d50c  data: singles
+192658  data: singles
+19b71c  data: singles
+19eb30  data: singles
+19f648  data: singles
+1a15f0  data: singles
+1b76bc  data: singles
+1bb4d0  data: singles
+1d9cbc  data: singles
+1dc590  data: singles
+1e5948  data: singles
+2298a0  data: singles
+22a438  data: singles
+231840  data: singles
+242a04  data: singles
+2468d8  probe
+28cf34  data: data,singles
+2bb454  probe
+2c4924  data: singles
+301ec4  data: data,singles,tables-side
+3039d0  data: data,singles
+30c9f4  data: singles
+310d74  data: singles
+311af8  data: singles
+315d4c  data: singles
+318958  data: singles
+318a10  data: singles
+31ab58  data: singles
+31ab5c  data: singles
+31ec98  data: singles

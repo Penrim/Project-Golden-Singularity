@@ -1,0 +1,2 @@
+# GS1 AGSI: pointers no relocation rule finds (step-5 proofs). One file offset per line (+ evidence).
+2af154  pointer: data,singles,tables-side
