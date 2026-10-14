@@ -9,6 +9,9 @@ with one read watchpoint over GS1 (bridge.lua `ptrprobe`) and records for every 
 Coverage: optional savestates, every map (warp + walk) and every enemy group (forced battle).
 
   python pointer_probe.py run  MERGED.gba ORIG_GS1.gba OUT.txt [state.ss ...]   (~25 min)
+  python pointer_probe.py runall MERGED.gba ORIG_GS1.gba OUT.txt [state.ss ...]
+      (every pointer-like word of GS1, relocated or not, incl. files; watches 0x08000000-0x09FFFFFF so that a
+       not-relocated word used as an address is seen too; OUT.cov = 256-byte blocks read at all = coverage)
   python pointer_probe.py list ORIG_GS1.gba OUT.txt [OTHER_GS1.gba ...]   -> data/reloc_exclude_<code>.txt
       (OTHER_GS1: versions whose lists exist already; their findings are mapped in by surrounding bytes)
 
@@ -39,19 +42,26 @@ def candidates(merged, orig_path):
             if a not in lits and a not in mft and (m[SHIFT + a:SHIFT + a + 4] != d[a:a + 4] or a in excl)]
 
 
-def run(merged, orig_path, out, states=()):
+def all_words(orig_path):
+    """Every 4-aligned word of GS1 whose value looks like a GS1 ROM address."""
+    d = open(orig_path, "rb").read()
+    return [a for a in range(0, len(d) - 3, 4) if reloc.is_ptr(struct.unpack_from("<I", d, a)[0], len(d))]
+
+
+def run(merged, orig_path, out, states=(), every=False):
     import maptour, battletour
-    tag = os.path.splitext(os.path.basename(merged))[0]
+    tag = os.path.splitext(os.path.basename(merged))[0] + ("_all" if every else "")
     lst = os.path.join(os.environ.get("TEMP", "."), f"{tag}_probe_list.txt")   # bridge paths: no spaces
     assert " " not in lst, "TEMP path must not contain spaces"
-    open(lst, "w").write("\n".join("%08x" % (0x09000000 + a) for a in candidates(merged, orig_path)))
+    words = all_words(orig_path) if every else candidates(merged, orig_path)
+    open(lst, "w").write("\n".join("%08x" % (0x09000000 + a) for a in words))
     field = maptour.field_state(merged, os.path.abspath(f"build/{tag}_probe_field.ss"), True)
     world = battletour.worldmap_state(merged, field, os.path.abspath(f"build/{tag}_probe_world.ss"))
     rets = profiles.profile_gs1(orig_path)["encounter_returns"]
     e = Emu.launch(merged); e.sock.settimeout(600)
     t0 = time.time()
     try:
-        e.cmd(f"ptrprobe {lst} {0x09000000} {0x09FFFFFF}")
+        e.cmd(f"ptrprobe {lst} {0x08000000 if every else 0x09000000} {0x09FFFFFF}")
         for s in states:
             e.load(os.path.abspath(s)); e.wait(600)
         for mp in range(201):
@@ -112,8 +122,8 @@ def mapped_exclusions(orig_path, other_roms, ctx=12):
 
 
 if __name__ == "__main__":
-    if sys.argv[1] == "run":
-        run(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5:])
+    if sys.argv[1] in ("run", "runall"):
+        run(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5:], every=sys.argv[1] == "runall")
     elif sys.argv[1] == "list":
         orig, probe, others = sys.argv[2], sys.argv[3], sys.argv[4:]   # others: GS1 ROMs with existing lists
         code = open(orig, "rb").read()[0xAC:0xB0].decode()

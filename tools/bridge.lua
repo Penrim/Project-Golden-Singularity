@@ -181,6 +181,22 @@ local function handle(line)
 			fh:close()
 		end, tonumber(addr))
 		reply("ok")
+	elseif cmd == "calllog" then
+		-- calllog ADDR PATH : every time ADDR executes, append "ADDR r0 r1 r2 lr" to PATH if that line is new
+		-- (e.g. get_file: which file number from which call site; decoders: source, destination)
+		local addr, path = line:match("^%S+%s+(%S+)%s+(.-)%s*$")
+		local seenC = {}
+		emu:setBreakpoint(function()
+			local key = string.format("%08x %08x %08x %08x %08x", tonumber(addr), emu:readRegister("r0"),
+				emu:readRegister("r1"), emu:readRegister("r2"), emu:readRegister("lr"))
+			if not seenC[key] then
+				seenC[key] = true
+				local fh = io.open(path, "a")
+				fh:write(key .. "\n")
+				fh:close()
+			end
+		end, tonumber(addr))
+		reply("ok")
 	elseif cmd == "watchwidth" then
 		-- watchwidth LISTFILE OUTFILE : read watchpoints on the 4-byte words listed (one hex address per line);
 		-- appends "address width pc" for each new (address, width) combination to OUTFILE
@@ -219,31 +235,44 @@ local function handle(line)
 			local addr = tonumber(l, 16)
 			if addr then probe[addr] = {narrow = 0, wide = 0, used = 0} end
 		end
-		local pending = {}
+		-- pending "used" checks live in a fixed ring of 128 slots (no table per read: with every pointer-like
+		-- word watched, per-read garbage made mGBA grow to 7 GB and stall)
+		local pw, pv, pn, slot, live = {}, {}, {}, 0, 0
 		local readNo = 0
+		cover = {}                                   -- 256-byte blocks read at all (coverage, written by ptrdump)
 		emu:setRangeWatchpoint(function(info)
 			readNo = readNo + 1
 			local a = info.address
-			for i = #pending, 1, -1 do
-				local p = pending[i]
-				if readNo - p[3] > 96 then
-					table.remove(pending, i)
-				elseif a >= p[2] and a < p[2] + 0x800 then
-					probe[p[1]].used = probe[p[1]].used + 1
-					table.remove(pending, i)
+			cover[a >> 8] = true
+			if live > 0 then
+				live = 0
+				for i = 1, 128 do
+					local w = pw[i]
+					if w then
+						if readNo - pn[i] > 96 then
+							pw[i] = nil
+						elseif a >= pv[i] and a < pv[i] + 0x800 then
+							probe[w].used = probe[w].used + 1
+							pw[i] = nil
+						else
+							live = live + 1
+						end
+					end
 				end
 			end
-			local w = a - (a % 4)
+			local w = a & 0xFFFFFFFC
 			local s = probe[w]
 			if s then
 				if (info.width or 4) < 4 then
 					s.narrow = s.narrow + 1
 				else
 					s.wide = s.wide + 1
-					local v = emu:read32(w) & 0xFFFFFFFE
-					pending[#pending + 1] = {w, v, readNo}
+					slot = slot % 128 + 1
+					pw[slot], pv[slot], pn[slot] = w, emu:read32(w) & 0xFFFFFFFE, readNo
+					live = live + 1
 				end
 			end
+			if readNo % 20000 == 0 then collectgarbage("step", 4000) end   -- each read makes garbage (info)
 		end, tonumber(lo), tonumber(hi), C.WATCHPOINT_TYPE.READ)
 		reply("ok")
 	elseif cmd == "ptrdump" then
@@ -254,6 +283,9 @@ local function handle(line)
 			end
 		end
 		fh:close()
+		local fc = io.open(a .. ".cov", "w")
+		for blk in pairs(cover or {}) do fc:write(string.format("%08x\n", blk * 256)) end
+		fc:close()
 		reply("ok")
 	elseif cmd == "bponce" then
 		-- bponce ADDR PATH : like bplog, but only the first hit (safe for addresses inside crash loops)
