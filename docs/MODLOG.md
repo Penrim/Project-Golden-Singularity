@@ -446,3 +446,15 @@ TODO: start menu (Continue / Chapter 1 / Chapter 2) in C; verify real GS1 credit
   verified to be the same sources with CRLF runtime.c, so the runtime binaries are unchanged).
 - Verified from `git archive` exports with CRLF and with LF line endings: all five languages build, output identical
   to the reference checksums. Release checks must use an export of the commit, never the working copy.
+
+## Session 17 (2026-10-14/15): verification steps 3-5, release 1.2.0
+- Map code: only jump-table entries are ROM addresses; three 16.16 coordinates in map code 881 were relocated by the
+  old literal scan (0x08380000 = 2104.0) -> relocate_blob changes exactly the jump-table entries.
+- typeflow: code/ROM spaces, literal-use tracking, cmp/cmn/tst fix (+75 dereferencing functions), DMA via stm,
+  call veneers, IWRAM routine arguments.
+- Step 5 by four parallel helpers (tables, singles, data, literals; branches step5-*, merged): no conflicting
+  evidence; ~270 data words per version taken out of the relocation, one missed pointer added. Fixed: animation
+  scripts, sprite frames, sprite +7 offsets, m4a velocities, 3 Thumb instructions in switch-table code, the fill
+  pattern, halfword tables.
+- Tests: CPU cap per emulator (tools/cpucap.py, once per process; nested caps multiply), at most 3 in parallel,
+  regression scripts write to new folders (nothing deleted). Regression after the fixes: all green in five languages.

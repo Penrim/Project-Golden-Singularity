@@ -19,7 +19,7 @@ import argparse, hashlib, os, sys, tempfile, zipfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "tools"))
 
-VERSION = "1.1.1"
+VERSION = "1.2.0"
 
 # Verified dumps (No-Intro). Other dumps of the same version may work but are untested.
 SUPPORTED = {
@@ -39,11 +39,11 @@ PAIRS = {("AGSE", "AGFE"): "en", ("AGSD", "AGFD"): "de", ("AGSF", "AGFF"): "fr",
 
 # SHA-1 of the finished cartridge for each language (same on every system with the pinned requirements)
 EXPECTED_OUTPUT = {
-    "en": "5a8c4f2a5542a9fb745f21b8b4e804d4158043d1",
-    "de": "9d87b87fa2437e19a6be82ff50fced38bbdc7321",
-    "fr": "2de01797b30807c289f79e7cd7c4afa7026c7cb3",
-    "it": "569f1cbbfc5f27cd53572bf8c5658af1a02470ae",
-    "es": "d64dedca0a0c245f0315452eb4da8656df4b4c26",
+    "en": "a83b1f8d8341d61ec2c3d876f147c08ad00c167e",
+    "de": "16ed34817a4979e287542fb1cf09880ac78b12a0",
+    "fr": "a89efc230b36cb59e14b16fb53d4698f4da5c511",
+    "it": "9b1cd79036b7e1c9e18ebc13109dcd1b45e37610",
+    "es": "5ca0e8cd944094808b4a2774ee4fb4a985e1c581",
 }
 
 

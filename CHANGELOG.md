@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.2.0 — about 300 fixes per language in the moved Golden Sun
+
+Golden Sun has to be moved inside the cartridge, and every internal address in it is adjusted. Until now that
+decision ("address or just a number?") was partly guessed. For this version every one of the ~32 000 candidate
+values was checked against how the game actually uses it (code analysis, file formats, recordings of the game
+running); about 96 % are proven now, the rest is decided as before. That found values the builder had changed although they are not addresses, and one address it missed.
+Fixed in all five languages (about 300 values per language):
+
+- Animation scripts of characters and monsters (frame durations off by one tick) and sprite frames (wrong pixels,
+  the same kind as the garbled sprite above Isaac fixed in 1.0.0); sprite position offsets (1 pixel).
+- Seven program instructions where a value was divided by 32 instead of halved.
+- Sound: about 170 bytes of instrument samples and three note velocities in songs.
+- Three coordinates in a map script, the fill pattern of a battle effect, and several small number tables.
+- A sprite frame (sprite 204) that pointed into The Lost Age's half of the cartridge.
+
+All maps, all enemy groups, saving, the start menu and the switch to Chapter 2 were tested again in all five
+languages. Save files keep working.
+
 ## 1.1.1 — fix: building works again
 
 - Fixed: building stopped with "cart/prebuilt/... does not match cart/runtime.c" for everyone who downloaded the

@@ -349,3 +349,25 @@ address range (0x08000000 + size) can need relocation (USA: 27 031).
   saw 32-bit reads and, by chance, "used" on ~12-30 of them: wordmap now puts `sample-data` before the probe).
   Still needed from the lists: 1 word in m4a track data (USA 0x182200) and the byte tables (USA 74: 0x0C5C20..,
   0x0EEA2C, 0x0EECF4, small-number fields in record tables 0x1851E0-0x18D3E4, 0x2468D8, packed sprite 0x2BB454).
+
+### Verification result (1.2.0)
+
+Every pointer-like word of GS1 got evidence (USA numbers; the other versions match):
+- Files after the MFT (~7 800 words): file formats proven by decoders that stop exactly at the part end
+  (`filemap.py`: palette + packed, u16/u32 offset tables, battle sprite headers, battle backgrounds
+  (`bgdecode.py`), nibble-coded portrait records (`nibbledecode.py`)), the file tour log (`filetour.py`,
+  `fileverify.py`) and the all-words probe. Open: font file 20, battle animation files 304-307, file 64.
+- Map code (~5 160): the only ROM addresses are jump-table entries (all verified to reach an engine function through
+  the engine's own jump table); `relocate_blob` changes exactly those (`mapflow.py`). Open: ~90 data words passed to
+  engine functions.
+- Engine literal pools (1 395): `typeflow.lit_use` + `litproof.py` (per-literal taint through calls, RAM fields,
+  identity comparisons, sizes): 1 382 proven pointers, 1 number (fill pattern 0x08080808 at USA 0x0D39D0).
+- Program-area guesses: `tableproof.py` (tables, nested sources, RAM links), `singles.py` (switch-table code
+  coverage, export stubs, ARM routines, sprite descriptors/animation lists/frame lists), `dataproof.py` (sprite
+  records, animation scripts, frame decoders, m4a tracks, decoder blobs). The four agree everywhere (no word with
+  pointer and data evidence). `step5_collect.py` + `step5_apply.py` write `data/reloc_exclude_<code>.txt` (probe +
+  ~270 data words with their sources, 'weak' marked) and `data/reloc_include_<code>.txt` (sprite 204's frame
+  pointer, USA 0x2AF154).
+- Still unproven (~1 200 per version, about 4 %): tables read through RAM objects whose reader is not found yet
+  (e.g. the family behind 0x029EE4), literal pools of code no confirmed code reaches, and the open files above.
+  They keep the heuristic decision. Next: the extended game scenario (menus, Psynergy, summons, shops, scenes).
