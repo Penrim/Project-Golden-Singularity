@@ -170,9 +170,9 @@ empty space or cut short at the end are adjusted automatically.
 | Golden Sun (Spain) | `de0bdc889594b012cad213ca83707feb81ada28b` |
 | Golden Sun - La Edad Perdida (Spain) | `a2e3e80036195343c2713410ac14f4e329e3f40d` |
 
-Finished cartridge: English `a83b1f8d8341d61ec2c3d876f147c08ad00c167e`,
-German `16ed34817a4979e287542fb1cf09880ac78b12a0`, French `a89efc230b36cb59e14b16fb53d4698f4da5c511`,
-Italian `9b1cd79036b7e1c9e18ebc13109dcd1b45e37610`, Spanish `5ca0e8cd944094808b4a2774ee4fb4a985e1c581`.
+Finished cartridge: English `e110dbeae2e42336dd83f6b8d2cf7813ae95ec81`,
+German `3b3c8ea4830f045bf9eece1cb159c5a8de0834cf`, French `ccd5c61c7a26e4f8f9bd7a6f1336c2b5407e61a0`,
+Italian `2573e44805e054d60385057a2f0db6ab72c8b7c4`, Spanish `4afaadffc4c41d48eff554c5fd4523c1bb49103c`.
 
 </details>
 

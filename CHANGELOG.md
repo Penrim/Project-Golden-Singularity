@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.2.1 — about 50 more fixes per language in the moved Golden Sun
+
+The check of every value that the builder adjusts when it moves Golden Sun is now complete except for about 1 %
+(was 4 %). That found about 50 more values per language that are not addresses but were changed as if they were.
+Fixed in all five languages:
+
+- Letters of the menu font and of the staff roll (single wrong pixels).
+- The bobbing of the menu cursor.
+- Frames of several monster and effect sprites (wrong pixels) and packed images.
+- Three bytes in songs, one value in the item table, small number tables of two battle effects.
+- German: one colour of a palette in the menus. Spanish: positions in a mini-game table.
+
+All maps, all enemy groups, saving, the start menu and the switch to Chapter 2 were tested again in all five
+languages. Save files keep working.
+
 ## 1.2.0 — about 300 fixes per language in the moved Golden Sun
 
 Golden Sun has to be moved inside the cartridge, and every internal address in it is adjusted. Until now that
