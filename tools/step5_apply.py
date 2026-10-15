@@ -63,14 +63,19 @@ def lists(lang):
 
 def write(lang):
     code = CODES[lang]
-    old = build_gs1_reloc.load_exclusions(code)
+    p_exc = os.path.join(ROOT, "data", f"reloc_exclude_{code}.txt")
+    old_txt = {int(l.split()[0], 16): (l.split(None, 1)[1].strip() if len(l.split(None, 1)) > 1 else "")
+               for l in open(p_exc) if l.strip() and not l.startswith("#")} if os.path.exists(p_exc) else {}
+    old = set(old_txt)
     excl, incl = lists(lang)
     lines = [f"# GS1 {code}: words the relocation heuristics take for pointers but that are data. One file offset per",
              "# line (+ evidence). Sources: pointer probe (tools/pointer_probe.py) and the step-5 code/format proofs",
              "# (tools/step5_collect.py: tableproof, singles, dataproof, litproof; 'weak' = data evidence whose table",
              "# bound rests on the next label, with no pointer evidence at all). See docs/TECHNICAL.md."]
     for a in sorted(old | set(excl)):
-        lines.append(f"{a:06x}  " + ("probe + " if a in old and a in excl else "") + (excl[a] if a in excl else "probe"))
+        # "probe" only for words the pointer probe found (their first line said so); reruns keep the text stable
+        probe = old_txt.get(a, "").startswith("probe")
+        lines.append(f"{a:06x}  " + (("probe + " if probe else "") + excl[a] if a in excl else old_txt.get(a) or "probe"))
     open(os.path.join(ROOT, "data", f"reloc_exclude_{code}.txt"), "w").write("\n".join(lines) + "\n")
     old_inc = {}
     p_inc = os.path.join(ROOT, "data", f"reloc_include_{code}.txt")
@@ -81,7 +86,7 @@ def write(lang):
     inc = [f"# GS1 {code}: pointers no relocation rule finds (step-5 proofs). One file offset per line (+ evidence)."]
     inc += [f"{a:06x}  {incl[a]}" for a in sorted(incl)]
     open(os.path.join(ROOT, "data", f"reloc_include_{code}.txt"), "w").write("\n".join(inc) + "\n")
-    print(f"{lang}: exclude {len(old | set(excl))} (probe {len(old)}, new {len(set(excl) - old)}), include {len(incl)}")
+    print(f"{lang}: exclude {len(old | set(excl))} (kept {len(old)}, new {len(set(excl) - old)}), include {len(incl)}")
 
 
 if __name__ == "__main__":

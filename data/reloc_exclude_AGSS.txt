@@ -88,6 +88,7 @@
 0f4268  probe + data: step5 (weak bound)
 0f426c  probe + data: step5 (weak bound)
 0f4894  data: fontproof: credits font 0f47dc: 8-byte 1-bit glyph (ldrb, reader 0x080f38cc)
+0fb778  data: fontproof: byte table 0fb775 read by a 14-step ldrb loop at 0x080f9fdc
 1007b8  probe
 100e70  probe
 100e74  probe

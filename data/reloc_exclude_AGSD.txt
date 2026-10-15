@@ -32,6 +32,7 @@
 032cac  data: fontproof: byte table 032c88 of 80 entries (ldrb with index mod 80)
 032cb0  data: fontproof: byte table 032c88 of 80 entries (ldrb with index mod 80)
 032d14  probe + data: step5 (weak bound)
+07a8e8  data: fontproof: video DMA source 07a8c8+0x40 (DMA set up at 0x0801beb2)
 081708  probe + data: step5 (weak bound)
 081734  probe + data: step5 (weak bound)
 081760  probe + data: step5 (weak bound)

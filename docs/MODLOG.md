@@ -469,5 +469,9 @@ TODO: start menu (Continue / Chapter 1 / Chapter 2) in C; verify real GS1 credit
   found and bounded by their reader code in all five versions) and dataproof sprite frames that share their tail
   with the next frame (USA table 0x30FBB4, entries 7/8). step5_apply: +34 EN, +35 DE, +31 FR, +33 IT, +35 ES
   exclusions; no other word changed (relocated count down by exactly these, every other changed word identical).
-- Left as relocated (no clean proof yet): DE 0x07A8E8 (options palette word), ES 0x0FB778 (reel mini-game bytes).
 - All five cartridges rebuilt; no emulator regression run yet.
+- Then the last two: fontproof also proves ROM blocks copied by a literal DMA setup into video memory (DE
+  0x07A8E8: 64 bytes to OBJ palette RAM, DMA at 0x0801BEAA) and byte tables read by a counted ldrb loop (ES
+  0x0FB778: 14-step loop at 0x080F9FDC). Neither rule claims any other pointer-like word in the five versions.
+- step5_apply: a rerun labelled every listed word "probe + ..."; now "probe" stays only on words the pointer probe
+  found, and a second run changes nothing.
