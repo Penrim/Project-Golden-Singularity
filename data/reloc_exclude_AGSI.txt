@@ -2,73 +2,92 @@
 # line (+ evidence). Sources: pointer probe (tools/pointer_probe.py) and the step-5 code/format proofs
 # (tools/step5_collect.py: tableproof, singles, dataproof, litproof; 'weak' = data evidence whose table
 # bound rests on the next label, with no pointer evidence at all). See docs/TECHNICAL.md.
-019278  probe
-029ec8  data: tiling: inside nibble stream of table 029c94
-02d0d8  data: tiling: inside nibble stream of table 02a010
-02d18c  data: tiling: inside nibble stream of table 02a010
-02d204  data: tiling: inside nibble stream of table 02a010
-02d7ec  data: tiling: inside nibble stream of table 02a010
-02d9c4  data: tiling: inside nibble stream of table 02a010
-02da04  data: tiling: inside nibble stream of table 02a010
-02da44  data: tiling: inside nibble stream of table 02a010
-02da7c  data: tiling: inside nibble stream of table 02a010
-02dab8  data: tiling: inside nibble stream of table 02a010
-02dafc  data: tiling: inside nibble stream of table 02a010
-02db74  data: tiling: inside nibble stream of table 02a010
-02dbb0  data: tiling: inside nibble stream of table 02a010
-02e7ec  data: tiling: inside nibble stream of table 02dfb4
-033c74  data: probe-data
-034080  data: step5 (weak bound)
-07d908  data: step5 (weak bound)
-07d934  data: step5 (weak bound)
-07d960  data: step5 (weak bound)
-07d98c  data: step5 (weak bound)
-07d9b8  data: step5 (weak bound)
-07d9e4  data: step5 (weak bound)
-07da10  data: step5 (weak bound)
-07da3c  data: step5 (weak bound)
-07dc78  data: step5 (weak bound)
-07dca4  data: step5 (weak bound)
-07dcd0  data: step5 (weak bound)
-07dcfc  data: step5 (weak bound)
-07dd28  data: step5 (weak bound)
-07dd54  data: step5 (weak bound)
-07de30  data: step5 (weak bound)
-07de88  data: step5 (weak bound)
-07df64  data: step5 (weak bound)
-07e040  data: step5 (weak bound)
-07e06c  data: step5 (weak bound)
-07e098  data: step5 (weak bound)
-09c7b4  data: step5 (weak bound)
-09c7ec  data: step5 (weak bound)
-09c824  data: step5 (weak bound)
-09ccdc  data: step5 (weak bound)
-09ce2c  data: step5 (weak bound)
-0a0240  data: step5
-0bbf24  probe
-0c5c38  data: probe-data
-0c5c3c  data: probe-data
-0c5e40  data: probe-data
-0d39d0  data: step5
-0ea7a0  probe
-0ee0d0  data: step5 (weak bound)
-0ee0dc  data: step5 (weak bound)
-0ee0e0  data: step5 (weak bound)
-0ee9f4  probe
-0eea2c  data: step5 (weak bound)
-0eea94  data: step5 (weak bound)
-0eea9c  data: step5 (weak bound)
-0eeac4  data: step5 (weak bound)
-0eeae0  data: step5 (weak bound)
-0eecf4  data: probe-data
-0eed88  probe
-0f1248  data: step5 (weak bound)
-0f1264  data: step5 (weak bound)
-0f1268  data: step5 (weak bound)
-0f1270  data: step5 (weak bound)
-0f1274  data: step5 (weak bound)
-0f1278  data: step5 (weak bound)
-0f127c  data: step5 (weak bound)
+019278  probe + data: reach: code (reached via switch/function tables)
+029ec8  probe + data: tiling: inside nibble stream of table 029c94
+02d0d8  probe + data: tiling: inside nibble stream of table 02a010
+02d18c  probe + data: tiling: inside nibble stream of table 02a010
+02d204  probe + data: tiling: inside nibble stream of table 02a010
+02d7ec  probe + data: tiling: inside nibble stream of table 02a010
+02d9c4  probe + data: tiling: inside nibble stream of table 02a010
+02da04  probe + data: tiling: inside nibble stream of table 02a010
+02da44  probe + data: tiling: inside nibble stream of table 02a010
+02da7c  probe + data: tiling: inside nibble stream of table 02a010
+02dab8  probe + data: tiling: inside nibble stream of table 02a010
+02dafc  probe + data: tiling: inside nibble stream of table 02a010
+02db74  probe + data: tiling: inside nibble stream of table 02a010
+02dbb0  probe + data: tiling: inside nibble stream of table 02a010
+02e7ec  probe + data: tiling: inside nibble stream of table 02dfb4
+032afc  data: fontproof: menu font 03236c: 32-byte glyph record (ldrh, reader 0x08016dc2)
+032fa0  data: fontproof: menu font 03236c: 32-byte glyph record (ldrh, reader 0x08016dc2)
+032fe0  data: fontproof: menu font 03236c: 32-byte glyph record (ldrh, reader 0x08016dc2)
+033020  data: fontproof: menu font 03236c: 32-byte glyph record (ldrh, reader 0x08016dc2)
+033060  data: fontproof: menu font 03236c: 32-byte glyph record (ldrh, reader 0x08016dc2)
+0330a0  data: fontproof: menu font 03236c: 32-byte glyph record (ldrh, reader 0x08016dc2)
+0330e0  data: fontproof: menu font 03236c: 32-byte glyph record (ldrh, reader 0x08016dc2)
+033594  data: fontproof: menu font 03236c: 32-byte glyph record (ldrh, reader 0x08016dc2)
+033c74  probe + data: probe-data
+033db4  data: fontproof: menu font 03236c: 32-byte glyph record (ldrh, reader 0x08016dc2)
+033e94  data: fontproof: menu font 03236c: 32-byte glyph record (ldrh, reader 0x08016dc2)
+034018  data: fontproof: byte table 033ff4 of 80 entries (ldrb with index mod 80)
+03401c  data: fontproof: byte table 033ff4 of 80 entries (ldrb with index mod 80)
+034080  probe + data: step5 (weak bound)
+07d908  probe + data: step5 (weak bound)
+07d934  probe + data: step5 (weak bound)
+07d960  probe + data: step5 (weak bound)
+07d98c  probe + data: step5 (weak bound)
+07d9b8  probe + data: step5 (weak bound)
+07d9e4  probe + data: step5 (weak bound)
+07da10  probe + data: step5 (weak bound)
+07da3c  probe + data: step5 (weak bound)
+07dc78  probe + data: step5 (weak bound)
+07dca4  probe + data: step5 (weak bound)
+07dcd0  probe + data: step5 (weak bound)
+07dcfc  probe + data: step5 (weak bound)
+07dd28  probe + data: step5 (weak bound)
+07dd54  probe + data: step5 (weak bound)
+07de30  probe + data: step5 (weak bound)
+07de88  probe + data: step5 (weak bound)
+07df0c  data: dataproof: code-label (weak bound): byte/halfword read (field T=0x7b6a8 stride 4
+07df64  probe + data: step5 (weak bound)
+07e040  probe + data: step5 (weak bound)
+07e06c  probe + data: step5 (weak bound)
+07e098  probe + data: step5 (weak bound)
+09c7b4  probe + data: step5 (weak bound)
+09c7ec  probe + data: step5 (weak bound)
+09c824  probe + data: step5 (weak bound)
+09ccdc  probe + data: step5 (weak bound)
+09ce2c  probe + data: step5 (weak bound)
+09e718  data: dataproof: format: packed blob 0x9e626-0x9e7d8 passed to the unpack-hw wrapper a
+09e790  data: dataproof: format: packed blob 0x9e626-0x9e7d8 passed to the unpack-hw wrapper a
+09e794  data: dataproof: format: packed blob 0x9e626-0x9e7d8 passed to the unpack-hw wrapper a
+0a0240  probe + data: step5
+0bbf24  probe + data: reach: code (reached via switch/function tables)
+0c5c38  probe + data: probe-data
+0c5c3c  probe + data: probe-data
+0c5e40  probe + data: probe-data
+0d39d0  probe + data: step5
+0ea7a0  probe + data: reach: code (reached via switch/function tables)
+0ee0d0  probe + data: step5 (weak bound)
+0ee0dc  probe + data: step5 (weak bound)
+0ee0e0  probe + data: step5 (weak bound)
+0ee9f4  probe + data: reach: typeflow data (('fld', 977394, 2, 0), ('narrow', 2, 135102582))
+0eea2c  probe + data: step5 (weak bound)
+0eea94  probe + data: step5 (weak bound)
+0eea9c  probe + data: step5 (weak bound)
+0eeac4  probe + data: step5 (weak bound)
+0eeae0  probe + data: step5 (weak bound)
+0eec5c  data: dataproof: code-byte-index (weak bound): byte/halfword read (field T=0xeec5a str
+0eec60  data: dataproof: code-byte-index (weak bound): byte/halfword read (field T=0xeec5f str
+0eecf4  probe + data: probe-data
+0eed88  probe + data: dataproof: code-byte-index (weak bound): byte/halfword read (field T=0xeed7e str
+0f1248  probe + data: step5 (weak bound)
+0f1264  probe + data: step5 (weak bound)
+0f1268  probe + data: step5 (weak bound)
+0f1270  probe + data: step5 (weak bound)
+0f1274  probe + data: step5 (weak bound)
+0f1278  probe + data: step5 (weak bound)
+0f127c  probe + data: step5 (weak bound)
+0f18a4  data: fontproof: credits font 0f17ec: 8-byte 1-bit glyph (ldrb, reader 0x080f08cc)
 0fdfb8  probe
 0fe670  probe
 0fe674  probe
@@ -114,304 +133,318 @@
 152cb8  probe
 152d3c  probe
 155038  probe
-182200  data: probe-data
-1851e0  data: probe-data
-185208  data: step5
-18521c  data: probe-data
-186180  data: probe-data
-186324  data: probe-data
-186388  data: probe-data
-1863ec  data: probe-data
-186400  data: step5
-186414  data: step5
-186428  data: probe-data
-18643c  data: probe-data
-1864c8  data: probe-data
-18652c  data: probe-data
-186568  data: probe-data
-1865a4  data: probe-data
-1865b8  data: probe-data
-1866e4  data: probe-data
-186770  data: probe-data
-186f40  data: probe-data
-186f54  data: probe-data
-187774  data: step5
-18782c  probe
-187830  probe
-187888  data: step5
-187890  data: step5
-187894  data: step5
-187898  data: step5
-187ad4  probe
-187ae8  probe
-187cf8  probe
-187d0c  probe
-187f38  data: probe-data
-187f3c  data: probe-data
-187f40  data: probe-data
-187f44  data: step5
-1880e8  data: probe-data
-1883e0  probe
-1884e0  data: step5
-1884e4  data: step5
-1884e8  data: step5
-188598  data: step5
-18859c  data: step5
-1885a0  data: step5
-188604  data: step5
-188608  data: step5
-18860c  data: step5
-188644  probe
-18864c  probe
-188650  probe
-188654  probe
-188658  probe
-18865c  probe
-18867c  probe
-188680  probe
-188684  probe
-1886a8  probe
-1886b0  probe
-1886b4  probe
-188758  data: step5
-1887a0  data: step5
-1888f8  data: probe-data
-188900  probe
-188904  probe
-188970  data: step5
-188974  data: step5
-188978  data: step5
-1889d8  data: step5
-1889dc  data: step5
-1889e0  data: step5
-188c78  probe
-188d6c  probe
-188d74  probe
-188d78  probe
-188d7c  probe
-188d80  probe
-188d84  probe
-188e0c  data: probe-data
-188e14  probe
-188e18  probe
-188e1c  probe
-188e20  probe
-188e24  probe
-188ec0  data: step5
-188ec4  data: step5
-188ec8  data: step5
-188f00  data: probe-data
-188f08  probe
-188f0c  probe
-188f10  probe
-188f14  probe
-188f18  probe
-188f68  data: step5
-1890ec  data: probe-data
-189138  data: probe-data
-1891bc  probe
-1891c0  probe
-189250  data: probe-data
-189254  data: probe-data
-189258  data: probe-data
-1892f0  data: probe-data
-1892f8  data: probe-data
-189360  probe
-189364  probe
-1893b4  data: probe-data
-1893b8  data: probe-data
-1893bc  data: step5
-18940c  data: step5
-1894d4  data: probe-data
-189544  data: probe-data
-189548  data: probe-data
-189670  data: step5
-189674  data: step5
-189678  data: step5
-1896b8  data: step5
-1896bc  data: step5
-1896c0  data: step5
-189760  data: step5
-1897ac  data: step5
-1897b0  data: step5
-1897b4  data: step5
-18982c  data: probe-data
-189830  data: probe-data
-189834  data: step5
-189880  data: step5
-189884  data: step5
-189888  data: step5
-18988c  data: step5
-18995c  data: step5
-189960  data: step5
-189964  data: step5
-18996c  data: step5
-189974  data: step5
-189978  data: step5
-1899d8  data: step5
-1899dc  data: step5
-189a34  data: step5
-189a38  data: step5
-189a3c  data: step5
-189a94  data: step5
-189a98  data: step5
-189a9c  data: step5
-189aa0  data: step5
-189aa4  data: step5
-189b08  data: step5
-189b0c  data: step5
-189b10  data: step5
-189b58  data: probe-data
-189b70  data: step5
-189bbc  data: probe-data
-189bc0  data: probe-data
-189bc4  data: probe-data
-189bc8  data: probe-data
-189bcc  data: probe-data
-189e50  data: step5
-189e54  data: step5
-189e58  data: step5
-189f04  probe
-189f08  probe
-189fbc  data: probe-data
-18a060  data: probe-data
-18a0c0  probe
-18a0c4  probe
-18a180  probe
-18a188  probe
-18a18c  probe
-18a190  probe
-18a194  probe
-18a198  probe
-18a1e4  data: probe-data
-18a1e8  data: probe-data
-18a1ec  data: probe-data
-18a320  data: step5
-18a324  data: step5
-18a328  data: step5
-18a404  data: probe-data
-18a410  data: step5
-18a414  data: step5
-18a418  data: step5
-18a554  data: step5
-18a598  probe
-18a59c  probe
-18a640  data: step5
-18a668  data: probe-data
-18a66c  probe
-18a7bc  data: step5
-18ae8c  data: probe-data
-18ae90  data: probe-data
-18ae94  data: probe-data
-18ae98  data: step5
-18aef0  data: probe-data
-18aef4  data: step5
-18aef8  data: step5
-18af00  data: probe-data
-18af04  probe
-18b16c  data: probe-data
-18b170  data: step5
-18b174  data: step5
-18b178  data: step5
-18b180  data: probe-data
-18b284  data: step5
-18b288  data: step5
-18b28c  data: step5
-18b2a0  data: step5
-18b2a4  data: step5
-18bff0  data: step5
-18c09c  probe
-18c14c  probe
-18c1bc  probe
-18c268  probe
-18c2a4  probe
-18c33c  probe
-18c454  data: probe-data
-18c468  probe
-18c4dc  probe
-18c518  data: step5
-18c554  data: step5
-18c5c8  probe
-18c644  data: probe-data
-18c774  probe
-18c7b0  probe
-18c7ec  probe
-18c828  probe
-18c864  data: step5
-18c8dc  data: probe-data
-18c918  data: probe-data
-18d390  probe
-18d394  probe
-18d3a0  data: step5
-18d3a4  data: step5
-18d3b0  data: step5
-18d3b4  data: step5
-18d3c0  data: probe-data
-18d3c4  data: probe-data
-18d3d0  data: step5
-18d3d4  data: step5
-18d3e0  data: probe-data
-18d3e4  data: probe-data
-18d3f0  data: step5
-18d3f4  data: step5
-18d400  probe
-18d40c  probe
-18d418  probe
-18d424  probe
-18d430  probe
-18d43c  probe
-18d448  probe
-18d454  data: step5
-18d458  data: step5
-18d464  data: step5
-18d468  data: step5
-18d474  data: step5
-18d478  data: step5
-18d484  data: step5
-18d488  data: step5
-18d494  data: step5
-18d498  data: step5
-18d4a4  data: step5
-18d4a8  data: step5
-18d4b4  data: step5
-18d4b8  data: step5
-18d4c4  probe
-18d4d0  probe
-18d4dc  probe
-18d4e8  probe
-18d4f4  probe
-18d500  probe
-18d50c  probe
-192658  probe
-19b71c  probe
-19eb30  probe
-19f648  probe
-1a15f0  probe
-1b76bc  probe
-1bb4d0  probe
-1d9cbc  probe
-1dc590  probe
-1e5948  probe
-2298a0  probe
-22a438  probe
-231840  probe
-242a04  probe
-2468d8  data: probe-data
-28cf34  data: step5
-2b4158  data: tiling: inside gs stream of table 2b4430
-2bb454  data: probe-data
-2c4924  probe
-2caf88  data: tiling: inside gs stream of table 2cb204
-2cafe4  data: tiling: inside gs stream of table 2cb204
-2cb040  data: tiling: inside gs stream of table 2cb204
-301ecc  data: step5
-3039d8  data: probe-data
-30c9fc  probe
-310d7c  probe
-311b00  probe
-315d54  probe
-318960  data: tiling: inside gs stream of table 318dc0
-318a18  data: tiling: inside gs stream of table 318dc0
-31ab60  probe
-31ab64  probe
-31eca0  probe
+1813c4  data: dataproof: format: m4a track stream at 0x181388 (read byte-wise)
+182158  data: dataproof: format: m4a track stream at 0x18211c (read byte-wise)
+1821ac  data: dataproof: format: m4a track stream at 0x182170 (read byte-wise)
+182200  probe + data: probe-data
+1851e0  probe + data: probe-data
+185208  probe + data: step5
+18521c  probe + data: probe-data
+186180  probe + data: probe-data
+186324  probe + data: probe-data
+186388  probe + data: probe-data
+1863ec  probe + data: probe-data
+186400  probe + data: step5
+186414  probe + data: step5
+186428  probe + data: probe-data
+18643c  probe + data: probe-data
+1864c8  probe + data: probe-data
+18652c  probe + data: probe-data
+186568  probe + data: probe-data
+1865a4  probe + data: probe-data
+1865b8  probe + data: probe-data
+1866e4  probe + data: probe-data
+186770  probe + data: probe-data
+186f40  probe + data: probe-data
+186f54  probe + data: probe-data
+187774  probe + data: step5
+18782c  probe + data: dataproof: format: anim script 0x187828 (ldrb op/arg pairs)
+187830  probe + data: dataproof: format: anim script 0x187828 (ldrb op/arg pairs)
+187888  probe + data: step5
+187890  probe + data: step5
+187894  probe + data: step5
+187898  probe + data: step5
+187ad4  probe + data: dataproof: format: anim script 0x187ad2 (ldrb op/arg pairs)
+187ae8  probe + data: dataproof: format: anim script 0x187ae8 (ldrb op/arg pairs)
+187cf8  probe + data: dataproof: format: anim script 0x187cf6 (ldrb op/arg pairs)
+187d0c  probe + data: dataproof: format: anim script 0x187d0c (ldrb op/arg pairs)
+187f38  probe + data: probe-data
+187f3c  probe + data: probe-data
+187f40  probe + data: probe-data
+187f44  probe + data: step5
+1880e8  probe + data: probe-data
+1883e0  probe + data: dataproof: format: anim script 0x1883e0 (ldrb op/arg pairs)
+1884e0  probe + data: step5
+1884e4  probe + data: step5
+1884e8  probe + data: step5
+188598  probe + data: step5
+18859c  probe + data: step5
+1885a0  probe + data: step5
+188604  probe + data: step5
+188608  probe + data: step5
+18860c  probe + data: step5
+188644  probe + data: dataproof: format: anim script 0x188644 (ldrb op/arg pairs)
+18864c  probe + data: dataproof: format: anim script 0x188644 (ldrb op/arg pairs)
+188650  probe + data: dataproof: format: anim script 0x188644 (ldrb op/arg pairs)
+188654  probe + data: dataproof: format: anim script 0x188644 (ldrb op/arg pairs)
+188658  probe + data: dataproof: format: anim script 0x188656 (ldrb op/arg pairs)
+18865c  probe + data: dataproof: format: anim script 0x188656 (ldrb op/arg pairs)
+18867c  probe + data: dataproof: format: anim script 0x18867a (ldrb op/arg pairs)
+188680  probe + data: dataproof: format: anim script 0x18867a (ldrb op/arg pairs)
+188684  probe + data: dataproof: format: anim script 0x18867a (ldrb op/arg pairs)
+1886a8  probe + data: dataproof: format: anim script 0x1886a8 (ldrb op/arg pairs)
+1886b0  probe + data: dataproof: format: anim script 0x1886a8 (ldrb op/arg pairs)
+1886b4  probe + data: dataproof: format: anim script 0x1886a8 (ldrb op/arg pairs)
+188758  probe + data: step5
+1887a0  probe + data: step5
+1888f8  probe + data: probe-data
+188900  probe + data: dataproof: format: anim script 0x1888f8 (ldrb op/arg pairs)
+188904  probe + data: dataproof: format: anim script 0x1888f8 (ldrb op/arg pairs)
+188970  probe + data: step5
+188974  probe + data: step5
+188978  probe + data: step5
+1889d8  probe + data: step5
+1889dc  probe + data: step5
+1889e0  probe + data: step5
+188c78  probe + data: dataproof: format: anim script 0x188c78 (ldrb op/arg pairs)
+188d6c  probe + data: dataproof: format: anim script 0x188d6c (ldrb op/arg pairs)
+188d74  probe + data: dataproof: format: anim script 0x188d6c (ldrb op/arg pairs)
+188d78  probe + data: dataproof: format: anim script 0x188d6c (ldrb op/arg pairs)
+188d7c  probe + data: dataproof: format: anim script 0x188d6c (ldrb op/arg pairs)
+188d80  probe + data: dataproof: format: anim script 0x188d7e (ldrb op/arg pairs)
+188d84  probe + data: dataproof: format: anim script 0x188d7e (ldrb op/arg pairs)
+188e0c  probe + data: probe-data
+188e14  probe + data: dataproof: format: anim script 0x188e0c (ldrb op/arg pairs)
+188e18  probe + data: dataproof: format: anim script 0x188e0c (ldrb op/arg pairs)
+188e1c  probe + data: dataproof: format: anim script 0x188e0c (ldrb op/arg pairs)
+188e20  probe + data: dataproof: format: anim script 0x188e1e (ldrb op/arg pairs)
+188e24  probe + data: dataproof: format: anim script 0x188e1e (ldrb op/arg pairs)
+188ec0  probe + data: step5
+188ec4  probe + data: step5
+188ec8  probe + data: step5
+188f00  probe + data: probe-data
+188f08  probe + data: dataproof: format: anim script 0x188f00 (ldrb op/arg pairs)
+188f0c  probe + data: dataproof: format: anim script 0x188f00 (ldrb op/arg pairs)
+188f10  probe + data: dataproof: format: anim script 0x188f00 (ldrb op/arg pairs)
+188f14  probe + data: dataproof: format: anim script 0x188f12 (ldrb op/arg pairs)
+188f18  probe + data: dataproof: format: anim script 0x188f12 (ldrb op/arg pairs)
+188f68  probe + data: step5
+1890ec  probe + data: probe-data
+189138  probe + data: probe-data
+1891bc  probe + data: dataproof: format: anim script 0x1891bc (ldrb op/arg pairs)
+1891c0  probe + data: dataproof: format: anim script 0x1891bc (ldrb op/arg pairs)
+189250  probe + data: probe-data
+189254  probe + data: probe-data
+189258  probe + data: probe-data
+1892f0  probe + data: probe-data
+1892f8  probe + data: probe-data
+189360  probe + data: dataproof: format: anim script 0x189354 (ldrb op/arg pairs)
+189364  probe + data: dataproof: format: anim script 0x189362 (ldrb op/arg pairs)
+1893b4  probe + data: probe-data
+1893b8  probe + data: probe-data
+1893bc  probe + data: step5
+18940c  probe + data: step5
+1894d4  probe + data: probe-data
+189544  probe + data: probe-data
+189548  probe + data: probe-data
+189670  probe + data: step5
+189674  probe + data: step5
+189678  probe + data: step5
+1896b8  probe + data: step5
+1896bc  probe + data: step5
+1896c0  probe + data: step5
+189760  probe + data: step5
+1897ac  probe + data: step5
+1897b0  probe + data: step5
+1897b4  probe + data: step5
+18982c  probe + data: probe-data
+189830  probe + data: probe-data
+189834  probe + data: step5
+189880  probe + data: step5
+189884  probe + data: step5
+189888  probe + data: step5
+18988c  probe + data: step5
+18995c  probe + data: step5
+189960  probe + data: step5
+189964  probe + data: step5
+18996c  probe + data: step5
+189974  probe + data: step5
+189978  probe + data: step5
+1899d8  probe + data: step5
+1899dc  probe + data: step5
+189a34  probe + data: step5
+189a38  probe + data: step5
+189a3c  probe + data: step5
+189a94  probe + data: step5
+189a98  probe + data: step5
+189a9c  probe + data: step5
+189aa0  probe + data: step5
+189aa4  probe + data: step5
+189b08  probe + data: step5
+189b0c  probe + data: step5
+189b10  probe + data: step5
+189b58  probe + data: probe-data
+189b70  probe + data: step5
+189bbc  probe + data: probe-data
+189bc0  probe + data: probe-data
+189bc4  probe + data: probe-data
+189bc8  probe + data: probe-data
+189bcc  probe + data: probe-data
+189e50  probe + data: step5
+189e54  probe + data: step5
+189e58  probe + data: step5
+189f04  probe + data: dataproof: format: anim script 0x189f04 (ldrb op/arg pairs)
+189f08  probe + data: dataproof: format: anim script 0x189f04 (ldrb op/arg pairs)
+189fbc  probe + data: probe-data
+18a060  probe + data: probe-data
+18a0c0  probe + data: dataproof: format: anim script 0x18a0b0 (ldrb op/arg pairs)
+18a0c4  probe + data: dataproof: format: anim script 0x18a0b0 (ldrb op/arg pairs)
+18a180  probe + data: dataproof: format: anim script 0x18a180 (ldrb op/arg pairs)
+18a188  probe + data: dataproof: format: anim script 0x18a180 (ldrb op/arg pairs)
+18a18c  probe + data: dataproof: format: anim script 0x18a180 (ldrb op/arg pairs)
+18a190  probe + data: dataproof: format: anim script 0x18a180 (ldrb op/arg pairs)
+18a194  probe + data: dataproof: format: anim script 0x18a192 (ldrb op/arg pairs)
+18a198  probe + data: dataproof: format: anim script 0x18a192 (ldrb op/arg pairs)
+18a1e4  probe + data: probe-data
+18a1e8  probe + data: probe-data
+18a1ec  probe + data: probe-data
+18a320  probe + data: step5
+18a324  probe + data: step5
+18a328  probe + data: step5
+18a404  probe + data: probe-data
+18a410  probe + data: step5
+18a414  probe + data: step5
+18a418  probe + data: step5
+18a554  probe + data: step5
+18a598  probe + data: dataproof: format: anim script 0x18a58c (ldrb op/arg pairs)
+18a59c  probe + data: dataproof: format: anim script 0x18a59a (ldrb op/arg pairs)
+18a640  probe + data: step5
+18a668  probe + data: probe-data
+18a66c  probe + data: dataproof: format: anim script 0x18a66a (ldrb op/arg pairs)
+18a7bc  probe + data: step5
+18ae8c  probe + data: probe-data
+18ae90  probe + data: probe-data
+18ae94  probe + data: probe-data
+18ae98  probe + data: step5
+18aef0  probe + data: probe-data
+18aef4  probe + data: step5
+18aef8  probe + data: step5
+18af00  probe + data: probe-data
+18af04  probe + data: dataproof: format: anim script 0x18af02 (ldrb op/arg pairs)
+18b16c  probe + data: probe-data
+18b170  probe + data: step5
+18b174  probe + data: step5
+18b178  probe + data: step5
+18b180  probe + data: probe-data
+18b284  probe + data: step5
+18b288  probe + data: step5
+18b28c  probe + data: step5
+18b2a0  probe + data: step5
+18b2a4  probe + data: step5
+18bff0  probe + data: step5
+18c09c  probe + data: dataproof: format: anim script 0x18c098 (ldrb op/arg pairs)
+18c14c  probe + data: dataproof: format: anim script 0x18c148 (ldrb op/arg pairs)
+18c1bc  probe + data: dataproof: format: anim script 0x18c1ba (ldrb op/arg pairs)
+18c268  probe + data: dataproof: format: anim script 0x18c268 (ldrb op/arg pairs)
+18c2a4  probe + data: dataproof: format: anim script 0x18c2a0 (ldrb op/arg pairs)
+18c33c  probe + data: dataproof: format: anim script 0x18c338 (ldrb op/arg pairs)
+18c454  probe + data: probe-data
+18c468  probe + data: dataproof: format: anim script 0x18c464 (ldrb op/arg pairs)
+18c4dc  probe + data: dataproof: format: anim script 0x18c4d8 (ldrb op/arg pairs)
+18c518  probe + data: step5
+18c554  probe + data: step5
+18c5c8  probe + data: dataproof: format: anim script 0x18c5c4 (ldrb op/arg pairs)
+18c644  probe + data: probe-data
+18c774  probe + data: dataproof: format: anim script 0x18c770 (ldrb op/arg pairs)
+18c7b0  probe + data: dataproof: format: anim script 0x18c7ac (ldrb op/arg pairs)
+18c7ec  probe + data: dataproof: format: anim script 0x18c7e8 (ldrb op/arg pairs)
+18c828  probe + data: dataproof: format: anim script 0x18c824 (ldrb op/arg pairs)
+18c864  probe + data: step5
+18c8dc  probe + data: probe-data
+18c918  probe + data: probe-data
+18d390  probe + data: dataproof: format: anim script 0x18d390 (ldrb op/arg pairs)
+18d394  probe + data: dataproof: format: anim script 0x18d390 (ldrb op/arg pairs)
+18d3a0  probe + data: step5
+18d3a4  probe + data: step5
+18d3b0  probe + data: step5
+18d3b4  probe + data: step5
+18d3c0  probe + data: probe-data
+18d3c4  probe + data: probe-data
+18d3d0  probe + data: step5
+18d3d4  probe + data: step5
+18d3e0  probe + data: probe-data
+18d3e4  probe + data: probe-data
+18d3f0  probe + data: step5
+18d3f4  probe + data: step5
+18d400  probe + data: dataproof: format: anim script 0x18d400 (ldrb op/arg pairs)
+18d40c  probe + data: dataproof: format: anim script 0x18d40c (ldrb op/arg pairs)
+18d418  probe + data: dataproof: format: anim script 0x18d418 (ldrb op/arg pairs)
+18d424  probe + data: dataproof: format: anim script 0x18d424 (ldrb op/arg pairs)
+18d430  probe + data: dataproof: format: anim script 0x18d430 (ldrb op/arg pairs)
+18d43c  probe + data: dataproof: format: anim script 0x18d43c (ldrb op/arg pairs)
+18d448  probe + data: dataproof: format: anim script 0x18d448 (ldrb op/arg pairs)
+18d454  probe + data: step5
+18d458  probe + data: step5
+18d464  probe + data: step5
+18d468  probe + data: step5
+18d474  probe + data: step5
+18d478  probe + data: step5
+18d484  probe + data: step5
+18d488  probe + data: step5
+18d494  probe + data: step5
+18d498  probe + data: step5
+18d4a4  probe + data: step5
+18d4a8  probe + data: step5
+18d4b4  probe + data: step5
+18d4b8  probe + data: step5
+18d4c4  probe + data: dataproof: format: anim script 0x18d4c4 (ldrb op/arg pairs)
+18d4d0  probe + data: dataproof: format: anim script 0x18d4d0 (ldrb op/arg pairs)
+18d4dc  probe + data: dataproof: format: anim script 0x18d4dc (ldrb op/arg pairs)
+18d4e8  probe + data: dataproof: format: anim script 0x18d4e8 (ldrb op/arg pairs)
+18d4f4  probe + data: dataproof: format: anim script 0x18d4f4 (ldrb op/arg pairs)
+18d500  probe + data: dataproof: format: anim script 0x18d500 (ldrb op/arg pairs)
+18d50c  probe + data: dataproof: format: anim script 0x18d50c (ldrb op/arg pairs)
+192658  probe + data: dataproof: format: packed sprite frame 0x1925ac (fmt 3)
+19b71c  probe + data: dataproof: format: packed sprite frame 0x19b6a4 (fmt 3)
+19eb30  probe + data: dataproof: format: packed sprite frame 0x19ea42 (fmt 3)
+19f648  probe + data: dataproof: format: packed sprite frame 0x19f572 (fmt 3)
+1a15f0  probe + data: dataproof: format: packed sprite frame 0x1a158c (fmt 3)
+1b76bc  probe + data: dataproof: format: packed sprite frame 0x1b75f7 (fmt 3)
+1bb4d0  probe + data: dataproof: format: packed sprite frame 0x1bb480 (fmt 3)
+1d9cbc  probe + data: dataproof: format: packed sprite frame 0x1d9bdf (fmt 3)
+1dc590  probe + data: dataproof: format: packed sprite frame 0x1dc48b (fmt 3)
+1e5948  probe + data: dataproof: format: packed sprite frame 0x1e5933 (fmt 3)
+2298a0  probe + data: dataproof: format: packed sprite frame 0x2297e8 (fmt 3)
+22a438  probe + data: dataproof: format: packed sprite frame 0x22a318 (fmt 3)
+231840  probe + data: dataproof: format: packed sprite frame 0x2317fa (fmt 3)
+242a04  probe + data: dataproof: format: packed sprite frame 0x242947 (fmt 3)
+2468d8  probe + data: probe-data
+28cf34  probe + data: step5
+2b4158  probe + data: tiling: inside gs stream of table 2b4430
+2bb454  probe + data: probe-data
+2c30c8  data: dataproof: format: packed sprite frame 0x2c2e6e (fmt 0)
+2c30cc  data: dataproof: format: packed sprite frame 0x2c2e6e (fmt 0)
+2c3100  data: dataproof: format: packed sprite frame 0x2c2e6e (fmt 0)
+2c3104  data: dataproof: format: packed sprite frame 0x2c2e6e (fmt 0)
+2c3108  data: dataproof: format: packed sprite frame 0x2c2e6e (fmt 0)
+2c4924  probe + data: dataproof: format: packed sprite frame 0x2c47fb (fmt 1)
+2caf88  probe + data: tiling: inside gs stream of table 2cb204
+2cafe4  probe + data: tiling: inside gs stream of table 2cb204
+2cb040  probe + data: tiling: inside gs stream of table 2cb204
+301ecc  probe + data: step5
+3039d8  probe + data: probe-data
+30c854  data: dataproof: format: packed sprite frame 0x30c6f0 (fmt 1)
+30c9fc  probe + data: dataproof: format: packed sprite frame 0x30c934 (fmt 1)
+30f4ec  data: dataproof: format: packed sprite frame 0x30f44f (fmt 1)
+30fa3c  data: dataproof: format: packed sprite frame 0x30f9fc (fmt 1)
+310d7c  probe + data: dataproof: format: packed sprite frame 0x310c70 (fmt 1)
+311b00  probe + data: dataproof: format: packed sprite frame 0x311a83 (fmt 1)
+312060  data: dataproof: format: packed sprite frame 0x311f18 (fmt 1)
+315d54  probe + data: dataproof: format: packed sprite frame 0x315d30 (fmt 1)
+316938  data: dataproof: format: packed sprite frame 0x316797 (fmt 1)
+3176c0  data: dataproof: format: packed sprite frame 0x317649 (fmt 1)
+318960  probe + data: tiling: inside gs stream of table 318dc0
+318a18  probe + data: tiling: inside gs stream of table 318dc0
+31ab60  probe + data: dataproof: format: packed sprite frame 0x31aa73 (fmt 3)
+31ab64  probe + data: dataproof: format: packed sprite frame 0x31aa73 (fmt 3)
+31eca0  probe + data: dataproof: format: packed sprite frame 0x31ec89 (fmt 3)

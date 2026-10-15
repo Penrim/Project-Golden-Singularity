@@ -302,7 +302,13 @@ def sprite_area(d, end):
                 except (IndexError, ValueError):
                     spans.add(None)
             e = spans.pop() if len(spans) == 1 else None
-            if e is None or not (nxt - 3 <= e <= nxt + 2):
+            ok = e is not None and nxt - 3 <= e <= nxt + 2
+            if not ok and e is not None and e > nxt + 2:
+                # frames sharing a tail: the next frame starts inside this one (USA table 0x30FBB4, entries 7/8);
+                # proven when the decoder stops at a later boundary instead (data up to the next frame start)
+                later = bounds[bisect.bisect_right(bounds, nxt):][:4] + [end]
+                ok = any(b - 3 <= e <= b + 2 for b in later)
+            if not ok:
                 out["problems"].append(f"frame table {F:#x} entry {k}: frame {s:#x} fmt {sorted(fmts)} ends "
                                        f"{e if e is None else hex(e)}, next {nxt:#x}")
                 continue
@@ -629,9 +635,10 @@ def stub_users(g, gp, code):
 
 
 # ------------------------------------------------------------------------------------------------- verdicts --
-def analyse(gs1_path, probe_path=None):
+def analyse(gs1_path, probe_path=None, all_words=False):
     """Per pointer-like word in the target categories (and the exclusion list): category, relocated?, verdict and
-    evidence. Also returns contradictions found by the new evidence anywhere in the program area."""
+    evidence. Also returns contradictions found by the new evidence anywhere in the program area (all_words: every
+    program-area word with evidence, for verify_all.py)."""
     g = Rom(gs1_path)
     d, size = g.data, len(g.data)
     gp = profiles.profile_gs1(gs1_path)
@@ -754,7 +761,7 @@ def analyse(gs1_path, probe_path=None):
         else:
             v = "unproven"
         bug = (v == "data" and r) or (v == "pointer" and not r)
-        if mine or bug:
+        if mine or bug or all_words and a < end and (dat or ptr):
             res[a] = {"cat": c, "val": u32(d, a), "reloc": r, "verdict": v, "data": dat, "ptr": ptr,
                       "excl": a in excl, "mine": mine, "bug": bug, "dead": sp["dead"].get(a)}
     return res, {"sprite": sp, "probe": probe, "code": g.code, "fver": fver}

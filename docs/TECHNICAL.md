@@ -368,6 +368,14 @@ Every pointer-like word of GS1 got evidence (USA numbers; the other versions mat
   pointer and data evidence). `step5_collect.py` + `step5_apply.py` write `data/reloc_exclude_<code>.txt` (probe +
   ~270 data words with their sources, 'weak' marked) and `data/reloc_include_<code>.txt` (sprite 204's frame
   pointer, USA 0x2AF154).
-- Still unproven (~1 200 per version, about 4 %): tables read through RAM objects whose reader is not found yet
-  (e.g. the family behind 0x029EE4), literal pools of code no confirmed code reaches, and the open files above.
-  They keep the heuristic decision. Next: the extended game scenario (menus, Psynergy, summons, shops, scenes).
+- Final accounting (`verify_all.py LANG` -> `build/verify/<lang>.json`, read by `step5_apply.py`): every
+  pointer-like word with one verdict, combining the above with `tileproof.py` (tables whose targets are packed
+  streams that tile seamlessly), `reach.py` (code reached only through self-describing switch/function tables),
+  `fontproof.py` (menu font: 32-byte glyph records indexed by char - 0x20; credits font: 8-byte 1-bit glyphs;
+  cursor offsets: byte table indexed mod 80, each found and bounded by its reader code) and `dataproof.py` for every
+  program-area word (also sprite frames that share their tail with the next frame, USA table 0x30FBB4).
+  `mapexports.py` (standalone) records the tables map code hands to the engine through its exports.
+- Still unproven (~300 per version, about 1 %): mostly map code data words and guessed table words without a reader
+  found. They keep the heuristic decision. Known wrongly relocated, not yet proven: DE 0x07A8E8 (options palette),
+  ES 0x0FB778 (reel mini-game byte table). Next: the extended game scenario (menus, Psynergy, summons, shops,
+  scenes).

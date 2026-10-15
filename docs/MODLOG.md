@@ -458,3 +458,16 @@ TODO: start menu (Continue / Chapter 1 / Chapter 2) in C; verify real GS1 credit
   pattern, halfword tables.
 - Tests: CPU cap per emulator (tools/cpucap.py, once per process; nested caps multiply), at most 3 in parallel,
   regression scripts write to new folders (nothing deleted). Regression after the fixes: all green in five languages.
+
+## Session 18 (2026-10-15): final accounting, last data words
+- Final accounting per word (verify_all.py) with the tiling proof (tileproof.py), self-describing switch and function
+  tables (reach.py) and dataproof for every program-area word: about 1 % of the ~31 300 pointer-like words per
+  version are still open. mapexports.py (standalone): tables map code passes to the engine through its exports.
+- A private cross-check showed 31-36 data words per version that the heuristics still relocated: menu font glyphs,
+  the credits font, cursor bob offsets, sprite frames, three m4a track bytes, one item table field, particle byte
+  tables, debug tiles. Each is now proven by the project's own evidence: new fontproof.py (the three UI tables,
+  found and bounded by their reader code in all five versions) and dataproof sprite frames that share their tail
+  with the next frame (USA table 0x30FBB4, entries 7/8). step5_apply: +34 EN, +35 DE, +31 FR, +33 IT, +35 ES
+  exclusions; no other word changed (relocated count down by exactly these, every other changed word identical).
+- Left as relocated (no clean proof yet): DE 0x07A8E8 (options palette word), ES 0x0FB778 (reel mini-game bytes).
+- All five cartridges rebuilt; no emulator regression run yet.

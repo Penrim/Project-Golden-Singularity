@@ -3,6 +3,8 @@
 Combines all evidence the project has:
   program area   wordmap.py categories (format / literal / code / typeflow / probe) and the step-5 verdicts
                  (build/step5/<lang>.json from step5_collect.py)
+  reached code   reach.py (switch and function tables that describe themselves, their code and literal pools)
+  formats        dataproof.py (sprite area, m4a tracks, packed blobs, byte reads) for every program-area word
   files          fileverify.py (file tour log + probe + filemap format proofs)
   map code       mapflow.py (jump tables, code, tables read by the map code)
 Verdict: P = proven pointer, D = proven not a pointer, open = no proof (the reason says why).
@@ -53,6 +55,41 @@ def account(lang):
             out[k] = ("CONFLICT", f"tiling says stream data ({name} table {t:06x}), other evidence pointer")
         elif k in out and out[k][0] == "open":
             out[k] = ("D", f"tiling: inside {name} stream of table {t:06x}")
+    import reach                                       # code reached through self-describing switch/function tables
+    with contextlib.redirect_stdout(io.StringIO()):
+        rp, rd = reach.proofs(rom)[:2]
+    for src, mine in ((rp, "P"), (rd, "D")):
+        for a, why in src.items():
+            k = ("rom", a)
+            if k not in out:
+                continue
+            if why.startswith("CONFLICT") or out[k][0] not in ("open", mine):
+                out[k] = ("CONFLICT", f"reach: {why}; other evidence {out[k]}")
+            elif out[k][0] == "open":
+                out[k] = (mine, f"reach: {why}")
+    import fontproof                                   # menu font, credits font, cursor offsets (reader code shapes)
+    for a, why in fontproof.proofs(rom).items():
+        k = ("rom", a)
+        if k not in out:
+            continue
+        if out[k][0] == "P":
+            out[k] = ("CONFLICT", f"fontproof: {why}; other evidence {out[k]}")
+        elif out[k][0] == "open":
+            out[k] = ("D", f"fontproof: {why}")
+    import dataproof                                   # format/code/probe evidence for every program-area word (the
+    with contextlib.redirect_stdout(io.StringIO()):    # step-5 table holds only its categories' contradictions)
+        dres = dataproof.analyse(rom, probe, all_words=True)[0]
+    for a, x in dres.items():
+        k = ("rom", a)
+        if k not in out or x["verdict"] not in ("data", "pointer"):
+            continue
+        mine = "P" if x["verdict"] == "pointer" else "D"
+        ev = (x["ptr"] if mine == "P" else x["data"])[0]
+        if out[k][0] == "open":
+            weak = mine == "D" and all(s.startswith("code-") for s, _ in x["data"])
+            out[k] = (mine, f"dataproof: {ev[0]}{' (weak bound)' if weak else ''}: {ev[1]}"[:120])
+        elif out[k][0] != mine:
+            out[k] = ("CONFLICT", f"dataproof: {x['verdict']} ({ev[1]}); other evidence {out[k]}"[:200])
     with contextlib.redirect_stdout(io.StringIO()):
         fv, req, bad = fileverify.verify(rom, os.path.join(ROOT, "build", "probe_all", f"files_{lang}.log"), probe)
     for a, v in fv.items():

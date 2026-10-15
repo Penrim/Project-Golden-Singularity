@@ -70,7 +70,7 @@ def write(lang):
              "# (tools/step5_collect.py: tableproof, singles, dataproof, litproof; 'weak' = data evidence whose table",
              "# bound rests on the next label, with no pointer evidence at all). See docs/TECHNICAL.md."]
     for a in sorted(old | set(excl)):
-        lines.append(f"{a:06x}" + (f"  {excl[a]}" if a in excl else "  probe"))
+        lines.append(f"{a:06x}  " + ("probe + " if a in old and a in excl else "") + (excl[a] if a in excl else "probe"))
     open(os.path.join(ROOT, "data", f"reloc_exclude_{code}.txt"), "w").write("\n".join(lines) + "\n")
     old_inc = {}
     p_inc = os.path.join(ROOT, "data", f"reloc_include_{code}.txt")

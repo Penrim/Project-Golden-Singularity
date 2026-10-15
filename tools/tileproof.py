@@ -85,6 +85,29 @@ def proofs(path):
                             data_words[w] = (name, a)
                     break
         a = b
+    # tables with ONE target: the stream starts right after the table and ends exactly where another table proven
+    # above starts (USA 0x029E00: 43 entries -> one nibble image at 0x029EAC that ends at table 0x029EE4)
+    starts = {t: n for n, t in ptr_words.values()}
+    a = 0
+    while a < end - 4:
+        b = a
+        while b < end - 3 and is_ptr(struct.unpack_from("<I", d, b)[0]):
+            b += 4
+        vals = {struct.unpack_from("<I", d, x)[0] - ROM for x in range(a, b, 4)}
+        if b - a >= 8 and vals == {b} and a not in ptr_words:
+            for name, fn in DECODERS:
+                try:
+                    stop, ahead = fn(d, b)
+                except (ValueError, IndexError, KeyError, struct.error):
+                    continue
+                nxt = [t for t in starts if b < t <= stop + 3]
+                if nxt and min(nxt) <= stop <= min(nxt) + ahead and starts[min(nxt)] == name:
+                    for x in range(a, b, 4):
+                        ptr_words[x] = (name, a)
+                    for w in range((b + 3) & ~3, min(nxt) - 3, 4):
+                        data_words.setdefault(w, (name, a))
+                    break
+        a = b + 4 if b == a else b
     return ptr_words, data_words
 
 
