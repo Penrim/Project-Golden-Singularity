@@ -39,6 +39,10 @@ Watchpoint callbacks receive an `info` table: `address, width, oldValue, newValu
   running one). Tests take correspondingly longer but never saturate a core.
 - Parallel runs: set `GSMERGE_PORT` (e.g. 61351, 61352, ...) per test process; `emu.py` and `bridge.lua`
   both read it (default 61337). Used to probe/test several languages at once.
+- "bridge did not come up" with the Scripting window showing `bridge.lua:370: attempt to index a nil value (local
+  'server')`: the port cannot be bound. WSL/Hyper-V reserve TCP port ranges dynamically (2026-10-15: 61358-61957,
+  which covered the earlier test ports 61431+); check with `netsh interface ipv4 show excludedportrange
+  protocol=tcp` and pick free ports (61341-61345 were free).
 - One bridge per port; a leftover mGBA keeps its port busy ("bridge did not come up"). Kill it by path:
   `Get-Process mGBA | ? { $_.Path -like '*GoldenSunMerge*' } | Stop-Process -Force`.
 - An mGBA crash dialog ("Jumped to invalid address …") pauses emulation → socket timeout. Tests treat a timeout as

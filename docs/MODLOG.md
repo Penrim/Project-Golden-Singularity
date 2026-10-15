@@ -475,3 +475,9 @@ TODO: start menu (Continue / Chapter 1 / Chapter 2) in C; verify real GS1 credit
   0x0FB778: 14-step loop at 0x080F9FDC). Neither rule claims any other pointer-like word in the five versions.
 - step5_apply: a rerun labelled every listed word "probe + ..."; now "probe" stays only on words the pointer probe
   found, and a second run changes nothing.
+- Regression (build/regress_0909, 3 emulators in parallel, CPU-capped, muted), all five languages: map tour 0 stray
+  reads; battle tour 0 crashes / 0 stray reads (8-61 battle starts differ by random enemy count: same enemies,
+  checked by screenshot; more than last time because the machine was busier and the bridge runs the game between
+  commands); saves, menu, transition PASS.
+- Test ports 61431+ no longer bound ("bridge did not come up"): WSL/Hyper-V had reserved 61358-61957; moved to
+  61341-61345 (TESTING.md).
