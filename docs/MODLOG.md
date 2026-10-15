@@ -481,3 +481,6 @@ TODO: start menu (Continue / Chapter 1 / Chapter 2) in C; verify real GS1 credit
   commands); saves, menu, transition PASS.
 - Test ports 61431+ no longer bound ("bridge did not come up"): WSL/Hyper-V had reserved 61358-61957; moved to
   61341-61345 (TESTING.md).
+- Release 1.2.1 (about 50 values per language since 1.2.0, incl. the packed-image words of the "last 4 %" commit):
+  Windows launcher with a fresh venv in three clean copies of the commit (git archive CRLF, git clone, archive
+  with LF line endings), all ten ROMs in roms/: 15 of 15 cartridges identical to the reference checksums.
