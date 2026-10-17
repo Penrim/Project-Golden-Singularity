@@ -112,7 +112,7 @@ code is checked for Thumb-2 encodings (`transfer_patch._asm`).
 | `boot_main` | boot stub at power-on | start menu: detects normal saves in both banks, Continue (TLA save → TLA, else GS1) / Chapter 1 / Chapter 2; panning panorama (below); fade out, selects bank, BIOS RegisterRamReset(0xFF), jumps to the game |
 | `gs1_clear_available` | TLA hooks | 1 if bank 1 holds GS1 clear data (slot 6, else slots 0–2 with marker) |
 | `gs1_clear_to_link_buffer` / `tla_receive_gs1` | TLA patched cable receive | copies exactly what GS1's "Send (cable)" transmits: RAM image 0x02000000..+0x1004 of the clear save, into TLA's receive buffer 0x02013000 |
-| `gs1_chapter_end` | GS1 title map code ("after the credits" branch) | sets clear marker, saves via GS1's own routines into slot 6/9, shows the chapter card (~4 s or A/Start), resets RAM, writes mailbox, jumps to TLA |
+| `gs1_chapter_end` | GS1 title map code ("after the credits" branch) | sets clear marker, saves via GS1's own routines into slot 6/9, shows the chapter card (mode 3; BG2 affine set to identity and blending/mosaic off first, GS1's title screen leaves them scaled and faded; ~4 s or A/Start), resets RAM, writes mailbox, jumps to TLA |
 | `tla_title_menu_override` | TLA title hook | consumes the mailbox → "New Game" |
 
 Mailbox: u32 at **0x0203FFF0** = 0x32534D47 ("GMS2") means "start TLA's new game directly". This address

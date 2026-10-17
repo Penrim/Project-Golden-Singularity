@@ -136,6 +136,15 @@ int tla_receive_gs1(void)
  * ------------------------------------------------------------------------------------------------------- */
 #define REG_DISPCNT (*(volatile u16 *)0x04000000)
 #define REG_VCOUNT (*(volatile u16 *)0x04000006)
+#define REG_BG2PA (*(volatile u16 *)0x04000020)   /* BG2 affine matrix; mode 3 draws through it */
+#define REG_BG2PB (*(volatile u16 *)0x04000022)
+#define REG_BG2PC (*(volatile u16 *)0x04000024)
+#define REG_BG2PD (*(volatile u16 *)0x04000026)
+#define REG_BG2X (*(volatile u32 *)0x04000028)
+#define REG_BG2Y (*(volatile u32 *)0x0400002C)
+#define REG_MOSAIC (*(volatile u16 *)0x0400004C)
+#define REG_BLDCNT (*(volatile u16 *)0x04000050)
+#define REG_BLDY (*(volatile u16 *)0x04000054)
 #define REG_KEYINPUT (*(volatile u16 *)0x04000130)
 #define REG_IME (*(volatile u16 *)0x04000208)
 #define VRAM ((volatile u32 *)0x06000000)
@@ -160,6 +169,15 @@ static __attribute__((noreturn)) void boot_tla_new_game(void)
     REG_DISPCNT = 0x0080;                       /* forced blank */
     for (u32 i = 0; i < 240 * 160 / 2; i++)
         VRAM[i] = CHAPTER_CARD[i];
+    REG_BG2PA = 0x0100;                         /* GS1's title screen leaves BG2 scaled/moved: identity */
+    REG_BG2PB = 0;
+    REG_BG2PC = 0;
+    REG_BG2PD = 0x0100;
+    REG_BG2X = 0;
+    REG_BG2Y = 0;
+    REG_BLDCNT = 0;                             /* and its fade to black / mosaic off */
+    REG_BLDY = 0;
+    REG_MOSAIC = 0;
     REG_DISPCNT = 0x0403;                       /* mode 3, BG2 */
     for (int f = 0; f < 240; f++) {             /* ~4 s, or A / START */
         wait_vblank();
@@ -214,8 +232,6 @@ int tla_title_menu_override(void)
 #define REG_BG0CNT (*(volatile u16 *)0x04000008)
 #define REG_BG2CNT (*(volatile u16 *)0x0400000C)
 #define REG_BG2HOFS (*(volatile u16 *)0x04000018)
-#define REG_BLDCNT (*(volatile u16 *)0x04000050)
-#define REG_BLDY (*(volatile u16 *)0x04000054)
 #define VRAM16 ((volatile u16 *)0x06000000)
 #define OAM16 ((volatile u16 *)0x07000000)
 #define PANO_MAP 0xA000                          /* VRAM offsets */

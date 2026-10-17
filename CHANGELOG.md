@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Fixed: the "Chapter 2" card after the Golden Sun credits was invisible (about 4 seconds of black screen before
+  The Lost Age started). Golden Sun's title screen leaves the screen scaled and faded out; the card now resets
+  both before it is shown. All five languages.
+
 ## 1.2.1 — about 50 more fixes per language in the moved Golden Sun
 
 The check of every value that the builder adjusts when it moves Golden Sun is now complete except for about 1 %

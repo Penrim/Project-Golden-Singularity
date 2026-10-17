@@ -484,3 +484,20 @@ TODO: start menu (Continue / Chapter 1 / Chapter 2) in C; verify real GS1 credit
 - Release 1.2.1 (about 50 values per language since 1.2.0, incl. the packed-image words of the "last 4 %" commit):
   Windows launcher with a fresh venv in three clean copies of the commit (git archive CRLF, git clone, archive
   with LF line endings), all ten ROMs in roms/: 15 of 15 cartridges identical to the reference checksums.
+
+## Session 19 (2026-10-17): invisible chapter card
+- Real playthrough: after the GS1 credits the "Chapter 2" card was a black screen for ~4 s. GS1's title screen
+  leaves BG2's affine matrix/offset (0x04000020-2F) non-identity, and mode 3 draws BG2 through it (proven in mGBA:
+  identity values make the card appear). It also leaves BLDCNT = 0x00FE (fade to black).
+- Fix (runtime.c boot_tla_new_game): before mode 3, BG2PA/PD = 0x100, PB/PC/X/Y = 0, BLDCNT/BLDY/MOSAIC = 0.
+  Runtime +80 bytes; prebuilt runtimes and asm_cache (new hook literals) regenerated, new reference SHA-1 in build.py
+  (README/release notes keep the 1.2.1 values until the next release).
+- test_transition.py missed it: the simulated end of the credits skips GS1's title screen. It now writes such
+  leftovers (BG2 scaled x2 with origin off-screen, BLDCNT 0xFE, BLDY 16, mosaic) via `bpwrite` at gs1_chapter_end
+  (bridge: several address/value pairs) and compares every card-phase screenshot (mode 3, every 20 frames) with the
+  card image in the ROM. 1.2.1 builds EN/DE: FAIL (score 0.0); fixed builds: PASS (1.0).
+- mGBA with a ROM in the temp scratchpad folder sometimes did not open the bridge; ROM copies in build/ work.
+- Clean clones (git clone CRLF, LF checkout) + patch: build.py without ARM GCC, 10 of 10 cartridges identical to
+  the new references.
+- Regression (build/regress_card, 3 emulators in parallel, uncapped, muted), all five languages: map tour 0 stray
+  reads; battle tour 0 crashes / 0 stray reads; saves, menu, transition PASS.

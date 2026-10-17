@@ -160,13 +160,14 @@ local function handle(line)
 		end, addr)
 		reply(tostring(id))
 	elseif cmd == "bpwrite" then
-		-- bpwrite ADDR WADDR VALUE : when ADDR executes (first time), write32 VALUE at WADDR
-		local addr, waddr, val = line:match("^%S+%s+(%S+)%s+(%S+)%s+(%S+)")
+		-- bpwrite ADDR WADDR VALUE [WADDR VALUE ...] : when ADDR executes (first time), write32 each VALUE at WADDR
+		local args = {}
+		for w in line:gmatch("%S+") do args[#args + 1] = w end
 		local id
 		id = emu:setBreakpoint(function()
-			emu:write32(tonumber(waddr), tonumber(val))
+			for i = 3, #args - 1, 2 do emu:write32(tonumber(args[i]), tonumber(args[i + 1])) end
 			emu:clearBreakpoint(id)
-		end, tonumber(addr))
+		end, tonumber(args[2]))
 		reply(tostring(id))
 	elseif cmd == "bplog" then
 		-- bplog ADDR PATH : every time ADDR executes, append registers to PATH (survives crashes)

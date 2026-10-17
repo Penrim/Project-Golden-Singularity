@@ -26,7 +26,7 @@ runs between commands; `wait N` advances N frames.
 | | `watchwidth LIST OUT` | log the access width of reads of listed words (LIST path without spaces) |
 | | `ptrprobe LIST LO HI` / `ptrdump PATH` | pointer probe (see TECHNICAL "Relocation false positives"); LIST path without spaces |
 | | `bponce ADDR PATH` | registers (incl. r12, sp, lr, pc, cpsr) at the first hit only — safe inside crash loops |
-| | `bpwrite ADDR WADDR VALUE` | at ADDR (once) write a u32 |
+| | `bpwrite ADDR WADDR VALUE [WADDR VALUE ...]` | at ADDR (once) write u32 values |
 | | `forceret ADDR VALUE` | at ADDR (once, if r0 == 0) set r0 = VALUE — used to force battles |
 | | `callafter FUNC TARGET` | after FUNC returns, call TARGET (experimental) |
 | | `watchall` / `unwatchall` | counting watchpoint (expensive, few frames only) |
@@ -59,7 +59,7 @@ Watchpoint callbacks receive an `info` table: `address, width, oldValue, newValu
 | `battletour.py ORIG MERGED OUT [first last]` | forces all 255 enemy groups on the world map (`forceret`), auto-fights with A | 0 crashes, 0 stray reads; ~42 battle starts differ only by random formation |
 | `test_saves.py MERGED OUT` | save in GS1, save in TLA, check banks, reload both | GS1 → bank 1, TLA → bank 0, no interference, both reload |
 | `test_menu.py MERGED OUT [GS1_BANK.sav]` | start menu with no save / TLA save / GS1-only save (GS1 bank of the same language; default `build/tour/gs1_backup.sav`) | 2 entries / Continue → TLA / Continue → GS1 |
-| `test_transition.py MERGED OUT [DEMO.ss1]` | empty cart → Chapter 1 → simulated end of credits → (saves the demo state) → Isaac renamed "Alex" → clear save, chapter card, TLA new game | prints `RESULT: PASS`: "Alex" in TLA RAM (0x02000520), bank 1 holds clear data |
+| `test_transition.py MERGED OUT [DEMO.ss1]` | empty cart → Chapter 1 → simulated end of credits → (saves the demo state) → Isaac renamed "Alex" → clear save, chapter card, TLA new game; the leftovers of GS1's title screen (scaled BG2, fade to black) are written when `gs1_chapter_end` starts | prints `RESULT: PASS`: "Alex" in TLA RAM (0x02000520), bank 1 holds clear data, every card-phase screenshot shows the card image (score 1.0) |
 | `pointer_probe.py run MERGED ORIG OUT [states]` + `list ORIG OUT [OTHER_GS1 ...]` | which relocated words the game reads byte-wise (data, not pointers) | writes `data/reloc_exclude_<code>.txt`; rebuild afterwards (~25 min) |
 | `difftest.py ORIG TEST OUT` | same scripted input on two ROMs | (early tool; screens differ by timing because recompressed map code decompresses at a different speed) |
 
