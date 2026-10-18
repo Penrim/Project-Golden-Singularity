@@ -7,10 +7,11 @@ This is a free fan project. **It contains no game files** — you create the car
 copies of the two games (see [LEGAL.md](LEGAL.md)).
 
 > ⚠️ **Early release — please keep backups of your save file.**
-> All of Golden Sun's maps and battles, saving, the start menu and the switch from the first to the second game
-> have been tested (The Lost Age itself runs unchanged), but **nobody has played the whole story from start to
-> finish on this cartridge yet**. Small glitches are possible, mostly in Golden Sun. If you run into anything odd,
-> please [report it](#something-went-wrong).
+> Golden Sun had to be moved inside the cartridge. That moved Golden Sun was **tested with a complete playthrough**
+> (English: every chapter, side quests, final battle and credits), which matches the original game step by step,
+> and with all maps and battles in all five languages. Saving, the start menu and the switch to the second game are
+> tested too. The Lost Age runs unchanged, but has not been played through on this cartridge yet. If you run into
+> anything odd, please [report it](#something-went-wrong).
 
 ## Features
 
@@ -127,9 +128,9 @@ Good to know:
 
 ## Status and known limitations
 
-- **Golden Sun was played from start to finish (automated, English).** A complete recorded playthrough (all
-  chapters, side quests, final battle, credits and the switch to Chapter 2) is replayed on the cartridge and matches
-  the original game step by step. Also tested in all five languages: all 201 Golden Sun maps, all 255 Golden Sun
+- **The moved Golden Sun was played from start to finish (automated, English).** A complete recorded playthrough
+  (all chapters, side quests, final battle, credits and the switch to Chapter 2) is replayed on the cartridge and
+  matches the original game step by step (developers: `tools/playthrough/`, see docs/TESTING.md). Also tested in all five languages: all 201 Golden Sun maps, all 255 Golden Sun
   enemy groups, saving and loading in both games, the start menu and the switch to Chapter 2 with the party
   transfer. The Lost Age runs unchanged and was tested at its start and with saving; a complete playthrough of it
   is still missing.
