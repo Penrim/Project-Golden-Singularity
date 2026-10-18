@@ -1,10 +1,12 @@
 # Changelog
 
-## Unreleased
+## 1.2.2 — the "Chapter 2" card is visible again; Golden Sun played through on the cartridge
 
 - Fixed: the "Chapter 2" card after the Golden Sun credits was invisible (about 4 seconds of black screen before
   The Lost Age started). Golden Sun's title screen leaves the screen scaled and faded out; the card now resets
   both before it is shown. All five languages.
+- New test: a complete playthrough of Golden Sun (English) is replayed on the cartridge and compared with the
+  original game step by step (`tools/playthrough/`, see docs/TESTING.md). It found the invisible card above.
 
 ## 1.2.1 — about 50 more fixes per language in the moved Golden Sun
 

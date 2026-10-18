@@ -18,3 +18,5 @@ tools/mgba-dev/
 tools/armgcc/
 gsmerge_watch*
 reports/
+# exception: flash image the playthrough movie starts from (game-written save, default names; see docs/TESTING.md)
+!data/playthrough/gs1_usa_boot.sav

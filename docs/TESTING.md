@@ -91,6 +91,50 @@ waits for a key before the suspect code (e.g. `while (!(~REG_KEYINPUT & 4)) {}`)
 the key. A test mGBA left over after a timeout keeps port 61337 busy: stop only the instance whose command line
 contains `bridge.lua` (by PID).
 
+### Playthrough replay (complete Golden Sun, English)
+
+`tools/playthrough/playthrough.py` replays a complete playthrough of Golden Sun (USA, Europe) on the merged
+cartridge and compares it with the original game step by step. The input movie is `data/playthrough/gs1_usa.movie`
+(button presses per frame from power-on, 3,680,708 frames: all 30 chapters, side quests, final battle, credits).
+
+    python tools/playthrough/playthrough.py ref "Golden Sun (USA, Europe).gba"   # once: reference from the original
+    python tools/playthrough/playthrough.py check build/gsmerge_en.gba            # every build to test
+    python tools/playthrough/playthrough.py compare                                # report again from the files
+
+The movie starts from the cartridge flash it was recorded with: an old level-1 clear-data file in slot 1
+(`data/playthrough/gs1_usa_boot.sav`, written by the game, default names only; it changes the title menu, so the
+movie depends on it). The merged cartridge gets it in flash bank 1. Output goes to `build/playthrough/` (ROM copies
+with that save, traces, RAM snapshots, screenshots, `report.txt`). Each pass takes about 50 minutes at the default CPU cap, about 25 with `--cpu 4` (uncapped). A
+watchdog prints progress every minute and stops the emulator if nothing moves for 5 minutes.
+
+How it works (`player.lua` runs the playback inside mGBA, so it is frame-exact):
+
+- `ref` plays the movie on the original ROM and records per frame the input, the game-step counter
+  (`0x03001E40`, +1 per main-loop iteration), the VBlank counter (`0x03001800`) and the random seed (`0x03001CB4`,
+  written only by the routine at `0x08004458`); RAM snapshots (4 KiB EWRAM + 2 KiB IWRAM) every 600 steps and
+  screenshots of steps g, g+1, g+2.
+- `check` boots the merged cartridge (A at frames 121-122 and 241-242: skip the intro, "Chapter 1"), then replays
+  **by game step**: the input that the original got at step g is given at step g, even when a load takes 1-3
+  frames more or less (recompressed map code). The VBlank counter is set back to the reference value at the start
+  of each step. After every step the seed must equal the reference.
+- Scanline interrupts: a few scenes (found by `ref` itself: one caller of the random routine with one call per
+  scanline on at least 32 scanlines, e.g. the screen shake in the forest before Kolima, the background flicker in
+  the Altin mountain) call the random routine from an HBlank handler. How many calls fall into one step depends on
+  exact CPU timing, which the merged cartridge cannot reproduce; in these scenes a seed that is at most 16 calls
+  off is realigned and logged as `rngfix` (the report counts them per scene). In the full run so far: the forest
+  (scene 43), the Altin mountain (77/79/81), scene 119, plus one moment on the world map (2) and in one battle (510);
+  every realignment was 1-8 calls.
+- At the end of the credits (`credits_end_step` in the movie header) input stops; the cartridge must save the clear
+  data, show the "Chapter 2" card and start The Lost Age (screenshots `handoff_*.png`, card compared with the card
+  image in the ROM).
+
+PASS = the replay reaches the end of the credits, 0 seed mismatches, every RAM snapshot equal (relocated ROM
+pointers +0x01000000 allowed), chapter change ok. Screens are informational: a handful differ for a step or three
+because data is written while the screen is drawn at a slightly different moment (sparkles, a battle flash, the
+shop cursor 1 pixel off); side-by-side images are written to `build/playthrough/diffs/`. Debugging: `--save-every
+25000` writes resume points, `--from build/playthrough/mrg_ss_<step>` continues from one, `--stop STEP` ends early.
+Only the English cartridge can be checked (the movie depends on the US text timing).
+
 ## 3. Debugging workflow for relocation bugs
 
 1. **Stray read** (merged ROM reads GS1's old area 0x08000000–0x087FFFFF while GS1 runs): the watch log gives pc,

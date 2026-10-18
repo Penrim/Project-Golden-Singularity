@@ -13,11 +13,12 @@ class Emu:
         self.proc, self.sock, self.f = proc, sock, sock.makefile("r")
 
     @classmethod
-    def launch(cls, rom, timeout=90):                  # capped emulators start slower under load
+    def launch(cls, rom, timeout=90, script=None):    # capped emulators start slower under load
         si = subprocess.STARTUPINFO()
         si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
         si.wShowWindow = 7  # SW_SHOWMINNOACTIVE: don't steal focus from the user
-        proc = subprocess.Popen(startupinfo=si, args=[MGBA, "--script", os.path.join(HERE, "bridge.lua"), "-C", "pauseOnFocusLost=0",
+        script = script or os.path.join(HERE, "bridge.lua")   # same line protocol: tools/playthrough/player.lua
+        proc = subprocess.Popen(startupinfo=si, args=[MGBA, "--script", script, "-C", "pauseOnFocusLost=0",
                                  "-C", "audioSync=0", "-C", "videoSync=0", "-C", "fpsTarget=600",
                                  "-C", "mute=1", "-C", "volume=0", rom])   # tests run silent (no fast-forward noise)
         try:                                          # at most GSMERGE_CPU (default 60 %) of one core, low priority

@@ -501,3 +501,24 @@ TODO: start menu (Continue / Chapter 1 / Chapter 2) in C; verify real GS1 credit
   the new references.
 - Regression (build/regress_card, 3 emulators in parallel, uncapped, muted), all five languages: map tour 0 stray
   reads; battle tour 0 crashes / 0 stray reads; saves, menu, transition PASS.
+
+## Session 20 (2026-10-18): playthrough replay test, release 1.2.2
+
+- New test `tools/playthrough/` (player.lua + playthrough.py, docs/TESTING.md "Playthrough replay"): a complete
+  Golden Sun (USA) playthrough (`data/playthrough/gs1_usa.movie`, 3,680,708 frames of key masks, 30 chapters) is
+  played on the original ROM (`ref`) and replayed on the cartridge by game step (`check`). Needed because the
+  recompressed map code makes some loads 1-3 frames longer/shorter: frame-indexed input drifted from step ~200k.
+  RAM words (found from traces/write watchpoints): step counter 0x03001E40, VBlank counter 0x03001800 (reset to the
+  reference at each step), seed 0x03001CB4 (LCG, only written by 0x08004458).
+- Timing-dependent random calls: some scenes call the random routine from an HBlank handler (one call per
+  scanline); the count per step depends on CPU cycles (music a few frames out of phase -> mixer load differs).
+  `ref` finds them itself (sampled breakpoint: >= 32 scanlines, one call each; a battle burst of 64 calls on 16
+  lines is rejected); `check` realigns the seed there when it is <= 16 calls off. Found: 2, 43, 77, 79, 81, 119, 510.
+- The movie starts from flash that held an old level-1 clear-data file (it changes GS1's title menu): tracked as
+  `data/playthrough/gs1_usa_boot.sav` (.gitignore exception, `*.sav binary`); merged cartridge: flash bank 1.
+  With an empty flash GS1 boots 7 frames faster and the movie derails.
+- Result on the fixed EN build (b35d8231): reference identical to the recording at all 3,490,934 steps; replay to
+  the end of the credits: 0 seed mismatches, 115 realignments (43: 2, 77: 96, 79: 7, 81: 9, 119: 1), 5801/5801 RAM
+  snapshots equal; screens: 5 spots differ for 3 steps (sparkles, shop cursor 1 px x3, a battle flash: data written
+  mid-frame, video memory equal) and 50 for one step. Chapter change: card 2 s+ (colour match 1.00), then TLA.
+  1.2.1 build: card check 0 of 40 screens (black card) -> the test finds the bug.

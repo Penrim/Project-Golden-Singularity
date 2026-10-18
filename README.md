@@ -127,10 +127,12 @@ Good to know:
 
 ## Status and known limitations
 
-- **Not yet played from start to finish.** Tested so far: all 201 Golden Sun maps, all 255 Golden Sun enemy
-  groups, saving and loading in both games, the start menu, and the end of Golden Sun (final battle, ending,
-  credits, switch to Chapter 2 with the party transfer). The Lost Age runs unchanged and was tested at its start
-  and with saving. A complete playthrough of both games is still missing.
+- **Golden Sun was played from start to finish (automated, English).** A complete recorded playthrough (all
+  chapters, side quests, final battle, credits and the switch to Chapter 2) is replayed on the cartridge and matches
+  the original game step by step. Also tested in all five languages: all 201 Golden Sun maps, all 255 Golden Sun
+  enemy groups, saving and loading in both games, the start menu and the switch to Chapter 2 with the party
+  transfer. The Lost Age runs unchanged and was tested at its start and with saving; a complete playthrough of it
+  is still missing.
 - **Small glitches are possible, mostly in Golden Sun** (for example a garbled sprite), because Golden Sun had to
   be moved inside the cartridge. The Lost Age is unchanged. Please [report](#something-went-wrong) where you saw
   one.
@@ -170,9 +172,9 @@ empty space or cut short at the end are adjusted automatically.
 | Golden Sun (Spain) | `de0bdc889594b012cad213ca83707feb81ada28b` |
 | Golden Sun - La Edad Perdida (Spain) | `a2e3e80036195343c2713410ac14f4e329e3f40d` |
 
-Finished cartridge: English `e110dbeae2e42336dd83f6b8d2cf7813ae95ec81`,
-German `3b3c8ea4830f045bf9eece1cb159c5a8de0834cf`, French `ccd5c61c7a26e4f8f9bd7a6f1336c2b5407e61a0`,
-Italian `2573e44805e054d60385057a2f0db6ab72c8b7c4`, Spanish `4afaadffc4c41d48eff554c5fd4523c1bb49103c`.
+Finished cartridge: English `b35d82311df18723797b35f9e9ec572a4abffe97`,
+German `2563db4c1456c296407ee900994527065985b517`, French `bcad2189bc5734710e97ca40d993d6ba51c4250d`,
+Italian `528c785bee43df2439ae0a07badebe66cbca8cfa`, Spanish `20c853dd089a4e5cf1b8365f82dce7ed2a5d554f`.
 
 </details>
 

@@ -4,3 +4,4 @@
 *.command text eol=lf
 *.png binary
 *.bin binary
+*.sav binary
