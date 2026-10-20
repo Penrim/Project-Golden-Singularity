@@ -1,4 +1,4 @@
-# Golden Sun Collection
+# Project Golden Singularity
 
 Play **Golden Sun** and **Golden Sun: The Lost Age** as one game: both on a single Game Boy Advance cartridge,
 with your party carried over automatically from the first game to the second.
