@@ -522,3 +522,16 @@ TODO: start menu (Continue / Chapter 1 / Chapter 2) in C; verify real GS1 credit
   snapshots equal; screens: 5 spots differ for 3 steps (sparkles, shop cursor 1 px x3, a battle flash: data written
   mid-frame, video memory equal) and 50 for one step. Chapter change: card 2 s+ (colour match 1.00), then TLA.
   1.2.1 build: card check 0 of 40 screens (black card) -> the test finds the bug.
+
+## Session 21 (2026-10-22): new "Chapter 2" card background, release 1.2.3
+
+- The dark card with a drawn sun got a generated background: MOSS-Image (SFT int8, ComfyUI 0.42 master) through the
+  new `comfy_gen.moss_workflow`; `python tools/bootmenu.py cardbg OUT seeds` / `cardbg pick FILE` ->
+  `art/card_bg.png` (240x160, 15-bit). First try (dark pixel-art sea at dawn, horizon behind the title) was
+  rejected: the user wanted the games' own title-screen look (soft painted clouds, haze, blue mountains, stone
+  tower). Chosen: valley prompt, seed 2, 960x640; re-generation is pixel-identical (max diff 0).
+- Texts unchanged in font/size/position; on the bright sky "Chapter 2" is bold gold with a brown outline and the
+  bottom line white with a dark-blue outline.
+- Checks: with the old card bytes put back, all five new cartridges hash to the 1.2.2 references (only the card
+  changed); test_transition PASS in all five languages (card shots score 1.0); build.py (prebuilt runtime) EN gives
+  the new reference d17e056a.

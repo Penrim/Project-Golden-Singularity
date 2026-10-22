@@ -17,7 +17,7 @@ file; "address" = GBA bus address (ROM file offset + 0x08000000). In the merged 
 | 0x1900000 | 0x09900000 | ARM boot stub: `ldr r0,[pc]; bx r0; .word boot_main|1` | `bootmenu.boot_stub` |
 | 0x1A00000 | 0x09A00000 | TLA title map code (MFT 1610), patched + recompressed (format 1) | `transfer_patch.patch_tla_title` |
 | 0x1B00000 | 0x09B00000 | C runtime (`cart/runtime.c`, linked by `cart/link.ld`) | `transfer_patch.build_runtime` |
-| 0x1B10000 | 0x09B10000 | "Chapter 2" card, 240×160 BGR555 (76 800 bytes) | `bootmenu.render_chapter_card` |
+| 0x1B10000 | 0x09B10000 | "Chapter 2" card, 240×160 BGR555 (76 800 bytes; texts over `art/card_bg.png`) | `bootmenu.render_chapter_card` |
 | 0x1C00000 | 0x09C00000 | GS1 intro replay: header (op offset, base palette offset, frames, sources offset) + decoded ROM files + base palette + op stream, ~310 KB | `intro_timeline.assemble` |
 | 0x1B30000 | 0x09B30000 | start-menu data: header (9 u32: columns, offsets of BG palette, panorama tiles, OBJ palette, logo tiles, window tiles; window state size, first row, rows) + data, ~190 KB | `bootmenu.menu_data` |
 

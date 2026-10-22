@@ -14,7 +14,8 @@ Only material created for this project:
   games (for example `art/gs1_intro_recipe.json`, `art/gs1_intro_timeline.json`, `data/*.txt`). They describe how
   to rebuild a picture or a scene from *your* ROM; they contain no graphics, music, text or code of the games;
 - original artwork: the generated middle part of the start-screen panorama (`art/panorama_patch.png`, only the
-  newly generated pixels) and the rendered menu texts (`art/ui/`).
+  newly generated pixels), the generated background of the "Chapter 2" card (`art/card_bg.png`) and the rendered
+  menu texts (`art/ui/`).
 
 It does **not** contain any ROM, any part of a ROM, or any graphics, music, text or code taken from the games. The
 logos, the intro, the title pictures and the music used by the cartridge are read from the ROMs you supply, at the

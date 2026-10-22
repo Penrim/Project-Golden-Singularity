@@ -43,6 +43,9 @@ SOFTWARE.
 - mGBA (MPL-2.0) — emulator used for automated tests.
 - ComfyUI (GPL-3.0) with the **Z-Image Turbo** model (Tongyi-MAI, Apache-2.0) — generated the middle part of the
   start-screen panorama (`art/panorama_patch.png`); settings and prompt in `art/README.md`.
+- ComfyUI with the **MOSS-Image** model (OpenMOSS, Apache-2.0; ComfyUI repackage Comfy-Org/MOSS-Image) — generated
+  the background of the "Chapter 2" card (`art/card_bg.png`); settings and prompt in `tools/bootmenu.py`
+  (`CARD_BG_PROMPT`) and `art/README.md`.
 
 ## Fonts
 

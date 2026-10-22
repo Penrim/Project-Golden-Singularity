@@ -115,7 +115,7 @@ def run_ref(args):
 
 def card_score(png, card):
     """Share of pixels whose colour matches the card image (within 24 per channel); the card itself scores 1.0,
-    black screens about 0.85 (the card is mostly dark), The Lost Age's first screens below 0.9."""
+    black screens and The Lost Age's first screens far below 0.9."""
     from PIL import Image
     shot = Image.open(png).convert("RGB").tobytes()
     hit = sum(1 for i in range(0, len(card), 3) if all(abs(card[i + k] - shot[i + k]) < 24 for k in range(3)))

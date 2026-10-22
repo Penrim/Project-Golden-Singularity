@@ -52,8 +52,8 @@ def card_image(rom_data):
 
 
 def matches(shot, ref, tol=24):
-    """Share of the card's bright pixels (sun, text) that the screenshot shows within tol per channel; the card is
-    mostly near-black, so a black screen scores about 0."""
+    """Share of the card's bright pixels (sky, clouds, text) that the screenshot shows within tol per channel; a
+    black screen scores about 0."""
     a, b = shot.convert("RGB").tobytes(), ref.tobytes()
     bright = [i for i in range(0, len(b), 3) if max(b[i:i + 3]) >= 64]
     return sum(all(abs(a[i + k] - b[i + k]) <= tol for k in range(3)) for i in bright) / len(bright)

@@ -1,4 +1,4 @@
-"""Golden Sun Collection - build the cartridge from your own two ROMs.
+"""Project Golden Singularity - build the cartridge from your own two ROMs.
 
 Easiest: put your ROM files (.gba or .zip) into the "roms" folder and double-click the launcher for your system
 ("Build (Windows).bat", "Build (macOS).command", "build-linux.sh"), or run:
@@ -19,7 +19,7 @@ import argparse, hashlib, os, sys, tempfile, zipfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "tools"))
 
-VERSION = "1.2.2"
+VERSION = "1.2.3"
 
 # Verified dumps (No-Intro). Other dumps of the same version may work but are untested.
 SUPPORTED = {
@@ -39,11 +39,11 @@ PAIRS = {("AGSE", "AGFE"): "en", ("AGSD", "AGFD"): "de", ("AGSF", "AGFF"): "fr",
 
 # SHA-1 of the finished cartridge for each language (same on every system with the pinned requirements)
 EXPECTED_OUTPUT = {
-    "en": "b35d82311df18723797b35f9e9ec572a4abffe97",
-    "de": "2563db4c1456c296407ee900994527065985b517",
-    "fr": "bcad2189bc5734710e97ca40d993d6ba51c4250d",
-    "it": "528c785bee43df2439ae0a07badebe66cbca8cfa",
-    "es": "20c853dd089a4e5cf1b8365f82dce7ed2a5d554f",
+    "en": "d17e056a3070a467f73929bab7110eaa43425aeb",
+    "de": "90f8a4b4467083b994788e4017c46db7c361bda6",
+    "fr": "423f360662d4d05aeb1fdc3cf51bed7b762272e5",
+    "it": "3b1c876bcf8b9af3c26f2f0692e886d52c5f828a",
+    "es": "1c9fa0aa6cc49bdce54a6518278205633ebef906",
 }
 
 
@@ -192,7 +192,7 @@ def auto(tmp):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Build the Golden Sun Collection cartridge from your own ROMs. "
+    ap = argparse.ArgumentParser(description="Build the Project Golden Singularity cartridge from your own ROMs. "
                                  "Without --gs1/--tla the ROM files are searched in the 'roms' folder.")
     ap.add_argument("--gs1", help="Golden Sun ROM (.gba or .zip)")
     ap.add_argument("--tla", help="Golden Sun: The Lost Age ROM of the same language (.gba or .zip)")
@@ -202,7 +202,7 @@ def main():
     args = ap.parse_args()
     global VERBOSE
     VERBOSE = args.verbose
-    print(f"Golden Sun Collection {VERSION}")
+    print(f"Project Golden Singularity {VERSION}")
     if sys.version_info < (3, 10):
         sys.exit("Python 3.10 or newer is required")
     try:

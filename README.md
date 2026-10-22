@@ -173,9 +173,9 @@ empty space or cut short at the end are adjusted automatically.
 | Golden Sun (Spain) | `de0bdc889594b012cad213ca83707feb81ada28b` |
 | Golden Sun - La Edad Perdida (Spain) | `a2e3e80036195343c2713410ac14f4e329e3f40d` |
 
-Finished cartridge: English `b35d82311df18723797b35f9e9ec572a4abffe97`,
-German `2563db4c1456c296407ee900994527065985b517`, French `bcad2189bc5734710e97ca40d993d6ba51c4250d`,
-Italian `528c785bee43df2439ae0a07badebe66cbca8cfa`, Spanish `20c853dd089a4e5cf1b8365f82dce7ed2a5d554f`.
+Finished cartridge: English `d17e056a3070a467f73929bab7110eaa43425aeb`,
+German `90f8a4b4467083b994788e4017c46db7c361bda6`, French `423f360662d4d05aeb1fdc3cf51bed7b762272e5`,
+Italian `3b1c876bcf8b9af3c26f2f0692e886d52c5f828a`, Spanish `1c9fa0aa6cc49bdce54a6518278205633ebef906`.
 
 </details>
 
@@ -196,7 +196,8 @@ and [docs/TECHNICAL.md](docs/TECHNICAL.md).
 - Third-party code and models: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (including Karanum's
   *gs2-randomiser2*, whose Golden Sun decompression this project ports).
 - The middle part of the start-screen panorama was generated locally with the Z-Image Turbo image model
-  (Tongyi-MAI, Apache 2.0) through ComfyUI (see AI disclosure).
+  (Tongyi-MAI, Apache 2.0) through ComfyUI, the background of the "Chapter 2" card with the MOSS-Image model
+  (OpenMOSS, Apache 2.0) (see AI disclosure).
 - *Golden Sun* is a trademark of Nintendo. This is an unofficial fan project, not affiliated with or endorsed by
   Nintendo or Camelot Software Planning. Please do not share built cartridges or ROMs ([LEGAL.md](LEGAL.md)).
 
@@ -209,7 +210,8 @@ This project was made with AI assistance, directed and play-tested by its author
 - **Start screen:** Claude Code also built the start screen — the code that takes the logo, the intro scenes and
   the music from your ROMs, the scripts and prompts for the image generation, and the choice of the generated
   variant. The only AI-generated image content is the **middle part of the panorama** (the transition between the
-  Golden Sun and The Lost Age scenes), generated locally with **Z-Image Turbo** (Tongyi-MAI) in ComfyUI; the
-  model, settings and prompt are documented in [art/README.md](art/README.md).
+  Golden Sun and The Lost Age scenes), generated locally with **Z-Image Turbo** (Tongyi-MAI) in ComfyUI, and the
+  **valley background of the "Chapter 2" card**, generated locally with **MOSS-Image** (OpenMOSS) in ComfyUI; the
+  models, settings and prompts are documented in [art/README.md](art/README.md).
 - Everything else you see and hear on the cartridge — both games, the logo, the intro, the title scenes, the
   music — comes unchanged from the original games, read from your ROMs.

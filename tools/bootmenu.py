@@ -161,17 +161,47 @@ def render_classic(bg, logo, selected, items, lang="en", kind="tla"):
     return img
 
 
+CARD_BG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "art", "card_bg.png")
+CARD_BG_PROMPT = (   # MOSS-Image, seed 2, 960x640 (tools/comfy_gen.moss_workflow); generated, not from the games
+    "Soft hand-painted pre-rendered background art from a Game Boy Advance fantasy RPG title screen (Golden Sun: "
+    "The Lost Age, Camelot, 2002), airy and luminous, smooth painterly gradients, strong atmospheric perspective, "
+    "no hard outlines. A vast view over a wide green-blue valley and a calm shining sea under a bright pale blue sky "
+    "with large soft white and lavender clouds. Layered hazy blue mountain ridges recede into the mist. Far away in "
+    "the middle of the valley a tall slender ancient stone lighthouse tower stands in pale blue haze. A small "
+    "sailing ship with white sails on the distant sea. Sunlight glows softly from the top of the picture. The "
+    "centre is open, calm and uncluttered. Bright, peaceful, adventurous fantasy atmosphere. No characters, no "
+    "text, no logo.")
+CARD_BG_NEGATIVE = ("nsfw, worst quality, blurry, photograph, 3d render, dark, night, text, letters, logo, watermark, "
+                    "signature, jpeg artifact")
+
+
 def render_chapter_card(lang="en"):
-    img = Image.new("RGB", (W, H), (6, 6, 14))
+    """Valley background (art/card_bg.png) with the chapter texts; dark outlines keep them readable on the sky."""
+    img = Image.open(CARD_BG).convert("RGB")
     d = ImageDraw.Draw(img)
-    d.ellipse((100, 18, 140, 58), fill=(232, 168, 56))
-    d.ellipse((106, 24, 134, 52), fill=(248, 208, 96))
-    d.text((W // 2, 80), TEXT[lang]["chapter2"], font=_font("georgia.ttf", 14), fill=(232, 200, 140), anchor="mm")
+    d.text((W // 2, 80), TEXT[lang]["chapter2"], font=_font("georgiab.ttf", 14), fill=(255, 214, 120), anchor="mm",
+           stroke_width=2, stroke_fill=(70, 30, 10))
     d.text((W // 2, 104), TEXT[lang]["tla"], font=_font("georgiab.ttf", 22 if len(TEXT[lang]["tla"]) < 16 else 17), fill=(255, 244, 214), anchor="mm",
            stroke_width=2, stroke_fill=(70, 30, 10))
-    d.text((W // 2, 138), TEXT[lang]["continues"], font=_font("georgia.ttf", 10), fill=(150, 150, 185),
-           anchor="mm")
+    d.text((W // 2, 138), TEXT[lang]["continues"], font=_font("georgia.ttf", 10), fill=(255, 255, 255),
+           anchor="mm", stroke_width=2, stroke_fill=(24, 40, 90))
     return img
+
+
+def card_bg_generate(out, seeds):
+    """Developers: candidate card backgrounds with MOSS-Image in a local ComfyUI."""
+    import comfy_gen
+    os.makedirs(out, exist_ok=True)
+    for s in seeds:
+        p = os.path.join(out, f"seed{s}.png")
+        comfy_gen.run(None, s, 0, 0, p, comfy_gen.moss_workflow(CARD_BG_PROMPT, CARD_BG_NEGATIVE, s, 960, 640))
+        print(p, flush=True)
+
+
+def card_bg_pick(src):
+    """Shrink a generated candidate to the screen (15-bit colour, Mode 3) and store it as art/card_bg.png."""
+    im = Image.open(src).convert("RGB").resize((W, H), Image.LANCZOS)
+    im.point(lambda v: (v >> 3) << 3).save(CARD_BG)
 
 
 def to_bgr555(img):
@@ -501,3 +531,8 @@ if __name__ == "__main__" and sys.argv[1:2] == ["ui"]:   # developers: re-render
     for lang in sys.argv[2:] or list(TEXT):
         save_ui(lang)
         print("wrote", os.path.join(UI_DIR, lang))
+elif __name__ == "__main__" and sys.argv[1:2] == ["cardbg"]:   # cardbg OUTDIR 1,2,3 | cardbg pick CANDIDATE.png
+    if sys.argv[2] == "pick":
+        card_bg_pick(sys.argv[3])
+    else:
+        card_bg_generate(sys.argv[2], [int(v) for v in sys.argv[3].split(",")])

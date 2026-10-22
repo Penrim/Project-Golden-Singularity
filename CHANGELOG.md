@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.3 — a painted background for the "Chapter 2" card
+
+- The "Chapter 2" card now shows a painted valley with a lighthouse and a ship, in the style of the two games'
+  title screens (generated with MOSS-Image, see art/README.md), instead of the dark card with a plain sun. Same
+  texts, now with outlines. All five languages.
+
 ## 1.2.2 — the "Chapter 2" card is visible again; Golden Sun played through on the cartridge
 
 - Fixed: the "Chapter 2" card after the Golden Sun credits was invisible (about 4 seconds of black screen before

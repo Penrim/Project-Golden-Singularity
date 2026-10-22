@@ -1,11 +1,11 @@
-"""Generate artwork with a local ComfyUI (Z-Image Turbo) over its HTTP API.
+"""Generate artwork with a local ComfyUI (Z-Image Turbo; MOSS-Image for the chapter card) over its HTTP API.
 
-ComfyUI must be running (run_nvidia_gpu.bat, default http://127.0.0.1:8188).
+ComfyUI must be running (run_nvidia_gpu.bat, default http://127.0.0.1:8188; other address: COMFY_HOST).
 Usage: python comfy_gen.py OUTDIR "prompt" [seeds=1,2,3] [WxH=1216x832]
 """
 import json, os, sys, time, urllib.request, urllib.parse
 
-HOST = "http://127.0.0.1:8188"
+HOST = os.environ.get("COMFY_HOST", "http://127.0.0.1:8188")
 MODEL = "ZImageTurbo\\zImageTurbo_turbo.safetensors"
 TEXT_ENCODER = "qwen_3_4b.safetensors"
 VAE = "zImage_vae.safetensors"
@@ -40,6 +40,26 @@ def inpaint_workflow(prompt, seed, image_name, steps=9, denoise=1.0):
     del wf["7"]
     wf["8"]["inputs"].update({"model": ["4b", 0], "latent_image": ["13", 0], "denoise": denoise})
     return wf
+
+
+def moss_workflow(prompt, negative, seed, w, h, steps=25):
+    """MOSS-Image SFT text-to-image (ComfyUI 0.42+, models from Comfy-Org/MOSS-Image), the template's settings."""
+    return {
+        "1": {"class_type": "UNETLoader", "inputs": {"unet_name": "moss_image_sft_int8_convrot.safetensors",
+                                                     "weight_dtype": "default"}},
+        "2": {"class_type": "CLIPLoader", "inputs": {"clip_name": "qwen3.5_9b_int8_convrot.safetensors",
+                                                     "type": "moss_image", "device": "default"}},
+        "3": {"class_type": "VAELoader", "inputs": {"vae_name": "flux2-vae_small.safetensors"}},
+        "4": {"class_type": "CLIPTextEncode", "inputs": {"clip": ["2", 0], "text": prompt}},
+        "5": {"class_type": "CLIPTextEncode", "inputs": {"clip": ["2", 0], "text": negative}},
+        "6": {"class_type": "EmptyFlux2LatentImage", "inputs": {"width": w, "height": h, "batch_size": 1}},
+        "7": {"class_type": "KSampler", "inputs": {
+            "model": ["1", 0], "positive": ["4", 0], "negative": ["5", 0], "latent_image": ["6", 0],
+            "seed": seed, "steps": steps, "cfg": 2.5, "sampler_name": "er_sde", "scheduler": "simple",
+            "denoise": 1.0}},
+        "8": {"class_type": "VAEDecode", "inputs": {"samples": ["7", 0], "vae": ["3", 0]}},
+        "10": {"class_type": "SaveImage", "inputs": {"images": ["8", 0], "filename_prefix": "gsmerge_card"}},
+    }
 
 
 def upload(path):
